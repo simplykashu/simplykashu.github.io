@@ -6,30 +6,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.getElementById('main-content');
     const music = document.getElementById('background-music');
     
-    // NEW: Flag to make sure intro runs only once
+    // Flag to make sure intro runs only once
     let introHasPlayed = false;
 
     // Add click listener for the intro screen
     if (introOverlay) {
         introOverlay.addEventListener('click', () => {
-            // NEW: Check if it has already run
+            // Check if it has already run
             if (introHasPlayed) {
                 return; 
             }
-            // NEW: Set the flag to true
             introHasPlayed = true;
 
-            // MODIFIED: Use fade-out class instead of hidden
-            introOverlay.classList.add('fade-out');
-            
-            // Show the main content
-            mainContent.classList.remove('hidden');
-
-            // Play the music
+            // 1. Play the music
             music.volume = 0.3; 
             music.play().catch(error => {
                 console.warn("Music playback failed:", error);
             });
+
+            // 2. MODIFIED: Start the fade-out effect immediately
+            introOverlay.classList.add('fade-out');
+            
+            // 3. Show the main content (so it can fade in/show under the overlay)
+            mainContent.classList.remove('hidden');
+
+            // 4. NEW: Wait 500ms (the duration of the CSS transition) before removing the overlay entirely
+            setTimeout(() => {
+                // We use display:none here as a final step to ensure it doesn't interfere
+                introOverlay.style.display = 'none'; 
+            }, 500); // 500 milliseconds = 0.5 seconds
+
         }); 
     }
     
