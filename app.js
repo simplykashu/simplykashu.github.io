@@ -12,25 +12,41 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('click', () => {
             
             // Get the 'data-tab' value (e.g., "bio", "gaming")
-            const target = tab.getAttribute('data-tab');
+            const targetId = tab.getAttribute('data-tab');
+            const targetContent = document.getElementById(targetId);
 
             // --- Deactivate all tabs and hide all content ---
             
-            // Remove 'active' class from all buttons
-            tabs.forEach(t => t.classList.remove('active'));
+            // Remove 'active' state from all buttons
+            tabs.forEach(t => {
+                // CHANGE: Removed Tailwind 'active' classes
+                t.classList.remove('text-zinc-50', 'border-b-zinc-50');
+                // CHANGE: Added Tailwind 'inactive' classes
+                t.classList.add('text-zinc-400', 'border-b-transparent');
+                // CHANGE: Update ARIA for accessibility
+                t.setAttribute('aria-selected', 'false');
+            });
             
             // Hide all content sections
             tabContents.forEach(c => {
-                c.style.display = 'none';
+                // CHANGE: Use Tailwind's 'hidden' class
+                c.classList.add('hidden');
             });
 
             // --- Activate the clicked tab and show its content ---
             
-            // Add 'active' class to the button that was clicked
-            tab.classList.add('active');
+            // Add 'active' state to the button that was clicked
+            // CHANGE: Use Tailwind 'active' classes
+            tab.classList.remove('text-zinc-400', 'border-b-transparent');
+            tab.classList.add('text-zinc-50', 'border-b-zinc-50');
+            // CHANGE: Update ARIA for accessibility
+            tab.setAttribute('aria-selected', 'true');
             
             // Show the content section that matches the target
-            document.getElementById(target).style.display = 'block';
+            if (targetContent) {
+                // CHANGE: Use Tailwind's 'hidden' class
+                targetContent.classList.remove('hidden');
+            }
         });
     });
 });
