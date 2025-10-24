@@ -1,5 +1,30 @@
 // This code runs after the page is loaded
 document.addEventListener('DOMContentLoaded', () => {
+
+    // NEW: Get Intro Screen elements
+    const introOverlay = document.getElementById('intro-overlay');
+    const mainContent = document.getElementById('main-content');
+    const music = document.getElementById('background-music');
+
+    // NEW: Add click listener for the intro screen
+    if (introOverlay) {
+        introOverlay.addEventListener('click', () => {
+            // Hide the intro
+            introOverlay.classList.add('hidden');
+            
+            // Show the main content
+            mainContent.classList.remove('hidden');
+
+            // Play the music
+            // We set volume and play here, inside the user click event
+            music.volume = 0.3; // Optional: Set a softer volume (0.0 to 1.0)
+            music.play().catch(error => {
+                console.warn("Music playback failed:", error);
+                // This catch is important for some browser policies
+            });
+        }, { once: true }); // {once: true} makes the listener remove itself after firing
+    }
+    // END NEW CODE
     
     // Find all the tab buttons
     const tabs = document.querySelectorAll('.tab-btn');
