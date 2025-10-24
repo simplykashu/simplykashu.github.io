@@ -7,44 +7,70 @@ document.addEventListener('DOMContentLoaded', () => {
     // Find all the content sections
     const tabContents = document.querySelectorAll('.tab-content');
 
-    // Loop over each tab button and add a click listener
+    // Find all the social buttons that should trigger a tab (e.g., the 'wip' tab)
+    const tabTriggers = document.querySelectorAll('[data-tab-trigger]');
+
+
+    /**
+     * Resets all tabs to inactive state and hides all content.
+     */
+    const deactivateAllTabs = () => {
+        // Remove 'active' state from all buttons
+        tabs.forEach(t => {
+            t.classList.remove('text-zinc-50', 'border-b-zinc-50');
+            t.classList.add('text-zinc-400', 'border-b-transparent');
+            t.setAttribute('aria-selected', 'false');
+        });
+        
+        // Hide all content sections
+        tabContents.forEach(c => {
+            c.classList.add('hidden');
+        });
+    }
+
+    /**
+     * Activates a specific tab and shows its content.
+     * @param {string} targetId - The data-tab ID of the tab to activate.
+     */
+    const activateTab = (targetId) => {
+        const targetButton = document.querySelector(`.tab-btn[data-tab="${targetId}"]`);
+        const targetContent = document.getElementById(targetId);
+
+        if (targetButton && targetContent) {
+            // Activate the button
+            targetButton.classList.remove('text-zinc-400', 'border-b-transparent');
+            targetButton.classList.add('text-zinc-50', 'border-b-zinc-50');
+            targetButton.setAttribute('aria-selected', 'true');
+            
+            // Show the content
+            targetContent.classList.remove('hidden');
+        }
+    }
+
+
+    // 1. Setup click listeners for the main tab buttons
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            
-            // Get the 'data-tab' value (e.g., "bio", "gaming")
-            const targetId = tab.getAttribute('data-tab');
-            const targetContent = document.getElementById(targetId);
+            const target = tab.getAttribute('data-tab');
 
-            // --- Deactivate all tabs and hide all content ---
-            
-            // Remove 'active' state from all buttons
-            tabs.forEach(t => {
-                // CHANGE: Removed Tailwind 'active' classes
-                t.classList.remove('text-zinc-50', 'border-b-zinc-50');
-                // CHANGE: Added Tailwind 'inactive' classes
-                t.classList.add('text-zinc-400', 'border-b-transparent');
-                // CHANGE: Update ARIA for accessibility
-                t.setAttribute('aria-selected', 'false');
-            });
-            
-            // Hide all content sections
-            tabContents.forEach(c => {
-                // CHANGE: Use Tailwind's 'hidden' class
-                c.classList.add('hidden');
-            });
+            deactivateAllTabs();
+            activateTab(target);
+        });
+    });
 
-            // --- Activate the clicked tab and show its content ---
+    // 2. Setup click listeners for social links that trigger a tab
+    tabTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            const target = trigger.getAttribute('data-tab-trigger');
             
-            // Add 'active' state to the button that was clicked
-            // CHANGE: Use Tailwind 'active' classes
-            tab.classList.remove('text-zinc-400', 'border-b-transparent');
-            tab.classList.add('text-zinc-50', 'border-b-zinc-50');
-            // CHANGE: Update ARIA for accessibility
-            tab.setAttribute('aria-selected', 'true');
+            // This is a special case: we show the target content (e.g., 'wip')
+            // but we don't activate the 'wip' button unless it's explicitly clicked.
+            // This prevents the hidden 'wip' button from popping up in the nav.
+            deactivateAllTabs(); 
             
-            // Show the content section that matches the target
+            // Activate only the content section for 'wip'
+            const targetContent = document.getElementById(target);
             if (targetContent) {
-                // CHANGE: Use Tailwind's 'hidden' class
                 targetContent.classList.remove('hidden');
             }
         });
