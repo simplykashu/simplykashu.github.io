@@ -4,78 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Luke</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Our custom stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-zinc-900 text-zinc-300 min-h-screen p-6 sm:p-10">
 
-    <!-- Main container -->
     <div class="max-w-4xl mx-auto bg-zinc-800 rounded-xl shadow-2xl border border-zinc-700 overflow-hidden">
         
         <div class="md:flex">
             
-            <!-- Left Column (Profile Pic & Info) -->
             <div class="md:w-1/3 bg-zinc-800 p-8 border-b md:border-b-0 md:border-r border-zinc-700">
                 
                 <div class="text-center mb-6">
                     <img 
                         src="images/avatar.jpg" 
                         alt="Luke" 
-                        class="profile-picture"
+                        class="w-[150px] h-[150px] object-cover rounded-full border-4 border-zinc-700 mx-auto shadow-lg"
                         onerror="this.src='https://placehold.co/150x150/27272a/fafafa?text=Luke'"
                     >
                 </div>
                 
                 <h1 class="text-3xl font-bold text-white text-center mb-6">Luke</h1>
 
-                <!-- Quick Info -->
-                <div class="space-y-3">
+                <dl class="space-y-3">
                     <div class="flex justify-between">
-                        <span class="font-medium text-zinc-400">Age:</span>
-                        <span class="text-zinc-100">15</span>
+                        <dt class="font-medium text-zinc-400">Age:</dt>
+                        <dd class="text-zinc-100">15</dd>
                     </div>
                     <div class="flex justify-between">
-                        <span class="font-medium text-zinc-400">Country:</span>
-                        <span class="text-zinc-100">South Africa</span>
+                        <dt class="font-medium text-zinc-400">Country:</dt>
+                        <dd class="text-zinc-100">South Africa</dd>
                     </div>
                     <div class="flex justify-between">
-                        <span class="font-medium text-zinc-400">Future:</span>
-                        <span class="text-zinc-100">Farmer</span>
+                        <dt class="font-medium text-zinc-400">Future:</dt>
+                        <dd class="text-zinc-100">Farmer</dd>
                     </div>
                     <div class="flex justify-between">
-                        <span class="font-medium text-zinc-400">Status:</span>
-                        <span class="text-zinc-100">50/50</span>
+                        <dt class="font-medium text-zinc-400">Status:</dt>
+                        <dd class="text-zinc-100">50/50</dd>
                     </div>
-                </div>
+                </dl>
 
-                <!-- Social Links -->
                 <div class="mt-8 pt-6 border-t border-zinc-700 text-center">
                     <h2 class="text-xl font-semibold mb-4 text-zinc-200">Connect</h2>
                     <div class="flex justify-center space-x-5">
-                        <!-- 
-                          IMPORTANT: You need to change the '#' to your actual links.
-                          For Discord, you can paste your server invite or username.
-                        -->
-                        <a href="#" title="Discord" class="text-zinc-400 hover:text-white transition-colors">
+                        <a href="#" title="Discord" aria-label="Discord profile" class="text-zinc-400 hover:text-white transition-colors">
                             <i data-lucide="discord"></i>
                         </a>
-                        <a href="#" title="Twitch" class="text-zinc-400 hover:text-white transition-colors">
+                        <a href="#" title="Twitch" aria-label="Twitch channel" class="text-zinc-400 hover:text-white transition-colors">
                             <i data-lucide="twitch"></i>
                         </a>
-                        <a href="#" title="YouTube" class="text-zinc-400 hover:text-white transition-colors">
+                        <a href="#" title="YouTube" aria-label="YouTube channel" class="text-zinc-400 hover:text-white transition-colors">
                             <i data-lucide="youtube"></i>
                         </a>
-                        <a href="#" title="TikTok" class="text-zinc-400 hover:text-white transition-colors">
-                            <!-- Lucide doesn't have a TikTok icon, so we use 'music-2' as a placeholder -->
+                        <a href="#" title="TikTok" aria-label="TikTok profile" class="text-zinc-400 hover:text-white transition-colors">
                             <i data-lucide="music-2"></i>
                         </a>
-                        <a href="#" title="Instagram" class="text-zinc-400 hover:text-white transition-colors">
+                        <a href="#" title="Instagram" aria-label="Instagram profile" class="text-zinc-400 hover:text-white transition-colors">
                             <i data-lucide="instagram"></i>
                         </a>
                     </div>
@@ -83,23 +71,42 @@
 
             </div>
 
-            <!-- Right Column (Bio & Interests) -->
             <div class="md:w-2/3 p-8">
                 
-                <!-- Tab Navigation -->
                 <div class="mb-6 border-b border-zinc-700">
-                    <nav class="flex -mb-px">
-                        <!-- These buttons control the tabs -->
-                        <button class="tab-btn active" data-tab="bio">Bio</button>
-                        <button class="tab-btn" data-tab="gaming">Gaming</button>
-                        <button class="tab-btn" data-tab="music">Music</button>
+                    <nav class="flex -mb-px" role="tablist" aria-label="Profile sections">
+                        <button 
+                            class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-50 border-b-2 border-zinc-50 transition-all duration-200 hover:text-zinc-200" 
+                            data-tab="bio"
+                            role="tab"
+                            aria-controls="bio"
+                            aria-selected="true"
+                        >
+                            Bio
+                        </button>
+                        <button 
+                            class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-400 border-b-2 border-transparent transition-all duration-200 hover:text-zinc-200" 
+                            data-tab="gaming"
+                            role="tab"
+                            aria-controls="gaming"
+                            aria-selected="false"
+                        >
+                            Gaming
+                        </button>
+                        <button 
+                            class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-400 border-b-2 border-transparent transition-all duration-200 hover:text-zinc-200" 
+                            data-tab="music"
+                            role="tab"
+                            aria-controls="music"
+                            aria-selected="false"
+                        >
+                            Music
+                        </button>
                     </nav>
                 </div>
 
-                <!-- Tab Content Area -->
                 <div>
-                    <!-- Bio Section (Visible by default) -->
-                    <section id="bio" class="tab-content">
+                    <section id="bio" class="tab-content" role="tabpanel" aria-labelledby="bio-tab">
                         <h2 class="text-2xl font-semibold mb-4 text-white">My Bio</h2>
                         <div class="space-y-4 text-zinc-300">
                             <p>Hey, I'm Luke. I'm 15 and living in South Africa. Right now, life's kind of a "mix," just figuring things out as I go. My personality? It's a bit of everything, which I guess keeps things interesting.</p>
@@ -108,8 +115,7 @@
                         </div>
                     </section>
 
-                    <!-- Games Section (Hidden by default) -->
-                    <section id="gaming" class="tab-content" style="display: none;">
+                    <section id="gaming" class="tab-content hidden" role="tabpanel" aria-labelledby="gaming-tab">
                         <h2 class="text-2xl font-semibold mb-4 text-white">Games I Play</h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700">
@@ -127,8 +133,7 @@
                         </div>
                     </section>
 
-                    <!-- Music Section (Hidden by default) -->
-                    <section id="music" class="tab-content" style="display: none;">
+                    <section id="music" class="tab-content hidden" role="tabpanel" aria-labelledby="music-tab">
                         <h2 class="text-2xl font-semibold mb-4 text-white">Music Tastes</h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700">
@@ -137,8 +142,15 @@
                             <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700">
                                 <h3 class="text-lg font-semibold text-zinc-100">sKitz Kraven</h3>
                             </div>
+                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 sm:col-span-2">
+                                <h3 class="text-lg font-semibold text-zinc-100 mb-3">Alex Warren</h3>
+                                <audio controls class="w-full">
+                                    <source src="Alex-Warren-Ordinary.mp3" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            </div>
                         </div>
-                        <p class="text-zinc-400 mt-4">This is the perfect spot to embed a Spotify playlist. Let me know if you want to do that next!</p>
+                        <p class="text-zinc-400 mt-6">This is also a perfect spot to embed a Spotify playlist. Let me know if you want to do that next!</p>
                     </section>
                 </div>
 
@@ -146,14 +158,10 @@
         </div>
     </div>
 
-    <!-- Lucide Icons script -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         lucide.createIcons();
     </script>
-    <!-- Our new custom script for tabs -->
     <script src="app.js"></script>
 </body>
 </html>
-
-
