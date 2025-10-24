@@ -2,15 +2,16 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // ------------------------------------------------
-    // NEW: Intro Screen and Music Logic
+    // 1. Intro Screen and Music Logic
     // ------------------------------------------------
     const introOverlay = document.getElementById('intro-overlay');
     const mainContent = document.getElementById('main-content');
     const music = document.getElementById('background-music');
     
+    // Flag to ensure the intro runs only once
     let introHasPlayed = false;
 
-    if (introOverlay) {
+    if (introOverlay && mainContent && music) {
         introOverlay.addEventListener('click', () => {
             if (introHasPlayed) {
                 return; 
@@ -18,22 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
             introHasPlayed = true;
 
             // 1. Play the music
-            if (music) {
-                music.volume = 0.3; 
-                music.play().catch(error => {
-                    console.warn("Music playback failed:", error);
-                });
-            }
+            music.volume = 0.3; // Set volume
+            music.play().catch(error => {
+                console.warn("Music playback failed:", error);
+            });
 
             // 2. Start the fade-out effect
             introOverlay.classList.add('fade-out');
             
-            // 3. Show the main content
-            if (mainContent) {
-                mainContent.classList.remove('hidden');
-            }
+            // 3. Show the main content immediately so it can be seen through the fading overlay
+            mainContent.classList.remove('hidden');
 
-            // 4. Wait 500ms (the duration of the CSS transition) before removing the overlay entirely
+            // 4. Wait 500ms (the duration of the CSS transition) then remove the overlay entirely
             setTimeout(() => {
                 introOverlay.style.display = 'none'; 
             }, 500); 
@@ -43,6 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // END: Intro Screen and Music Logic
     // ------------------------------------------------
 
+
+    // ------------------------------------------------
+    // 2. Tab Switching Logic
+    // ------------------------------------------------
 
     // Find all the tab buttons
     const tabs = document.querySelectorAll('.tab-btn');
@@ -97,7 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('click', () => {
             const target = tab.getAttribute('data-tab');
 
-            deactivateAllTabs();
+            // Deactivate all first, then activate the target.
+            deactivateAllTabs(); 
             activateTab(target);
         });
     });
@@ -107,16 +109,18 @@ document.addEventListener('DOMContentLoaded', () => {
         trigger.addEventListener('click', () => {
             const target = trigger.getAttribute('data-tab-trigger');
             
-            // This is a special case: we show the target content (e.g., 'wip')
-            // but we don't activate the 'wip' button unless it's explicitly clicked.
-            // This prevents the hidden 'wip' button from popping up in the nav.
+            // Reset all tabs/content first
             deactivateAllTabs(); 
             
-            // Activate only the content section for 'wip'
-            const targetContent = document.getElementById(target);
-            if (targetContent) {
-                targetContent.classList.remove('hidden');
-            }
+            // Activate only the content section for the target (e.g., 'wip' page)
+            activateTab(target); 
         });
     });
+    
+    // Initial activation to ensure the 'Bio' tab is highlighted on load
+    activateTab('bio');
+
+    // ------------------------------------------------
+    // END: Tab Switching Logic
+    // ------------------------------------------------
 });
