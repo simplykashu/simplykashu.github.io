@@ -17,12 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const deactivateAllTabs = () => {
         // Remove 'active' state from all buttons
         tabs.forEach(t => {
+            // Set to inactive state (text-zinc-400, border-transparent)
             t.classList.remove('text-zinc-50', 'border-b-zinc-50');
             t.classList.add('text-zinc-400', 'border-b-transparent');
             t.setAttribute('aria-selected', 'false');
         });
         
-        // Hide all content sections
+        // Hide all content sections using Tailwind's 'hidden' class
         tabContents.forEach(c => {
             c.classList.add('hidden');
         });
