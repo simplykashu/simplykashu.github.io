@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Luke</title>
+    <!-- Tailwind CSS for core styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Our custom stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-zinc-900 text-zinc-300 min-h-screen p-6 sm:p-10">
+
+    <!-- Main container -->
+    <div class="max-w-4xl mx-auto bg-zinc-800 rounded-xl shadow-2xl border border-zinc-700 overflow-hidden">
+        
+        <!-- Main content area, using flex for columns on medium screens and up -->
+        <div class="md:flex">
+            
+            <!-- Left Column (Profile Pic & Info) -->
+            <div class="md:w-1/3 bg-zinc-800 p-8 border-b md:border-b-0 md:border-r border-zinc-700">
+                
+                <!-- Profile Picture -->
+                <div class="text-center mb-6">
+                    <img 
+                        src="images/avatar.jpg" 
+                        alt="Luke" 
+                        class="profile-picture"
+                        onerror="this.src='https://placehold.co/150x150/27272a/fafafa?text=Luke'"
+                    >
+                </div>
+                
+                <h1 class="text-3xl font-bold text-white text-center mb-6">Luke</h1>
+
+                <!-- Quick Info -->
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-zinc-400">Age:</span>
+                        <span class="text-zinc-100">15</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-zinc-400">Country:</span>
+                        <span class="text-zinc-100">South Africa</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-zinc-400">Future:</span>
+                        <span class="text-zinc-100">Farmer</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-zinc-400">Status:</span>
+                        <span class="text-zinc-100">50/50</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column (Bio & Interests) -->
+            <div class="md:w-2/3 p-8">
+                
+                <!-- Bio Section -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold mb-4 text-white border-b border-zinc-700 pb-2">My Bio</h2>
+                    <div class="space-y-4 text-zinc-300">
+                        <p>
+                            Hey, I'm Luke. I'm 15 and living in South Africa. Right now, life's kind of a "mix," just figuring things out as I go. My personality? It's a bit of everything, which I guess keeps things interesting.
+                        </p>
+                        <p>
+                            Most of my free time is split between two things: music and gaming. When I've got headphones on, you'll probably catch me listening to Diggy Graves or sKitz Kraven—their stuff just hits different. When I'm gaming, I'm usually trying to survive a match in <strong class="text-zinc-100">Dead by Daylight</strong> or exploring different worlds in <strong class="text-zinc-100">Roblox</strong>, but I'm always down to try new games.
+                        </p>
+                        <p>
+                            Looking ahead, I've got a pretty clear goal: I want to be a farmer. It's not the usual thing you hear from someone my age, but I think working with the land and being outdoors... there's something real about it. It's a lot of hard work, but it's a future I'm excited about.
+                        </p>
+                        <p>
+                            For now, I'm just balancing school, friends, and hobbies. Still figuring out the "relationship" thing (it's 50/50, who knows?). Just taking it one day at a time. Welcome to my little corner of the web.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Games Section -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-semibold mb-4 text-white border-b border-zinc-700 pb-2">Games I Play</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-zinc-700/50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-zinc-100">Dead by Daylight</h3>
+                            <p class="text-zinc-400">Trying to survive (or hunt). Mostly.</p>
+                        </div>
+                        <div class="bg-zinc-700/50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-zinc-100">Roblox</h3>
+                            <p class="text-zinc-400">Exploring all the different worlds.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Music Section -->
+                <section>
+                    <h2 class="text-2xl font-semibold mb-4 text-white border-b border-zinc-700 pb-2">Music Tastes</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-zinc-700/50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-zinc-100">Diggy Graves</h3>
+                        </div>
+                        <div class="bg-zinc-700/50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-zinc-100">sKitz Kraven</h3>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
