@@ -1,19 +1,19 @@
 /*
 This file is for custom styles that Tailwind CSS doesn't easily cover,
 or for personal touches.
-
-All .profile-picture and .tab-btn styles have been moved 
-to the index.html file as Tailwind utility classes.
 */
 
 body {
     font-family: 'Inter', sans-serif;
 }
 
-/* Removed .profile-picture styles 
-  Removed .tab-btn styles
-  Removed .tab-btn:hover styles
-  Removed .tab-btn.active styles
-  
-  FIX: Removed an extra '}' bracket that was here.
+/* REMOVED: .profile-picture styles
+The styles are now handled by classes in index.html:
+class="w-[150px] h-[150px] object-cover rounded-full border-4 border-zinc-700 mx-auto shadow-lg"
+*/
+
+/* REMOVED: All .tab-btn styles
+The styles are now handled by classes in index.html:
+class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-50 border-b-2 border-zinc-50 transition-all duration-200 hover:text-zinc-200" 
+(and similar for inactive states)
 */
