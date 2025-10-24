@@ -12,7 +12,11 @@
 </head>
 <body class="bg-zinc-900 text-zinc-300 min-h-screen p-6 sm:p-10">
 
-    <div class="max-w-4xl mx-auto bg-zinc-800 rounded-xl shadow-2xl border border-zinc-700 overflow-hidden">
+    <div id="intro-overlay" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center cursor-pointer text-white">
+        <p class="text-2xl sm:text-4xl font-semibold animate-pulse">Click to Enter</p>
+        <p class="text-lg sm:text-xl text-zinc-400 mt-2">(Tap screen for mobile users)</p>
+    </div>
+    <div id="main-content" class="max-w-4xl mx-auto bg-zinc-800 rounded-xl shadow-2xl border border-zinc-700 overflow-hidden hidden">
         
         <div class="md:flex">
             
@@ -188,8 +192,7 @@
 
             </div>
         </div>
-    </div>
-
+    </div> <audio id="background-music" src="music/music.mp3" loop></audio>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         lucide.createIcons();
