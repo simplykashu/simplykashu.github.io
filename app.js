@@ -2,43 +2,11 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // ------------------------------------------------
-    // 0. VIDEO RANDOMIZER LOGIC (FIXED)
-    // ------------------------------------------------
-    const backgroundVideo = document.getElementById('background-video');
-
-    // 1. Define the full playlist. 
-    // IMPORTANT: Make sure these files exist inside your 'music' folder.
-    const videoPlaylist = [
-        'music/music1.mp4',
-        'music/music2.mp4',
-        'music/music6.mp4' // The file you wanted to add
-        // Add more files here if you upload them later (e.g., 'music/music3.mp4')
-    ];
-    
-    // 2. Select a random video URL
-    if (videoPlaylist.length > 0) {
-        const randomIndex = Math.floor(Math.random() * videoPlaylist.length);
-        const randomVideoSrc = videoPlaylist[randomIndex];
-
-        // 3. Set the video player's source before the page loads
-        if (backgroundVideo) {
-            backgroundVideo.src = randomVideoSrc;
-            console.log(`Video source set to: ${randomVideoSrc}`);
-        }
-    } else {
-        console.warn("Video playlist is empty. Background video will not play.");
-    }
-    // ------------------------------------------------
-    // END: VIDEO RANDOMIZER LOGIC
-    // ------------------------------------------------
-
-
-    // ------------------------------------------------
     // 1. Intro Screen and Music Logic
     // ------------------------------------------------
     const introOverlay = document.getElementById('intro-overlay');
     const mainContent = document.getElementById('main-content');
-    // backgroundVideo is already defined in Section 0
+    const backgroundVideo = document.getElementById('background-video');
     const floatingElement = document.getElementById('floating-element'); 
     
     // NEW: Get the master toggle button
@@ -59,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // VOLUME BOOST IMPLEMENTED: Set to maximum volume (1.0)
             backgroundVideo.volume = 1.0; 
             backgroundVideo.play().catch(error => { 
-                // This catches the 'user not interacting yet' error often seen in dev tools, but allows it to auto-play after user click.
                 console.warn("Music playback failed:", error);
             });
             
@@ -69,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // 3. Show the main content, floating animation, AND the toggle button
             mainContent.classList.remove('hidden');
             floatingElement.classList.remove('hidden'); 
-            toggleBtn.classList.remove('hidden'); // <-- Show the button
+            toggleBtn.classList.remove('hidden'); // <-- NEW: Show the button
 
             // 4. Wait 500ms (the duration of the CSS transition) then remove the overlay entirely
             setTimeout(() => {
@@ -143,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. Keyboard Navigation for Tabs (Accessibility)
+    // 3. NEW: Keyboard Navigation for Tabs (Accessibility)
     const tabList = document.querySelector('nav[role="tablist"]');
 
     if (tabList) {
@@ -259,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ------------------------------------------------
-    // 4. Main Content Toggle
+    // 4. NEW: Main Content Toggle (Replaces old logic)
     // ------------------------------------------------
     
     // We already defined 'toggleBtn', 'mainContent', and 'floatingElement' in Section 1
