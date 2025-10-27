@@ -14,18 +14,14 @@
 
     <div id="floating-element" class="hidden"></div>
 
-    <video id="background-video" src="music/music.mp4" loop playsinline class="fixed inset-0 w-full h-full object-cover -z-10"></video>
+    <video id="background-video" src="" preload="metadata" loop playsinline class="fixed inset-0 w-full h-full object-cover -z-10"></video>
     
-    <!-- NEW: Added p-2, rounded-lg, border, border-zinc-700, and shadow-md -->
-    <!--      Removed hover:text-white (will be handled in style.css)     -->
     <button id="toggle-content-btn" 
             class="fixed top-6 right-6 sm:top-10 sm:right-10 text-zinc-200 transition-colors z-40 hidden p-2 rounded-lg border border-zinc-700 shadow-md" 
             title="Toggle Content"
             aria-label="Toggle profile content"
             aria-expanded="true">
-        <!-- Icon shown when content is VISIBLE -->
         <i id="toggle-icon-hide" data-lucide="eye-off"></i>
-        <!-- Icon shown when content is HIDDEN -->
         <i id="toggle-icon-show" data-lucide="eye" class="hidden"></i>
     </button>
     
@@ -237,4 +233,3 @@
     <script src="app.js?v=5"></script>
 </body>
 </html>
-
