@@ -111,4 +111,3 @@ class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-50 border-b-2 border-zi
     transform: scale(0.98);
     pointer-events: none; /* Allows clicks on the background */
 }
-
