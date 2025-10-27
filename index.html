@@ -4,41 +4,147 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
+    <!-- Tailwind CSS is loaded from CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- CONSOLIDATED STYLES from style.css -->
+    <style>
+        /* Base font setting */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Intro screen fade-out transition */
+        #intro-overlay {
+            transition: opacity 0.5s ease-out; /* The 0.5s sets the fade duration */
+        }
+
+        #intro-overlay.fade-out {
+            opacity: 0;
+            pointer-events: none; /* Allows clicks to go through to the page underneath */
+        }
+
+        /* Frosted Glass Effect on Main Content Card */
+        #main-content {
+            /* bg-zinc-800 with 80% opacity */
+            background-color: rgba(39, 39, 42, 0.8); 
+
+            /* Adds the "frosted glass" blur effect */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+
+            transition: all 0.5s ease-in-out; /* Add transition for content toggle */
+        }
+
+        /* Floating Element (for subtle background movement - simulates particles/energy) */
+        #floating-element {
+            position: fixed;
+            top: -50vh;
+            left: -50vw;
+            width: 200vw;
+            height: 200vh;
+            /* Two soft radial gradients for a subtle effect */
+            background: radial-gradient(circle at 70% 30%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+                        radial-gradient(circle at 20% 80%, rgba(20, 184, 166, 0.1) 0%, transparent 35%);
+            animation: floatEffect 120s linear infinite;
+            pointer-events: none; /* Crucial: allows clicks to go through */
+            z-index: -5; /* Between the video (-10) and content (default) */
+
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Add transition for content toggle */
+        }
+
+        @keyframes floatEffect {
+            0% {
+                transform: translate(0, 0) scale(1.0);
+            }
+            25% {
+                transform: translate(10%, -5%) scale(1.05);
+            }
+            50% {
+                transform: translate(0, 5%) scale(1.0);
+            }
+            75% {
+                transform: translate(-10%, 5%) scale(1.05);
+            }
+            100% {
+                transform: translate(0, 0) scale(1.0);
+            }
+        }
+
+        /* Background blur & hover effect for the toggle button */
+        #toggle-content-btn {
+            background-color: rgba(39, 39, 42, 0.8); /* Matches #main-content */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        #toggle-content-btn:hover {
+            background-color: rgba(45, 45, 48, 0.9); /* Slightly more opaque on hover */
+        }
+
+        /* Main Content Toggle Styles (Hidden State) */
+        #main-content.content-hidden {
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+            pointer-events: none; /* Disable interaction */
+        }
+
+        /* When content is hidden, also hide the floating background element */
+        #floating-element.content-hidden {
+            opacity: 0;
+        }
+
+        /* Ensure tab content fading is smooth (though tabs are currently toggled via `hidden` class) */
+        .tab-content {
+            transition: opacity 0.3s ease-in-out;
+        }
+    </style>
 </head>
 <body class="bg-zinc-900 text-zinc-300 min-h-screen p-6 sm:p-10">
 
+    <!-- Subtle, animated floating background element -->
     <div id="floating-element" class="hidden"></div>
 
-    <video id="background-video" loop playsinline class="fixed inset-0 w-full h-full object-cover -z-10"></video>
+    <!-- Background Video for aesthetic (requires a reliable src) -->
+    <!-- NOTE: The 'src' attribute has been added as a placeholder video. You can replace this with your local 'music/music.mp4' source. -->
+    <video id="background-video" 
+           src="https://www.w3schools.com/tags/movie.mp4" 
+           loop muted playsinline class="fixed inset-0 w-full h-full object-cover -z-10"></video>
     
+    <!-- Content Toggle Button -->
     <button id="toggle-content-btn" 
             class="fixed top-6 right-6 sm:top-10 sm:right-10 text-zinc-200 transition-colors z-40 hidden p-2 rounded-lg border border-zinc-700 shadow-md" 
             title="Toggle Content"
             aria-label="Toggle profile content"
             aria-expanded="true">
+        <!-- Lucide icons are injected by the script at the end of the body -->
         <i id="toggle-icon-hide" data-lucide="eye-off"></i>
         <i id="toggle-icon-show" data-lucide="eye" class="hidden"></i>
     </button>
     
+    <!-- Intro Overlay -->
     <div id="intro-overlay" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center cursor-pointer text-white">
         <p class="text-2xl sm:text-4xl font-semibold animate-pulse">Click to Enter</p>
         <p class="text-lg sm:text-xl text-zinc-400 mt-2">(Tap screen for mobile users)</p>
     </div>
     
+    <!-- Main Content Card -->
     <div id="main-content" class="max-w-4xl mx-auto bg-zinc-800 rounded-xl shadow-2xl border border-zinc-700 overflow-hidden hidden">
         
         <div class="md:flex">
             
+            <!-- Profile Panel (Left Side) -->
             <div id="profile-panel" class="md:w-1/3 bg-zinc-800 p-8 border-b md:border-b-0 md:border-r border-zinc-700">
                 
                 <div class="text-center mb-6">
+                    <!-- Avatar image placeholder -->
                     <img 
-                        src="images/avatar.jpg" 
+                        src="https://placehold.co/150x150/27272a/fafafa?text=Luke" 
                         alt="Luke" 
                         class="w-[150px] h-[150px] object-cover rounded-full border-4 border-zinc-700 mx-auto shadow-lg"
                         onerror="this.src='https://placehold.co/150x150/27272a/fafafa?text=Luke'"
@@ -77,8 +183,9 @@
                     <h2 class="text-xl font-semibold mb-4 text-zinc-200">Connect</h2>
                     <div class="flex justify-center space-x-5">
                         
+                        <!-- These trigger the WIP tab logic -->
                         <button data-tab-trigger="wip" title="Discord" aria-label="Discord status" class="text-zinc-400 hover:text-white transition-colors">
-                            <i data-lucide="message-square"></i> 
+                            <i data-lucide="message-square"></i>    
                         </button>
                         
                         <button data-tab-trigger="wip" title="Twitch" aria-label="Twitch channel status" class="text-zinc-400 hover:text-white transition-colors">
@@ -89,6 +196,7 @@
                             <i data-lucide="youtube"></i>
                         </button>
                         
+                        <!-- External Links -->
                         <a href="https://tiktok.com/@simplykashu" target="_blank" title="TikTok" aria-label="TikTok profile" class="text-zinc-400 hover:text-white transition-colors">
                             <i data-lucide="music-2"></i>
                         </a>
@@ -97,15 +205,17 @@
                             <i data-lucide="music"></i>
                         </a>
 
-                        </div>
+                    </div>
                 </div>
 
             </div>
 
+            <!-- Content Panel (Right Side) -->
             <div id="content-panel" class="md:w-2/3 p-8">
                 
                 <div class="mb-6 border-b border-zinc-700">
                     <nav class="flex -mb-px" role="tablist" aria-label="Profile sections">
+                        <!-- Bio Tab (Active by default) -->
                         <button 
                             id="bio-tab" 
                             class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-50 border-b-2 border-zinc-50 transition-all duration-200 hover:text-zinc-200" 
@@ -116,6 +226,7 @@
                         >
                             Bio
                         </button>
+                        <!-- Gaming Tab -->
                         <button 
                             id="gaming-tab" 
                             class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-400 border-b-2 border-transparent transition-all duration-200 hover:text-zinc-200" 
@@ -126,6 +237,7 @@
                         >
                             Gaming
                         </button>
+                        <!-- Music Tab -->
                         <button 
                             id="music-tab" 
                             class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-400 border-b-2 border-transparent transition-all duration-200 hover:text-zinc-200" 
@@ -136,6 +248,7 @@
                         >
                             Music
                         </button>
+                        <!-- WIP Status Tab (Hidden from main nav) -->
                         <button 
                             id="wip-tab" 
                             class="tab-btn hidden py-3 px-5 font-semibold text-sm text-zinc-400 border-b-2 border-transparent transition-all duration-200 hover:text-zinc-200" 
@@ -150,6 +263,7 @@
                 </div>
 
                 <div>
+                    <!-- Bio Content -->
                     <section id="bio" class="tab-content" role="tabpanel" aria-labelledby="bio-tab">
                         <h2 class="text-2xl font-semibold mb-4 text-white">My Bio</h2>
                         <div class="space-y-4 text-zinc-300">
@@ -158,36 +272,41 @@
                             <p>Looking ahead, I have a clear goal: I want to become a farmworker. I know it's not a typical career path for someone my age, but I'm drawn to the idea of working with the land and being outdoors. There's something real about it. It's hard work, but it's a future I'm genuinely excited about.</p>
                         </div>
                     </section>
+                    
+                    <!-- Gaming Content -->
                     <section id="gaming" class="tab-content hidden" role="tabpanel" aria-labelledby="gaming-tab">
                         <h2 class="text-2xl font-semibold mb-4 text-white">Games I Play</h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             
+                            <!-- Game image placeholders -->
                             <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/deadbydaylight.png" alt="Dead by Daylight" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=DbD'">
+                                <img src="https://placehold.co/40x40/27272a/fafafa?text=DbD" alt="Dead by Daylight" class="w-10 h-10 rounded-md object-cover">
                                 <h3 class="text-lg font-semibold text-zinc-100">Dead by Daylight</h3>
                             </div>
                             
                             <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/phasmophobia.png" alt="Phasmophobia" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=Phas'">
+                                <img src="https://placehold.co/40x40/27272a/fafafa?text=Phas" alt="Phasmophobia" class="w-10 h-10 rounded-md object-cover">
                                 <h3 class="text-lg font-semibold text-zinc-100">Phasmophobia</h3>
                             </div>
 
                             <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/roblox.png" alt="Roblox" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=RBLX'">
+                                <img src="https://placehold.co/40x40/27272a/fafafa?text=RBLX" alt="Roblox" class="w-10 h-10 rounded-md object-cover">
                                 <h3 class="text-lg font-semibold text-zinc-100">Roblox</h3>
                             </div>
 
                             <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/fortnite.png" alt="Fortnite" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=FN'">
+                                <img src="https://placehold.co/40x40/27272a/fafafa?text=FN" alt="Fortnite" class="w-10 h-10 rounded-md object-cover">
                                 <h3 class="text-lg font-semibold text-zinc-100">Fortnite</h3>
                             </div>
 
                             <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/more.png" alt="More Games" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=...'">
+                                <img src="https://placehold.co/40x40/27272a/fafafa?text=..." alt="More Games" class="w-10 h-10 rounded-md object-cover">
                                 <h3 class="text-lg font-semibold text-zinc-100">And More</h3>
                             </div>
                         </div>
                     </section>
+                    
+                    <!-- Music Content -->
                     <section id="music" class="tab-content hidden" role="tabpanel" aria-labelledby="music-tab">
                         <h2 class="text-2xl font-semibold mb-4 text-white">Music Tastes</h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -213,6 +332,7 @@
                         </div>
                     </section>
                     
+                    <!-- WIP Status Content (Hidden until triggered) -->
                     <section id="wip" class="tab-content hidden" role="tabpanel" aria-labelledby="wip-tab">
                         <h2 class="text-2xl font-semibold mb-4 text-white">Status Update</h2>
                         <div class="bg-zinc-700/50 p-6 rounded-lg border border-zinc-700 space-y-3">
@@ -226,10 +346,156 @@
         </div>
     </div> 
     
+    <!-- Lucide Icons Library -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
+        // Inject the Lucide icons into the HTML
         lucide.createIcons();
     </script>
-    <script src="app.js?v=5"></script>
+
+    <!-- CONSOLIDATED JAVASCRIPT from app.js -->
+    <script>
+        // This code runs after the page is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ------------------------------------------------
+            // 1. Element References
+            // ------------------------------------------------
+            const introOverlay = document.getElementById('intro-overlay');
+            const mainContent = document.getElementById('main-content');
+            const backgroundVideo = document.getElementById('background-video');
+            const floatingElement = document.getElementById('floating-element');
+            const toggleBtn = document.getElementById('toggle-content-btn');
+            
+            // Flag to ensure the intro runs only once
+            let introHasPlayed = false;
+
+            // ------------------------------------------------
+            // 2. Intro Screen and Music Logic
+            // ------------------------------------------------
+            if (introOverlay && mainContent && backgroundVideo && toggleBtn && floatingElement) {
+                introOverlay.addEventListener('click', () => {
+                    if (introHasPlayed) {
+                        return; // Don't run twice
+                    }
+                    introHasPlayed = true;
+
+                    // 1. Play the video's audio/music
+                    // NOTE: Video is muted by default in HTML. The play() call is necessary for mobile compatibility
+                    // and to allow the video to start looping.
+                    backgroundVideo.volume = 1.0;
+                    backgroundVideo.play().catch(error => {
+                        console.warn("Music playback failed (auto-play policy):", error);
+                    });
+                    
+                    // 2. Start the fade-out effect on the intro screen
+                    introOverlay.classList.add('fade-out');
+                    
+                    // 3. After the fade-out duration (0.5s), make the content visible
+                    setTimeout(() => {
+                        mainContent.classList.remove('hidden');
+                        toggleBtn.classList.remove('hidden');
+                        floatingElement.classList.remove('hidden');
+                    }, 500); // Wait for CSS transition to complete
+                });
+                
+            } else {
+                // Fallback: If critical elements are missing, show content immediately
+                mainContent.classList.remove('hidden');
+                if(toggleBtn) toggleBtn.classList.remove('hidden');
+                if(floatingElement) floatingElement.classList.remove('hidden');
+                console.warn('Intro or main elements missing. Skipping intro overlay.');
+            }
+
+            // ------------------------------------------------
+            // 3. Tab Switching Logic
+            // ------------------------------------------------
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            // Function to handle tab clicks
+            const switchTab = (tabId) => {
+                // Deactivate all buttons and content
+                tabButtons.forEach(btn => {
+                    // Update styling to inactive state
+                    btn.classList.remove('text-zinc-50', 'border-zinc-50');
+                    btn.classList.add('text-zinc-400', 'border-transparent');
+                    btn.setAttribute('aria-selected', 'false');
+                });
+                tabContents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+
+                // Activate the selected button and content
+                const activeTabBtn = document.querySelector(`[data-tab="${tabId}"]`);
+                const activeTabContent = document.getElementById(tabId);
+
+                if (activeTabBtn) {
+                    // Update styling to active state
+                    activeTabBtn.classList.remove('text-zinc-400', 'border-transparent');
+                    activeTabBtn.classList.add('text-zinc-50', 'border-zinc-50');
+                    activeTabBtn.setAttribute('aria-selected', 'true');
+                }
+
+                if (activeTabContent) {
+                    activeTabContent.classList.remove('hidden');
+                }
+            };
+
+            // Attach click listeners to tab buttons
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+
+            // ------------------------------------------------
+            // 4. Social Links (WIP Tab Trigger)
+            // ------------------------------------------------
+            const socialButtons = document.querySelectorAll('[data-tab-trigger="wip"]');
+            
+            socialButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault(); // Stop default action
+                    switchTab('wip'); // Switch to the WIP status tab
+                });
+            });
+
+            // ------------------------------------------------
+            // 5. Main Content Toggle
+            // ------------------------------------------------
+            const iconHide = document.getElementById('toggle-icon-hide');
+            const iconShow = document.getElementById('toggle-icon-show');
+
+            if (toggleBtn && mainContent && floatingElement && iconHide && iconShow) {
+                
+                let isContentVisible = true; // Tracks the state
+
+                toggleBtn.addEventListener('click', () => {
+                    isContentVisible = !isContentVisible; // Flip the state
+                    
+                    // Toggle the custom fade/blur class defined in <style>
+                    mainContent.classList.toggle('content-hidden');
+                    floatingElement.classList.toggle('content-hidden');
+                    
+                    // Toggle the eye icons
+                    iconHide.classList.toggle('hidden');
+                    iconShow.classList.toggle('hidden');
+                    
+                    // Update ARIA attributes
+                    toggleBtn.setAttribute('aria-expanded', isContentVisible);
+                    mainContent.setAttribute('aria-hidden', !isContentVisible);
+                });
+                
+                // Set initial ARIA state
+                mainContent.setAttribute('aria-hidden', 'false');
+
+            } else {
+                console.warn('Main content toggle elements not found. Button will not work.');
+            }
+
+        });
+    </script>
 </body>
 </html>
