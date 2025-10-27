@@ -9,6 +9,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const backgroundVideo = document.getElementById('background-video');
     const floatingElement = document.getElementById('floating-element'); 
     
+    // --- NEW: VIDEO RANDOMIZER ---
+    // IMPORTANT: ONLY LIST THE VIDEOS YOU HAVE UPLOADED.
+    // The script will randomly pick from this list.
+    const videoPlaylist = [
+        'music/music1.mp4',
+        'music/music2.mp4'
+        'music/music3.mp4',
+        'music/music4.mp4',
+        'music/music5.mp4',
+        'music/music6.mp4',
+        'music/music7.mp4',
+        'music/music8.mp4',
+        'music/music9.mp4',
+        'music/music10.mp4'
+    ];
+
+    // 2. Pick a random video index from the list
+    const randomIndex = Math.floor(Math.random() * videoPlaylist.length);
+    
+    // 3. Get the path of the randomly chosen video
+    const randomVideo = videoPlaylist[randomIndex];
+
+    // 4. Set the video element's source to the random video
+    if (backgroundVideo) {
+        backgroundVideo.src = randomVideo;
+        backgroundVideo.load(); // Tells the browser to load this new video
+    }
+    // --- END: VIDEO RANDOMIZER ---
+    
     // NEW: Get the master toggle button
     const toggleBtn = document.getElementById('toggle-content-btn');
     
