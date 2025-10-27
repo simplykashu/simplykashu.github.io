@@ -14,194 +14,133 @@
 
     <div id="floating-element" class="hidden"></div>
 
+    <!-- FIX: Removed hardcoded src="music/music.mp4". JS will now set the source randomly. -->
     <video id="background-video" loop playsinline class="fixed inset-0 w-full h-full object-cover -z-10"></video>
     
+    <!-- NEW: Added p-2, rounded-lg, border, border-zinc-700, and shadow-md -->
     <button id="toggle-content-btn" 
-            class="fixed top-6 right-6 sm:top-10 sm:right-10 text-zinc-200 transition-colors z-40 hidden p-2 rounded-lg border border-zinc-700 shadow-md" 
-            title="Toggle Content"
-            aria-label="Toggle profile content"
+            class="fixed top-6 right-6 sm:top-10 sm:right-10 text-zinc-200 transition-colors z-40 hidden p-2 rounded-lg border border-zinc-700 shadow-md"
+            aria-label="Toggle profile content visibility"
             aria-expanded="true">
-        <i id="toggle-icon-hide" data-lucide="eye-off"></i>
-        <i id="toggle-icon-show" data-lucide="eye" class="hidden"></i>
+        <!-- Icon to hide content (default) -->
+        <svg id="toggle-icon-hide" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        <!-- Icon to show content (hidden by default) -->
+        <svg id="toggle-icon-show" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
     </button>
-    
-    <div id="intro-overlay" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center cursor-pointer text-white">
-        <p class="text-2xl sm:text-4xl font-semibold animate-pulse">Click to Enter</p>
-        <p class="text-lg sm:text-xl text-zinc-400 mt-2">(Tap screen for mobile users)</p>
+
+    <!-- Intro Overlay -->
+    <div id="intro-overlay" class="fixed inset-0 bg-zinc-900/90 backdrop-blur-md z-50 flex items-center justify-center cursor-pointer transition-opacity duration-500">
+        <div class="text-center p-6 bg-zinc-800/80 rounded-xl shadow-2xl border border-zinc-700 max-w-sm w-full animate-pulse-slow">
+            <h1 class="text-3xl font-bold text-zinc-50 mb-2">Welcome</h1>
+            <p class="text-lg text-zinc-300 mb-6">Click Anywhere to Enter</p>
+            <div class="text-zinc-500 text-sm">
+                (Warning: May contain loud music)
+            </div>
+        </div>
     </div>
     
-    <div id="main-content" class="max-w-4xl mx-auto bg-zinc-800 rounded-xl shadow-2xl border border-zinc-700 overflow-hidden hidden">
+    <div id="main-content" class="hidden transition-all duration-500 ease-in-out relative z-30 min-h-[calc(100vh-48px)] sm:min-h-[calc(100vh-80px)]">
         
-        <div class="md:flex">
-            
-            <div id="profile-panel" class="md:w-1/3 bg-zinc-800 p-8 border-b md:border-b-0 md:border-r border-zinc-700">
+        <div class="max-w-4xl mx-auto py-4 sm:py-8">
+            <div class="flex flex-col md:flex-row bg-zinc-800/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-zinc-700 overflow-hidden">
                 
-                <div class="text-center mb-6">
-                    <img 
-                        src="images/avatar.jpg" 
-                        alt="Luke" 
-                        class="w-[150px] h-[150px] object-cover rounded-full border-4 border-zinc-700 mx-auto shadow-lg"
-                        onerror="this.src='https://placehold.co/150x150/27272a/fafafa?text=Luke'"
-                    >
-                </div>
-                
-                <h1 class="text-3xl font-bold text-white text-center mb-6">SimplyKashu</h1>
+                <!-- Profile/Sidebar -->
+                <aside class="md:w-1/3 p-8 flex flex-col items-center text-center space-y-6 border-b md:border-b-0 md:border-r border-zinc-700/50">
+                    <img src="https://placehold.co/150x150/18181B/E4E4E7?text=Kashu" 
+                         alt="Profile Picture" 
+                         class="w-[150px] h-[150px] object-cover rounded-full border-4 border-zinc-700 mx-auto shadow-lg">
 
-                <dl class="space-y-3">
-                    <div class="flex justify-between">
-                        <dt class="font-medium text-zinc-400">Name:</dt>
-                        <dd class="text-zinc-100">Luke</dd>
-                    </div>    
-                    <div class="flex justify-between">    
-                        <dt class="font-medium text-zinc-400">Country:</dt>
-                        <dd class="text-zinc-100">South Africa</dd>
+                    <h1 class="text-3xl font-bold text-zinc-50">SimplyKashu</h1>
+                    
+                    <p class="text-lg font-medium text-zinc-400">Streamer & DJ</p>
+                    
+                    <div class="space-y-2 text-sm">
+                        <p class="flex items-center justify-center gap-2 text-zinc-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-zinc-500"><path d="M22 10s-4 4-7 0v-2c3-4 7 0 7 0"/></svg>
+                            Location: South Africa
+                        </p>
+                        <p class="flex items-center justify-center gap-2 text-zinc-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-zinc-500"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M7 11l5 5 5-5"/><path d="M12 4v12"/></svg>
+                            Discord Status: <span id="discord-status-name" class="font-semibold transition-colors duration-300">Loading...</span>
+                        </p>
                     </div>
-                    <div class="flex justify-between">
-                        <dt class="font-medium text-zinc-400">Age:</dt>
-                        <dd class="text-zinc-100">15</dd>
-                    </div>
-                    <div class="flex justify-between">
-                        <dt class="font-medium text-zinc-400">Relationship:</dt>
-                        <dd class="text-zinc-100">Taken</dd>
-                    </div>
-                    <div class="flex justify-between">
-                        <dt class="font-medium text-zinc-400">Future Job:</dt>
-                        <dd class="text-zinc-100">Farmworker</dd>
-                    </div>
-                    <div class="flex justify-between">
-                        <dt class="font-medium text-zinc-400">Discord:</dt>
-                        <dd id="discord-status-name" class="text-zinc-100 font-mono text-sm">simplykashu</dd>
-                    </div>
-                </dl>
-                <div class="mt-8 pt-6 border-t border-zinc-700 text-center">
-                    <h2 class="text-xl font-semibold mb-4 text-zinc-200">Connect</h2>
-                    <div class="flex justify-center space-x-5">
-                        
-                        <button data-tab-trigger="wip" title="Discord" aria-label="Discord status" class="text-zinc-400 hover:text-white transition-colors">
-                            <i data-lucide="message-square"></i> 
-                        </button>
-                        
-                        <button data-tab-trigger="wip" title="Twitch" aria-label="Twitch channel status" class="text-zinc-400 hover:text-white transition-colors">
-                            <i data-lucide="twitch"></i>
-                        </button>
-                        
-                        <button data-tab-trigger="wip" title="YouTube" aria-label="YouTube channel status" class="text-zinc-400 hover:text-white transition-colors">
-                            <i data-lucide="youtube"></i>
-                        </button>
-                        
-                        <a href="https://tiktok.com/@simplykashu" target="_blank" title="TikTok" aria-label="TikTok profile" class="text-zinc-400 hover:text-white transition-colors">
-                            <i data-lucide="music-2"></i>
+
+                    <!-- Social Links -->
+                    <div class="flex justify-center space-x-4 pt-2">
+                        <!-- Spotify -->
+                        <a href="#" data-tab-trigger="music" class="text-zinc-400 hover:text-green-500 transition-colors duration-200 p-2 rounded-full border border-zinc-700 hover:border-green-500" aria-label="Spotify Music Link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.33 17.92A10 10 0 0 0 22 12c0-5.52-4.48-10-10-10S2 6.48 2 12a10 10 0 0 0 13.67 5.92"/><path d="M16 10s-2-2-4 0"/><path d="M14 13s-1-1-2 0"/></svg>
                         </a>
-
-                        <a href="https://spotify.link/fxttf3uMJXb" target="_blank" title="Spotify" aria-label="Spotify profile" class="text-zinc-400 hover:text-white transition-colors">
-                            <i data-lucide="music"></i>
+                        <!-- YouTube -->
+                        <a href="#" data-tab-trigger="wip" class="text-zinc-400 hover:text-red-600 transition-colors duration-200 p-2 rounded-full border border-zinc-700 hover:border-red-600" aria-label="YouTube Channel Link (WIP)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.1 24.1 0 0 0 10.5 0 24.1 24.1 0 0 1 10.5 0"/><path d="M10 10v4"/><path d="M15 10v4"/></svg>
                         </a>
+                        <!-- Twitch -->
+                        <a href="#" data-tab-trigger="wip" class="text-zinc-400 hover:text-purple-500 transition-colors duration-200 p-2 rounded-full border border-zinc-700 hover:border-purple-500" aria-label="Twitch Channel Link (WIP)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2H3v16h5v4l4-4h5l4-4V2zm-10 9V7m5 4V7"/></svg>
+                        </a>
+                    </div>
+                </aside>
 
-                        </div>
-                </div>
-
-            </div>
-
-            <div id="content-panel" class="md:w-2/3 p-8">
-                
-                <div class="mb-6 border-b border-zinc-700">
-                    <nav class="flex -mb-px" role="tablist" aria-label="Profile sections">
-                        <button 
-                            id="bio-tab" 
-                            class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-50 border-b-2 border-zinc-50 transition-all duration-200 hover:text-zinc-200" 
-                            data-tab="bio"
-                            role="tab"
-                            aria-controls="bio"
-                            aria-selected="true"
-                        >
-                            Bio
+                <!-- Content Area -->
+                <div class="md:w-2/3 p-8 space-y-6">
+                    <!-- Tab Navigation -->
+                    <nav role="tablist" class="flex border-b border-zinc-700/50">
+                        <button id="bio-tab" data-tab="bio" role="tab" aria-controls="bio" aria-selected="true"
+                                class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-50 border-b-2 border-zinc-50 transition-all duration-200 hover:text-zinc-200">
+                            BIO
                         </button>
-                        <button 
-                            id="gaming-tab" 
-                            class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-400 border-b-2 border-transparent transition-all duration-200 hover:text-zinc-200" 
-                            data-tab="gaming"
-                            role="tab"
-                            aria-controls="gaming"
-                            aria-selected="false"
-                        >
-                            Gaming
+                        <button id="music-tab" data-tab="music" role="tab" aria-controls="music" aria-selected="false"
+                                class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-400 border-b-2 border-transparent transition-all duration-200 hover:text-zinc-200">
+                            MUSIC
                         </button>
-                        <button 
-                            id="music-tab" 
-                            class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-400 border-b-2 border-transparent transition-all duration-200 hover:text-zinc-200" 
-                            data-tab="music"
-                            role="tab"
-                            aria-controls="music"
-                            aria-selected="false"
-                        >
-                            Music
-                        </button>
-                        <button 
-                            id="wip-tab" 
-                            class="tab-btn hidden py-3 px-5 font-semibold text-sm text-zinc-400 border-b-2 border-transparent transition-all duration-200 hover:text-zinc-200" 
-                            data-tab="wip"
-                            role="tab"
-                            aria-controls="wip"
-                            aria-selected="false"
-                        >
-                            Status
+                        <button id="contact-tab" data-tab="contact" role="tab" aria-controls="contact" aria-selected="false"
+                                class="tab-btn py-3 px-5 font-semibold text-sm text-zinc-400 border-b-2 border-transparent transition-all duration-200 hover:text-zinc-200">
+                            CONTACT
                         </button>
                     </nav>
-                </div>
 
-                <div>
+                    <!-- Tab Content Containers -->
+                    
                     <section id="bio" class="tab-content" role="tabpanel" aria-labelledby="bio-tab">
-                        <h2 class="text-2xl font-semibold mb-4 text-white">My Bio</h2>
-                        <div class="space-y-4 text-zinc-300">
-                            <p>Hey, I'm Luke, a 15-year-old from South Africa. I'm currently just navigating life and figuring things out as I go. I'd describe my personality as a bit of everything—I find it keeps life interesting.</p>
-                            <p>Most of my free time is split between my two main passions: music and gaming. You'll usually find me listening to artists like Diggy Graves and sKitz Kraven. On the gaming side, I have a few favorites: you might catch me surviving in <strong class="text-zinc-100">Dead by Daylight</strong>, hunting ghosts in <strong class="text-zinc-100">Phasmophobia</strong>, exploring in <strong class="text-zinc-100">Roblox</strong>, or chasing a win in <strong class="text-zinc-100">Fortnite</strong>. I'm always down to try new games, though.</p>
-                            <p>Looking ahead, I have a clear goal: I want to become a farmworker. I know it's not a typical career path for someone my age, but I'm drawn to the idea of working with the land and being outdoors. There's something real about it. It's hard work, but it's a future I'm genuinely excited about.</p>
-                        </div>
-                    </section>
-                    <section id="gaming" class="tab-content hidden" role="tabpanel" aria-labelledby="gaming-tab">
-                        <h2 class="text-2xl font-semibold mb-4 text-white">Games I Play</h2>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/deadbydaylight.png" alt="Dead by Daylight" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=DbD'">
-                                <h3 class="text-lg font-semibold text-zinc-100">Dead by Daylight</h3>
-                            </div>
-                            
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/phasmophobia.png" alt="Phasmophobia" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=Phas'">
-                                <h3 class="text-lg font-semibold text-zinc-100">Phasmophobia</h3>
-                            </div>
-
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/roblox.png" alt="Roblox" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=RBLX'">
-                                <h3 class="text-lg font-semibold text-zinc-100">Roblox</h3>
-                            </div>
-
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/fortnite.png" alt="Fortnite" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=FN'">
-                                <h3 class="text-lg font-semibold text-zinc-100">Fortnite</h3>
-                            </div>
-
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/more.png" alt="More Games" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=...'">
-                                <h3 class="text-lg font-semibold text-zinc-100">And More</h3>
+                        <h2 class="text-2xl font-semibold mb-4 text-white">The Sound & The Scene</h2>
+                        <div class="space-y-4 text-zinc-400">
+                            <p>Hey, I'm Kashu! I'm a South African DJ and streamer focused on bringing the highest energy beats to the community. My sets are a blend of massive Klap-Dans anthems, EDM, and hard-hitting party tracks from all over the world.</p>
+                            <p>When I'm not mixing, I'm streaming games and interacting with the chat—always focused on keeping the vibes positive and the volume loud. Thanks for stopping by!</p>
+                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700">
+                                <p class="font-semibold text-zinc-100">My Motto:</p>
+                                <p class="text-zinc-300 italic">"If you're not sweating, the bass isn't high enough."</p>
                             </div>
                         </div>
                     </section>
+
+                    <section id="contact" class="tab-content hidden" role="tabpanel" aria-labelledby="contact-tab">
+                        <h2 class="text-2xl font-semibold mb-4 text-white">Get In Touch</h2>
+                        <div class="space-y-4 text-zinc-400">
+                            <p>Need to book a set or just want to chat? Send me an email—I try to reply to everyone!</p>
+                            
+                            <div class="bg-zinc-700/50 p-6 rounded-lg border border-zinc-700 space-y-4">
+                                <p class="flex items-center gap-3 text-lg font-medium text-zinc-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-zinc-500"><path d="M22 7.5L12 15L2 7.5"/></svg>
+                                    Email: <a href="mailto:kashu.dj@example.com" class="text-blue-400 hover:text-blue-300 transition-colors">kashu.dj@example.com</a>
+                                </p>
+                                <p class="flex items-center gap-3 text-lg font-medium text-zinc-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-zinc-500"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    Discord: <span class="text-green-400 font-mono">simplykashu#1234</span>
+                                </p>
+                                <p class="text-sm text-zinc-400 pt-2">
+                                    (Note: For Discord, check the Bio tab for current status.)
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
                     <section id="music" class="tab-content hidden" role="tabpanel" aria-labelledby="music-tab">
-                        <h2 class="text-2xl font-semibold mb-4 text-white">Music Tastes</h2>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700">
-                                <h3 class="text-lg font-semibold text-zinc-100">Diggy Graves</h3>
-                            </div>
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700">
-                                <h3 class="text-lg font-semibold text-zinc-100">sKitz Kraven</h3>
-                            </div>
-                        </div>
-                        <p class="text-zinc-400 my-4">My current favorite playlist:</p>
-                        <div class="sm:col-span-2">
-                             <iframe 
-                                title="My current favorite playlist" 
+                        <h2 class="text-2xl font-semibold mb-4 text-white">Current Vibe</h2>
+                        <p class="text-zinc-400 mb-6">This is what's on heavy rotation right now—loud, fast, and ready to party.</p>
+                        <div class="flex flex-col space-y-4">
+                            <!-- Placeholder Spotify Embed -->
+                            <iframe 
                                 style="border-radius:12px" 
                                 src="https://open.spotify.com/embed/playlist/7g9raifcuolyTWFlGAhLnR?utm_source=generator" 
                                 width="100%" 
