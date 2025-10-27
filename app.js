@@ -2,42 +2,39 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // ------------------------------------------------
+    // 0. NEW: VIDEO RANDOMIZER LOGIC (FIX)
+    // ------------------------------------------------
+    const backgroundVideo = document.getElementById('background-video');
+
+    // 1. Define the full playlist. Add your new files here!
+    const videoPlaylist = [
+        'music/music1.mp4',
+        'music/music2.mp4',
+        'music/music3.mp4',
+        'music/music4.mp4
+    ];
+    
+    // 2. Select a random video URL
+    const randomIndex = Math.floor(Math.random() * videoPlaylist.length);
+    const randomVideoSrc = videoPlaylist[randomIndex];
+
+    // 3. Set the video player's source before the page loads
+    if (backgroundVideo) {
+        backgroundVideo.src = randomVideoSrc;
+        console.log(`Video source set to: ${randomVideoSrc}`);
+    }
+    // ------------------------------------------------
+    // END: VIDEO RANDOMIZER LOGIC
+    // ------------------------------------------------
+
+
+    // ------------------------------------------------
     // 1. Intro Screen and Music Logic
     // ------------------------------------------------
     const introOverlay = document.getElementById('intro-overlay');
     const mainContent = document.getElementById('main-content');
-    const backgroundVideo = document.getElementById('background-video');
+    // backgroundVideo is already defined in Section 0
     const floatingElement = document.getElementById('floating-element'); 
-    
-    // --- NEW: VIDEO RANDOMIZER ---
-    // IMPORTANT: ONLY LIST THE VIDEOS YOU HAVE UPLOADED.
-    // The script will randomly pick from this list.
-    const videoPlaylist = [
-        'music/music1.mp4',
-        'music/music2.mp4'
-        // If you upload music3.mp4 later, uncomment this line:
-        // 'music/music3.mp4',
-        // 'music/music4.mp4',
-        // 'music/music5.mp4',
-        // 'music/music6.mp4',
-        // 'music/music7.mp4',
-        // 'music/music8.mp4',
-        // 'music/music9.mp4',
-        // 'music/music10.mp4'
-    ];
-
-    // 2. Pick a random video index from the list
-    const randomIndex = Math.floor(Math.random() * videoPlaylist.length);
-    
-    // 3. Get the path of the randomly chosen video
-    const randomVideo = videoPlaylist[randomIndex];
-
-    // 4. Set the video element's source to the random video
-    if (backgroundVideo) {
-        backgroundVideo.src = randomVideo;
-        backgroundVideo.load(); // Tells the browser to load this new video
-    }
-    // --- END: VIDEO RANDOMIZER ---
     
     // NEW: Get the master toggle button
     const toggleBtn = document.getElementById('toggle-content-btn');
