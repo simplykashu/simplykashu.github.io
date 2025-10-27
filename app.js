@@ -15,14 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoPlaylist = [
         'music/music1.mp4',
         'music/music2.mp4'
-        'music/music3.mp4',
-        'music/music4.mp4',
-        'music/music5.mp4',
-        'music/music6.mp4',
-        'music/music7.mp4',
-        'music/music8.mp4',
-        'music/music9.mp4',
-        'music/music10.mp4'
+        // If you upload music3.mp4 later, uncomment this line:
+        // 'music/music3.mp4',
+        // 'music/music4.mp4',
+        // 'music/music5.mp4',
+        // 'music/music6.mp4',
+        // 'music/music7.mp4',
+        // 'music/music8.mp4',
+        // 'music/music9.mp4',
+        // 'music/music10.mp4'
     ];
 
     // 2. Pick a random video index from the list
