@@ -149,68 +149,86 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ------------------------------------------------
-    // 3. Dynamic Discord Status
+    // 3. Dynamic Discord Status (FIXED with Icon and Logic)
     // ------------------------------------------------
 
-    // IMPORTANT: Replace this with your actual Discord User ID
+    // 🔴 IMPORTANT: REPLACE THE ID BELOW WITH YOUR ACTUAL DISCORD USER ID 
+    // This is the line that's causing the console warning right now!
     const DISCORD_USER_ID = '1066445133916164146'; 
 
     const discordStatusEl = document.getElementById('discord-status-name');
+    const discordStatusIconEl = document.getElementById('discord-status-icon');
+
 
     async function getDiscordStatus() {
-        if (!discordStatusEl || DISCORD_USER_ID === 'YOUR_DISCORD_USER_ID_HERE') {
-            console.warn('Discord status element not found or User ID is not set.');
-            if (discordStatusEl) {
-               discordStatusEl.textContent = 'simplykashu';
-            }
+        // Fallback for missing elements
+        // *** FIX: Removed the check for the placeholder ID ***
+        if (!discordStatusEl || !discordStatusIconEl) { 
+            console.warn('Discord status element or icon not found.');
             return;
         }
         
-        // FIX: Remove all possible status colors before fetching new status
+        // Cleanup and loading state (briefly resets visual state before fetch)
         discordStatusEl.classList.remove('text-green-400', 'text-yellow-500', 'text-red-500', 'text-zinc-500');
-        discordStatusEl.textContent = 'Loading...';
+        // Setting a placeholder while waiting for the API response
+        discordStatusEl.textContent = 'Updating...'; 
 
         try {
-            // Lanyard provides Discord presence
             const response = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`);
             if (!response.ok) {
                 throw new Error('Lanyard API request failed');
             }
             
             const { data } = await response.json();
+            
+            let status = data.discord_status;
+            let iconPath = 'images/discord/';
+            let iconAlt = '';
 
-            // Check for offline status first
-            if (data.discord_status === 'offline') {
-                discordStatusEl.textContent = 'Offline';
-                discordStatusEl.classList.add('text-zinc-500'); // Grey for Offline
-            } else {
-                // If not offline, set the username
-                discordStatusEl.textContent = data.discord_user.username;
-                
-                // Now, set the color based on the specific status (online, idle, dnd)
-                switch (data.discord_status) {
-                    case 'online':
-                        discordStatusEl.classList.add('text-green-400'); // Green
-                        break;
-                    case 'idle':
-                        // Assuming you have 'text-yellow-500' in your Tailwind config
-                        discordStatusEl.classList.add('text-yellow-500'); // Yellow for Idle
-                        break;
-                    case 'dnd':
-                        // Assuming you have 'text-red-500' in your Tailwind config
-                        discordStatusEl.classList.add('text-red-500'); // Red for Do Not Disturb
-                        break;
-                    default:
-                        // Fallback for any other unexpected status
-                        discordStatusEl.classList.add('text-zinc-500');
-                        break;
-                }
+            // Determine status, set BOTH text and visual cues.
+            switch (status) {
+                case 'online':
+                    // Display username when active
+                    discordStatusEl.textContent = data.discord_user.username; 
+                    discordStatusEl.classList.add('text-green-400');
+                    iconPath += 'online.png';
+                    iconAlt = 'Online';
+                    break;
+                case 'idle':
+                    // Display username when active
+                    discordStatusEl.textContent = data.discord_user.username; 
+                    discordStatusEl.classList.add('text-yellow-500');
+                    iconPath += 'idle.png';
+                    iconAlt = 'Idle';
+                    break;
+                case 'dnd':
+                    // Display username when active
+                    discordStatusEl.textContent = data.discord_user.username; 
+                    discordStatusEl.classList.add('text-red-500');
+                    iconPath += 'dnd.png';
+                    iconAlt = 'Do Not Disturb';
+                    break;
+                case 'offline': // Handle offline explicitly
+                default:        // Handle unknown statuses as offline
+                    // Show "Offline" text when inactive
+                    discordStatusEl.textContent = 'Offline'; 
+                    discordStatusEl.classList.add('text-zinc-500');
+                    iconPath += 'offline.png';
+                    iconAlt = 'Offline';
+                    break;
             }
             
+            // Update the icon element
+            discordStatusIconEl.src = iconPath;
+            discordStatusIconEl.alt = iconAlt + ' status icon';
+
         } catch (error) {
             console.error('Error fetching Discord status:', error);
-            discordStatusEl.textContent = 'simplykashu'; // Fallback
-            discordStatusEl.classList.add('text-zinc-500'); // Add fallback color
+            // Fallback on error
+            discordStatusEl.textContent = 'simplykashu'; 
+            discordStatusEl.classList.add('text-zinc-500'); 
+            discordStatusIconEl.src = 'images/discord/offline.png';
+            discordStatusIconEl.alt = 'Offline (Error)';
         }
     }
 
@@ -226,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ------------------------------------------------
-    // 4. NEW: Main Content Toggle (Replaces old logic)
+    // 4. NEW: Main Content Toggle 
     // ------------------------------------------------
     
     // We already defined 'toggleBtn', 'mainContent', and 'floatingElement' in Section 1
