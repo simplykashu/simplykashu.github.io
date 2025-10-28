@@ -14,18 +14,14 @@
 
     <div id="floating-element" class="hidden"></div>
 
-    <video id="background-video" src="music/music.mp4" loop playsinline class="fixed inset-0 w-full h-full object-cover -z-10"></video>
+    <video id="background-video" src="music/Dik In Desember.mp4" loop playsinline class="fixed inset-0 w-full h-full object-cover -z-10"></video>
     
-    <!-- NEW: Added p-2, rounded-lg, border, border-zinc-700, and shadow-md -->
-    <!--      Removed hover:text-white (will be handled in style.css)     -->
     <button id="toggle-content-btn" 
             class="fixed top-6 right-6 sm:top-10 sm:right-10 text-zinc-200 transition-colors z-40 hidden p-2 rounded-lg border border-zinc-700 shadow-md" 
             title="Toggle Content"
             aria-label="Toggle profile content"
             aria-expanded="true">
-        <!-- Icon shown when content is VISIBLE -->
         <i id="toggle-icon-hide" data-lucide="eye-off"></i>
-        <!-- Icon shown when content is HIDDEN -->
         <i id="toggle-icon-show" data-lucide="eye" class="hidden"></i>
     </button>
     
@@ -72,11 +68,15 @@
                         <dt class="font-medium text-zinc-400">Future Job:</dt>
                         <dd class="text-zinc-100">Farmworker</dd>
                     </div>
+                    
                     <div class="flex justify-between">
                         <dt class="font-medium text-zinc-400">Discord:</dt>
-                        <dd id="discord-status-name" class="text-zinc-100 font-mono text-sm">simplykashu</dd>
+                        <dd class="flex items-center space-x-2">
+                            <img id="discord-status-icon" src="images/discord/offline.png" alt="Discord Status Icon" class="w-4 h-4 rounded-full">
+                            <span id="discord-status-name" class="text-zinc-100 font-mono text-sm">simplykashu</span>
+                        </dd>
                     </div>
-                </dl>
+                    </dl>
                 <div class="mt-8 pt-6 border-t border-zinc-700 text-center">
                     <h2 class="text-xl font-semibold mb-4 text-zinc-200">Connect</h2>
                     <div class="flex justify-center space-x-5">
@@ -237,4 +237,3 @@
     <script src="app.js?v=5"></script>
 </body>
 </html>
-
