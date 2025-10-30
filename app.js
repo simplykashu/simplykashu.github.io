@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Setup click listeners for social links that trigger a tab
     tabTriggers.forEach(trigger => {
         trigger.addEventListener('click', () => {
-          _ const target = trigger.getAttribute('data-tab-trigger');
+            const target = trigger.getAttribute('data-tab-trigger');
             
             deactivateAllTabs(); 
             activateTab(target); 
@@ -153,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ------------------------------------------------
 
     // 🔴 IMPORTANT: REPLACE THE ID BELOW WITH YOUR ACTUAL DISCORD USER ID 
+    // This is the line that's causing the console warning right now!
     const DISCORD_USER_ID = '1066445133916164146'; 
 
     const discordStatusEl = document.getElementById('discord-status-name');
@@ -161,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function getDiscordStatus() {
         // Fallback for missing elements
+        // *** FIX: Removed the check for the placeholder ID ***
         if (!discordStatusEl || !discordStatusIconEl) { 
             console.warn('Discord status element or icon not found.');
             return;
@@ -178,7 +180,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const { data } = await response.json();
-s
+            
+            let status = data.discord_status;
             let iconPath = 'images/discord/';
             let iconAlt = '';
 
@@ -186,52 +189,55 @@ s
             switch (status) {
                 case 'online':
                     // Display username when active
-                    discordStatusEl.textContent = data.discord_user.username;s
+                    discordStatusEl.textContent = data.discord_user.username; 
+                    discordStatusEl.classList.add('text-green-400');
                     iconPath += 'online.png';
-            	        iconAlt = `${data.discord_user.username} (Online)`; // <-- UPDATED
+                    iconAlt = 'Online';
                     break;
                 case 'idle':
                     // Display username when active
                     discordStatusEl.textContent = data.discord_user.username; 
                     discordStatusEl.classList.add('text-yellow-500');
                     iconPath += 'idle.png';
-            	        iconAlt = `${data.discord_user.username} (Idle)`; // <-- UPDATED
+                    iconAlt = 'Idle';
                     break;
                 case 'dnd':
                     // Display username when active
                     discordStatusEl.textContent = data.discord_user.username; 
                     discordStatusEl.classList.add('text-red-500');
                     iconPath += 'dnd.png';
-            	        iconAlt = `${data.discord_user.username} (Do Not Disturb)`; // <-- UPDATED
+                    iconAlt = 'Do Not Disturb';
                     break;
                 case 'offline': // Handle offline explicitly
-            	default:        // Handle unknown statuses as offline
+                default:        // Handle unknown statuses as offline
                     // Show "Offline" text when inactive
                     discordStatusEl.textContent = data.discord_user?.username || 'simplykashu'; 
-            	        discordStatusEl.classList.add('text-zinc-500');
-      	              iconPath += 'offline.png';
-      	              iconAlt = `${data.discord_user?.username || 'simplykashu'} (Offline)`;
-      	              break;
-          	}
+                    discordStatusEl.classList.add('text-zinc-500');
+                    iconPath += 'offline.png';
+                    iconAlt = `${data.discord_user?.username || 'simplykashu'} (Offline)`;
+                    break;
+            }
             
-          	// Update the icon element
-      	    discordStatusIconEl.src = iconPath;
-      	    discordStatusIconEl.alt = iconAlt + ' status icon';
+            // Update the icon element
+            discordStatusIconEl.src = iconPath;
+            discordStatusIconEl.alt = iconAlt + ' status icon';
 
-    	} catch (error) {
-        	console.error('Error fetching Discord status:', error);
-      	    // Fallback on error
-      	    discordStatusEl.textContent = 'simplykashu';s
-    	      discordStatusIconEl.src = 'images/discord/offline.png';
-    	      discordStatusIconEl.alt = 'simplykashu (Offline) status icon';
-    	}
+        } catch (error) {
+            console.error('Error fetching Discord status:', error);
+            // Fallback on error
+            discordStatusEl.textContent = 'simplykashu'; 
+            discordStatusEl.classList.add('text-zinc-500'); 
+            discordStatusIconEl.src = 'images/discord/offline.png';
+            discordStatusIconEl.alt = `${data?.discord_user?.username || 'simplykashu'} (Offline)`
+        }
     }
 
     // Call the function when the page loads
     getDiscordStatus();
     
     // Refresh the status every 60 seconds (60000 milliseconds)
-s
+    setInterval(getDiscordStatus, 60000);
+
     // ------------------------------------------------
     // END: Dynamic Discord Status
     // ------------------------------------------------
@@ -276,3 +282,5 @@ s
     // END: Main Content Toggle
     // ------------------------------------------------
 });
+
+example at the end (online), (idle), (dnd), (offline)
