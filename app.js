@@ -282,5 +282,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // END: Main Content Toggle
     // ------------------------------------------------
 });
-
-example at the end (online), (idle), (dnd), (offline)
