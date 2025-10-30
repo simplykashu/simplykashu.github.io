@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     discordStatusEl.textContent = 'simplykashu'; 
                     discordStatusEl.classList.add('text-zinc-500');
                     iconPath += 'offline.png';
-                    iconAlt = 'Offline';
+                    iconAlt = '${data.discord_user.username}';
                     break;
             }
             
