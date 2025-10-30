@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const target = trigger.getAttribute('data-tab-trigger');
             
             deactivateAllTabs(); 
-            activateTab(target); 
+            activateTab(target);s
         });
     });
 
@@ -184,34 +184,32 @@ document.addEventListener('DOMContentLoaded', () => {
             let iconAlt = '';
 
             // Determine status, set BOTH text and visual cues.
-            switch (status) {
+id="bio" class="tab-content"
                 case 'online':
                     // Display username when active
                     discordStatusEl.textContent = data.discord_user.username; 
                     discordStatusEl.classList.add('text-green-400');
                     iconPath += 'online.png';
-                    iconAlt = `${data.discord_user.username} (Online)`; // <-- UPDATED
+                    iconAlt = `${data.discord_user.username} (Online)`;
                     break;
                 case 'idle':
                     // Display username when active
                     discordStatusEl.textContent = data.discord_user.username; 
                     discordStatusEl.classList.add('text-yellow-500');
                     iconPath += 'idle.png';
-                    iconAlt = `${data.discord_user.username} (Idle)`; // <-- UPDATED
+                    iconAlt = `${data.discord_user.username} (Idle)`;
                     break;
                 case 'dnd':
                     // Display username when active
-s.forEach(c => c.classList.remove('active'));
-            e.classList.add('active');
-            document.getElementById(target).classList.add('active');
+id="bio" class="tab-content"
                     discordStatusEl.classList.add('text-red-500');
                     iconPath += 'dnd.png';
-            	        iconAlt = `${data.discord_user.username} (Do Not Disturb)`; // <-- UPDATED
-                    break;
+            	        iconAlt = `${data.discord_user.username} (Do Not Disturb)`;
+s
                 case 'offline': // Handle offline explicitly
             	default:        // Handle unknown statuses as offline
                     // Show "Offline" text when inactive
-                    discordStatusEl.textContent = data.discord_user?.username || 'simplykashu'; 
+id="bio" class="tab-content"
             	        discordStatusEl.classList.add('text-zinc-500');
       	              iconPath += 'offline.png';
       	              iconAlt = `${data.discord_user?.username || 'simplykashu'} (Offline)`;
@@ -224,70 +222,58 @@ s.forEach(c => c.classList.remove('active'));
 
     	} catch (error) {
         	console.error('Error fetching Discord status:', error);
-    s.forEach(c => c.classList.remove('active'));
+      	    // Fallback on error
       	    discordStatusEl.textContent = 'simplykashu'; 
       	    discordStatusEl.classList.add('text-zinc-500'); 
     	      discordStatusIconEl.src = 'images/discord/offline.png';
-    	      discordStatusIconEl.alt = `${data?.discord_user?.username || 'simplykashu'} (Offline) status icon`;
-i> }
-  	}
+    	      discordStatusIconEl.alt = `simplykashu (Offline) status icon`; // Simplified fallback
+    	}
+    }
 
-  	// Call the function when the page loads
-  	getDiscordStatus();
+    // Call the function when the page loads
+    getDiscordStatus();
     
-  	// Refresh the status every 60 seconds (60000 milliseconds)
-  	setInterval(getDiscordStatus, 60000);
+    // Refresh the status every 60 seconds (60000 milliseconds)
+    setInterval(getDiscordStatus, 60000);
 
-  	// ------------------------------------------------
-  	// END: Dynamic Discord Status
-  	// ------------------------------------------------
+    // ------------------------------------------------
+    // END: Dynamic Discord Status
+    // ------------------------------------------------
 
 
-  	// ------------------------------------------------
-  	// 4. NEW: Main Content Toggle 
-  	// ------------------------------------------------
+    // ------------------------------------------------
+    // 4. NEW: Main Content Toggle 
+    // ------------------------------------------------
     
-  	// We already defined 'toggleBtn', 'mainContent', and 'floatingElement' in Section 1
-  	const iconHide = document.getElementById('toggle-icon-hide');
-  	const iconShow = document.getElementById('toggle-icon-show');
+    // We already defined 'toggleBtn', 'mainContent', and 'floatingElement' in Section 1
+    const iconHide = document.getElementById('toggle-icon-hide');
+    const iconShow = document.getElementById('toggle-icon-show');
 
-  	if (toggleBtn && mainContent && floatingElement && iconHide && iconShow) {
-        
-    	    let isContentVisible = true; // Tracks the state
-
-    	    toggleBtn.addEventListener('click', () => {
-  s.forEach(c => c.classList.remove('active'));
-          	e.classList.add('active');
-          	document.getElementById(target).classList.add('active');
-        });
-    	});
-          	mainContent.classList.toggle('content-hidden');
-      	      floatingElement.classList.toggle('content-hidden');
+    if (toggleBtn && mainContent && floatingElement && iconHide && iconShow) {
+s
+            isContentVisible = !isContentVisible; // Flip the state
             
-  	          // Toggle the icons
-s.forEach(c => c.classList.remove('active'));
-  	        	e.classList.add('active');
-          	document.getElementById(target).classList.add('active');
-        });
-  	  	});
-      	      iconShow.classList.toggle('hidden');
-s.forEach(c => c.classList.remove('active'));
-          	e.classList.add('active');
-          	document.getElementById(target).classList.add('active');
-        });
-  	  	});
-      	    	toggleBtn.setAttribute('aria-expanded', isContentVisible);
-      	    	mainContent.setAttribute('aria-hidden', !isContentVisible);
+            // Toggle the custom fade class
+S
+            floatingElement.classList.toggle('content-hidden');
+            
+            // Toggle the icons
+            iconHide.classList.toggle('hidden');
+            iconShow.classList.toggle('hidden');
+            
+            // Update ARIA attributes
+s
+            mainContent.setAttribute('aria-hidden', !isContentVisible);
         });
         
-  	    // Set initial ARIA state
-    	    mainContent.setAttribute('aria-hidden', 'false');
+        // Set initial ARIA state
+        mainContent.setAttribute('aria-hidden', 'false');
 
-  	} else {
-    	    console.warn('Main content toggle elements not found. Button will not work.');
-  	}
+    } else {
+        console.warn('Main content toggle elements not found. Button will not work.');
+    }
 
-  	// ------------------------------------------------
-  	// END: Main Content Toggle
-  	// ------------------------------------------------
+    // ------------------------------------------------
+    // END: Main Content Toggle
+    // ------------------------------------------------
 });
