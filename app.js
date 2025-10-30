@@ -103,10 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Setup click listeners for social links that trigger a tab
     tabTriggers.forEach(trigger => {
         trigger.addEventListener('click', () => {
-            const target = trigger.getAttribute('data-tab-trigger');
+          _ const target = trigger.getAttribute('data-tab-trigger');
             
             deactivateAllTabs(); 
-            activateTab(target);s
+            activateTab(target); 
         });
     });
 
@@ -178,38 +178,36 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const { data } = await response.json();
-            
-            let status = data.discord_status;
+s
             let iconPath = 'images/discord/';
             let iconAlt = '';
 
             // Determine status, set BOTH text and visual cues.
-id="bio" class="tab-content"
+            switch (status) {
                 case 'online':
                     // Display username when active
-                    discordStatusEl.textContent = data.discord_user.username; 
-                    discordStatusEl.classList.add('text-green-400');
+                    discordStatusEl.textContent = data.discord_user.username;s
                     iconPath += 'online.png';
-                    iconAlt = `${data.discord_user.username} (Online)`;
+            	        iconAlt = `${data.discord_user.username} (Online)`; // <-- UPDATED
                     break;
                 case 'idle':
                     // Display username when active
                     discordStatusEl.textContent = data.discord_user.username; 
                     discordStatusEl.classList.add('text-yellow-500');
                     iconPath += 'idle.png';
-                    iconAlt = `${data.discord_user.username} (Idle)`;
+            	        iconAlt = `${data.discord_user.username} (Idle)`; // <-- UPDATED
                     break;
                 case 'dnd':
                     // Display username when active
-id="bio" class="tab-content"
+                    discordStatusEl.textContent = data.discord_user.username; 
                     discordStatusEl.classList.add('text-red-500');
                     iconPath += 'dnd.png';
-            	        iconAlt = `${data.discord_user.username} (Do Not Disturb)`;
-s
+            	        iconAlt = `${data.discord_user.username} (Do Not Disturb)`; // <-- UPDATED
+                    break;
                 case 'offline': // Handle offline explicitly
             	default:        // Handle unknown statuses as offline
                     // Show "Offline" text when inactive
-id="bio" class="tab-content"
+                    discordStatusEl.textContent = data.discord_user?.username || 'simplykashu'; 
             	        discordStatusEl.classList.add('text-zinc-500');
       	              iconPath += 'offline.png';
       	              iconAlt = `${data.discord_user?.username || 'simplykashu'} (Offline)`;
@@ -223,10 +221,9 @@ id="bio" class="tab-content"
     	} catch (error) {
         	console.error('Error fetching Discord status:', error);
       	    // Fallback on error
-      	    discordStatusEl.textContent = 'simplykashu'; 
-      	    discordStatusEl.classList.add('text-zinc-500'); 
+      	    discordStatusEl.textContent = 'simplykashu';s
     	      discordStatusIconEl.src = 'images/discord/offline.png';
-    	      discordStatusIconEl.alt = `simplykashu (Offline) status icon`; // Simplified fallback
+    	      discordStatusIconEl.alt = 'simplykashu (Offline) status icon';
     	}
     }
 
@@ -234,8 +231,7 @@ id="bio" class="tab-content"
     getDiscordStatus();
     
     // Refresh the status every 60 seconds (60000 milliseconds)
-    setInterval(getDiscordStatus, 60000);
-
+s
     // ------------------------------------------------
     // END: Dynamic Discord Status
     // ------------------------------------------------
@@ -250,11 +246,14 @@ id="bio" class="tab-content"
     const iconShow = document.getElementById('toggle-icon-show');
 
     if (toggleBtn && mainContent && floatingElement && iconHide && iconShow) {
-s
+        
+        let isContentVisible = true; // Tracks the state
+
+        toggleBtn.addEventListener('click', () => {
             isContentVisible = !isContentVisible; // Flip the state
             
             // Toggle the custom fade class
-S
+            mainContent.classList.toggle('content-hidden');
             floatingElement.classList.toggle('content-hidden');
             
             // Toggle the icons
@@ -262,7 +261,7 @@ S
             iconShow.classList.toggle('hidden');
             
             // Update ARIA attributes
-s
+            toggleBtn.setAttribute('aria-expanded', isContentVisible);
             mainContent.setAttribute('aria-hidden', !isContentVisible);
         });
         
