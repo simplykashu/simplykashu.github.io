@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     discordStatusEl.textContent = data.discord_user?.username || 'simplykashu'; 
                     discordStatusEl.classList.add('text-zinc-500');
                     iconPath += 'offline.png';
-                    iconAlt = data.discord_user?.username || 'simplykashu';
+                    iconAlt = `${data.discord_user?.username || 'simplykashu'} (Offline)`;
                     break;
             }
             
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
             discordStatusEl.textContent = 'simplykashu'; 
             discordStatusEl.classList.add('text-zinc-500'); 
             discordStatusIconEl.src = 'images/discord/offline.png';
-            discordStatusIconEl.alt = 'Offline (Error)';
+            discordStatusIconEl.alt = `${data?.discord_user?.username || 'simplykashu'} (Offline)`
         }
     }
 
