@@ -211,10 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'offline': // Handle offline explicitly
                 default:        // Handle unknown statuses as offline
                     // Show "Offline" text when inactive
-                    discordStatusEl.textContent = 'simplykashu'; 
+                    discordStatusEl.textContent = data.discord_user?.username || 'simplykashu'; 
                     discordStatusEl.classList.add('text-zinc-500');
                     iconPath += 'offline.png';
-                    iconAlt = '${data.discord_user.username}';
+                    iconAlt = data.discord_user?.username || 'simplykashu';
                     break;
             }
             
