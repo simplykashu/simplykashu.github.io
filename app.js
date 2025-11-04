@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const introOverlay = document.getElementById('intro-overlay');
     const mainContent = document.getElementById('main-content');
     const backgroundVideo = document.getElementById('background-video');
-    const floatingElement = document.getElementById('floating-element'); 
+    const floatingElement = document.getElementById('floating-element');
     
     // NEW: Get the master toggle button
     const toggleBtn = document.getElementById('toggle-content-btn');
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let introHasPlayed = false;
 
     // This is the "click and enter" logic. It checks if the elements exist first.
-    if (introOverlay && mainContent && backgroundVideo && toggleBtn) { 
+    if (introOverlay && mainContent && backgroundVideo && toggleBtn) {
         introOverlay.addEventListener('click', () => {
             if (introHasPlayed) {
                 return; // Don't run twice
@@ -149,11 +149,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ------------------------------------------------
-    // 3. Dynamic Discord Status (FIXED with Icon and Logic)
+    // 3. Dynamic Discord Status
     // ------------------------------------------------
 
     // 🔴 IMPORTANT: REPLACE THE ID BELOW WITH YOUR ACTUAL DISCORD USER ID 
-    // This is the line that's causing the console warning right now!
     const DISCORD_USER_ID = '1066445133916164146'; 
 
     const discordStatusEl = document.getElementById('discord-status-name');
@@ -161,16 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     async function getDiscordStatus() {
-        // Fallback for missing elements
-        // *** FIX: Removed the check for the placeholder ID ***
         if (!discordStatusEl || !discordStatusIconEl) { 
             console.warn('Discord status element or icon not found.');
             return;
         }
         
-        // Cleanup and loading state (briefly resets visual state before fetch)
         discordStatusEl.classList.remove('text-green-400', 'text-yellow-500', 'text-red-500', 'text-zinc-500');
-        // Setting a placeholder while waiting for the API response
         discordStatusEl.textContent = 'Updating...'; 
 
         try {
@@ -182,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const { data } = await response.json();
             
             let status = data.discord_status;
-            let iconPath = 'images/discord/';
+            let iconPath = 'assets/images/discord/';
             let iconAlt = '';
 
             // Determine status, set BOTH text and visual cues.
@@ -227,8 +222,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Fallback on error
             discordStatusEl.textContent = 'simplykashu'; 
             discordStatusEl.classList.add('text-zinc-500'); 
-            discordStatusIconEl.src = 'images/discord/offline.png';
-            discordStatusIconEl.alt = `${data?.discord_user?.username || 'simplykashu'} (Offline)`
+            discordStatusIconEl.src = 'assets/images/discord/offline.png';
+            discordStatusIconEl.alt = 'simplykashu (Offline)';
         }
     }
 
@@ -244,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ------------------------------------------------
-    // 4. NEW: Main Content Toggle 
+    // 4. Main Content Toggle 
     // ------------------------------------------------
     
     // We already defined 'toggleBtn', 'mainContent', and 'floatingElement' in Section 1
@@ -280,5 +275,141 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ------------------------------------------------
     // END: Main Content Toggle
+    // ------------------------------------------------
+
+
+    // ------------------------------------------------
+    // 5. UPDATED: Artist Link Modal Logic
+    // ------------------------------------------------
+
+    // Data structure for the music artists and their links
+    const ARTIST_DATA = {
+        "diggy_graves": {
+            name: "Diggy Graves",
+            icon: "assets/images/artists/diggy_graves.png",
+            links: {
+                spotify: "https://open.spotify.com/artist/1TpOqFPZPxxeuLHL3oSl2t",
+                youtube: "https://music.youtube.com/channel/UCrnvtdLN6AHgQ8SdFGLalfw"
+            }
+        },
+        "skitz_kraven": {
+            name: "sKitz Kraven",
+            icon: "assets/images/artists/skitz_kraven.png",
+            links: {
+                spotify: "https://open.spotify.com/artist/6aIak8mWVfNefWFAnAxKPQ",
+                youtube: "https://music.youtube.com/channel/UCSwNbrYaFgFq6Q42TtVbxLg"
+            }
+        },
+        "djsm": {
+            name: "DJSM",
+            icon: "assets/images/artists/djsm.png",
+            links: {
+                spotify: "https://open.spotify.com/artist/13qjHQyFpjR48hBIbPrwMx",
+                youtube: "https://music.youtube.com/channel/UCP1TzVHk-L2YTUZfgvjeEsA"
+            }
+        },
+        "snotkop": {
+            name: "Snotkop",
+            icon: "assets/images/artists/snotkop.png",
+            links: {
+                spotify: "https://open.spotify.com/artist/0F0l2JFPA3u6cBpaqKCm6J",
+                youtube: "https://music.youtube.com/channel/UCIal7Ew8eoeWvXMBPkrPVRQ"
+            }
+        }
+    };
+
+    const artistButtons = document.querySelectorAll('.artist-btn');
+    const modalOverlay = document.getElementById('artist-modal-overlay');
+    const modal = document.getElementById('artist-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const modalArtistName = document.getElementById('modal-artist-name');
+    const modalArtistIcon = document.getElementById('modal-artist-icon');
+    const modalLinksContainer = document.getElementById('modal-links');
+
+
+    // Function to close the modal
+    const closeModal = () => {
+        // Start exit animation
+        modal.classList.remove('scale-100', 'opacity-100');
+        modal.classList.add('scale-95', 'opacity-0');
+        
+        // Hide the overlay after the animation
+        setTimeout(() => {
+            modalOverlay.classList.add('hidden');
+        }, 300); 
+    };
+
+    // Function to open the modal
+    const openModal = (artistKey) => {
+        const artist = ARTIST_DATA[artistKey];
+        if (!artist) return;
+
+        // 1. Populate Modal Content
+        modalArtistName.textContent = artist.name;
+        modalArtistIcon.src = artist.icon;
+        modalArtistIcon.alt = artist.name + ' icon';
+        modalLinksContainer.innerHTML = ''; // Clear previous links
+
+        // 2. Generate new link buttons
+        for (const [platform, url] of Object.entries(artist.links)) {
+            const platformName = platform === 'youtube' ? 'YouTube Music' : platform.charAt(0).toUpperCase() + platform.slice(1);
+            
+            // 💡 UPDATED: Logic to use custom image paths
+            let iconSrc;
+            if (platform === 'youtube') {
+                iconSrc = 'assets/images/icons/youtube.png'; // Path to your custom YouTube icon
+            } else if (platform === 'spotify') {
+                iconSrc = 'assets/images/icons/spotify.png'; // Path to your custom Spotify icon
+            } else {
+                continue; 
+            }
+            
+            const linkHTML = `
+                <a href="${url}" target="_blank" rel="noopener noreferrer" 
+                   class="flex items-center space-x-3 p-3 bg-zinc-700 rounded-lg text-zinc-100 font-semibold hover:bg-zinc-600 transition-colors duration-200">
+                    
+                    <img src="${iconSrc}" alt="${platformName} icon" class="w-5 h-5 object-contain">
+                    
+                    <span>Go to ${platformName}</span>
+                </a>
+            `;
+            modalLinksContainer.insertAdjacentHTML('beforeend', linkHTML);
+        }
+        
+        // 3. We NO LONGER call lucide.createIcons() here since we are using custom images
+        // lucide.createIcons(); // <--- REMOVED
+        
+
+        // 4. Show the modal and run enter animation
+        modalOverlay.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.remove('scale-95', 'opacity-0');
+            modal.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    };
+
+    // Add click listeners to artist buttons
+    artistButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const artistKey = button.getAttribute('data-artist');
+            openModal(artistKey);
+        });
+    });
+
+    // Add listeners to close the modal
+    closeModalBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+        // Close if click is outside the modal content
+        if (e.target === modalOverlay) {
+            closeModal();
+        }
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) {
+            closeModal();
+        }
+    });
+    // ------------------------------------------------
+    // END: Artist Link Modal Logic
     // ------------------------------------------------
 });
