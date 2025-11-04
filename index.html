@@ -14,7 +14,7 @@
 
     <div id="floating-element" class="hidden"></div>
 
-    <video id="background-video" src="music/Dik In Desember.mp4" loop playsinline class="fixed inset-0 w-full h-full object-cover -z-10"></video>
+    <video id="background-video" src="assets/music/Dik In Desember.mp4" loop playsinline class="fixed inset-0 w-full h-full object-cover -z-10"></video>
     
     <button id="toggle-content-btn" 
             class="fixed top-6 right-6 sm:top-10 sm:right-10 text-zinc-200 transition-colors z-40 hidden p-2 rounded-lg border border-zinc-700 shadow-md" 
@@ -39,7 +39,7 @@
                 
                 <div class="text-center mb-6">
                     <img 
-                        src="images/avatar.jpg" 
+                        src="assets/images/avatar.jpg" 
                         alt="Luke" 
                         class="w-[150px] h-[150px] object-cover rounded-full border-4 border-zinc-700 mx-auto shadow-lg"
                         onerror="this.src='https://placehold.co/150x150/27272a/fafafa?text=Luke'"
@@ -63,18 +63,21 @@
                     </div>
                     <div class="flex justify-between">
                         <dt class="font-medium text-zinc-400">Relationship:</dt>
-                        <dd class="text-zinc-100">🤷‍♂️</dd>
+                        <dd class="text-zinc-100">Taken</dd>
                     </div>
                     <div class="flex justify-between">
                         <dt class="font-medium text-zinc-400">Future Job:</dt>
-                        <dd class="text-zinc-100">Farmworker</dd>
+                        <dd class="text-zinc-100 flex items-center justify-end space-x-2">
+                            <span>Farmworker</span>
+                            <i data-lucide="tractor" class="w-4 h-4 text-green-400"></i>
+                        </dd>
                     </div>
                     
                     <div class="flex justify-between">
                         <dt class="font-medium text-zinc-400">Discord:</dt>
                         <dd class="flex items-center space-x-2">
-                            <img id="discord-status-icon" src="images/discord/offline.png" alt="Discord Status Icon" class="w-4 h-4 rounded-full">
-                            <span id="discord-status-name" class="text-zinc-100 font-mono text-sm">simplykashu</span>
+                            <img id="discord-status-icon" src="assets/images/discord/offline.png" alt="Discord Status Icon" class="w-4 h-4 rounded-full">
+                            <span id="discord-status-name" class="text-zinc-500 font-mono text-sm">simplykashu</span>
                         </dd>
                     </div>
                     </dl>
@@ -82,24 +85,24 @@
                     <h2 class="text-xl font-semibold mb-4 text-zinc-200">Connect</h2>
                     <div class="flex justify-center space-x-5">
                         
-                        <button data-tab-trigger="wip" title="Discord" aria-label="Discord status" class="text-zinc-400 hover:text-white transition-colors">
-                            <i data-lucide="message-square"></i> 
+                        <button data-tab-trigger="wip" title="Discord" aria-label="Discord status">
+                            <img src="assets/images/icons/discord.png" alt="Discord" class="w-6 h-6 opacity-60 hover:opacity-100 transition-all duration-200 hover:scale-110 transform">
                         </button>
                         
-                        <button data-tab-trigger="wip" title="Twitch" aria-label="Twitch channel status" class="text-zinc-400 hover:text-white transition-colors">
-                            <i data-lucide="twitch"></i>
+                        <button data-tab-trigger="wip" title="Twitch" aria-label="Twitch channel status">
+                            <img src="assets/images/icons/twitch.png" alt="Twitch" class="w-6 h-6 opacity-60 hover:opacity-100 transition-all duration-200 hover:scale-110 transform">
                         </button>
                         
-                        <button data-tab-trigger="wip" title="YouTube" aria-label="YouTube channel status" class="text-zinc-400 hover:text-white transition-colors">
-                            <i data-lucide="youtube"></i>
+                        <button data-tab-trigger="wip" title="YouTube" aria-label="YouTube channel status">
+                            <img src="assets/images/icons/youtube.png" alt="YouTube" class="w-6 h-6 opacity-60 hover:opacity-100 transition-all duration-200 hover:scale-110 transform">
                         </button>
                         
-                        <a href="https://tiktok.com/@simplykashu" target="_blank" title="TikTok" aria-label="TikTok profile" class="text-zinc-400 hover:text-white transition-colors">
-                            <i data-lucide="music-2"></i>
+                        <a href="https://tiktok.com/@simplykashu" target="_blank" title="TikTok" aria-label="TikTok profile">
+                            <img src="assets/images/icons/tiktok.png" alt="TikTok" class="w-6 h-6 opacity-60 hover:opacity-100 transition-all duration-200 hover:scale-110 transform">
                         </a>
 
-                        <a href="https://spotify.link/fxttf3uMJXb" target="_blank" title="Spotify" aria-label="Spotify profile" class="text-zinc-400 hover:text-white transition-colors">
-                            <i data-lucide="music"></i>
+                        <a href="https://spotify.link/fxttf3uMJXb" target="_blank" title="Spotify" aria-label="Spotify profile">
+                            <img src="assets/images/icons/spotify.png" alt="Spotify" class="w-6 h-6 opacity-60 hover:opacity-100 transition-all duration-200 hover:scale-110 transform">
                         </a>
 
                         </div>
@@ -158,64 +161,52 @@
                     <section id="bio" class="tab-content" role="tabpanel" aria-labelledby="bio-tab">
                         <h2 class="text-2xl font-semibold mb-4 text-white">My Bio</h2>
                         <div class="space-y-4 text-zinc-300">
-                            <p>Hey, I'm Luke, a 15-year-old from South Africa. I'm currently just navigating life and figuring things out as I go. I'd describe my personality as a bit of everything—I find it keeps life interesting.</p>
-                            <p>Most of my free time is split between my two main passions: music and gaming. You'll usually find me listening to artists like Diggy Graves and sKitz Kraven. On the gaming side, I have a few favorites: you might catch me surviving in <strong class="text-zinc-100">Dead by Daylight</strong>, hunting ghosts in <strong class="text-zinc-100">Phasmophobia</strong>, exploring in <strong class="text-zinc-100">Roblox</strong>, or chasing a win in <strong class="text-zinc-100">Fortnite</strong>. I'm always down to try new games, though.</p>
-                            <p>Looking ahead, I have a clear goal: I want to become a farmworker. I know it's not a typical career path for someone my age, but I'm drawn to the idea of working with the land and being outdoors. There's something real about it. It's hard work, but it's a future I'm genuinely excited about.</p>
+                            <p>Hey, I'm Luke, a 15-year-old from South Africa just navigating life. I'd like to think my personality is a bit of everything, which always keeps things interesting. I'm also a big animal person—I like all pets, even snakes and spiders.</p>
+                            <p>Most of my free time is split between my two main passions: music and gaming. You'll usually find me listening to artists like <strong class="text-zinc-100">Diggy Graves</strong> and <strong class="text-zinc-100">sKitz Kraven</strong>, but I also enjoy <strong class="text-zinc-100">DJSM</strong> and Afrikaans music like <strong class="text-zinc-100">Snotkop</strong>. On the gaming side, I'm mostly on <strong class="text-zinc-100">Roblox</strong>, but I'm always down to try new games.</p>
+                            <p>Looking ahead, I have a clear goal: I want to become a farmworker. I know it's not a typical career path, but I'm drawn to the idea of working with the land. It's hard work, but it's a future I'm genuinely excited about.</p>
                         </div>
                     </section>
+
                     <section id="gaming" class="tab-content hidden" role="tabpanel" aria-labelledby="gaming-tab">
                         <h2 class="text-2xl font-semibold mb-4 text-white">Games I Play</h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/deadbydaylight.png" alt="Dead by Daylight" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=DbD'">
-                                <h3 class="text-lg font-semibold text-zinc-100">Dead by Daylight</h3>
-                            </div>
-                            
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/phasmophobia.png" alt="Phasmophobia" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=Phas'">
-                                <h3 class="text-lg font-semibold text-zinc-100">Phasmophobia</h3>
-                            </div>
-
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/roblox.png" alt="Roblox" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=RBLX'">
+                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4 transition-all duration-200 hover:scale-[1.03] hover:border-zinc-500">
+                                <img src="assets/images/games/roblox.png" alt="Roblox" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=RBLX'">
                                 <h3 class="text-lg font-semibold text-zinc-100">Roblox</h3>
                             </div>
 
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/fortnite.png" alt="Fortnite" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=FN'">
-                                <h3 class="text-lg font-semibold text-zinc-100">Fortnite</h3>
-                            </div>
-
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4">
-                                <img src="images/games/more.png" alt="More Games" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=...'">
+                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4 transition-all duration-200 hover:scale-[1.03] hover:border-zinc-500">
+                                <img src="assets/images/games/more.png" alt="More Games" class="w-10 h-10 rounded-md object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=...'">
                                 <h3 class="text-lg font-semibold text-zinc-100">And More</h3>
                             </div>
                         </div>
                     </section>
+                    
                     <section id="music" class="tab-content hidden" role="tabpanel" aria-labelledby="music-tab">
                         <h2 class="text-2xl font-semibold mb-4 text-white">Music Tastes</h2>
+                        <p class="text-zinc-400 mb-4">Click on an artist to quickly jump to their music!</p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700">
+                            
+                            <button data-artist="diggy_graves" class="artist-btn bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4 text-left transition-all duration-200 hover:scale-[1.03] hover:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-400">
+                                <img src="assets/images/artists/diggy_graves.png" alt="Diggy Graves icon" class="w-10 h-10 rounded-full object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=DG'">
                                 <h3 class="text-lg font-semibold text-zinc-100">Diggy Graves</h3>
-                            </div>
-                            <div class="bg-zinc-700/50 p-4 rounded-lg border border-zinc-700">
+                            </button>
+                            <button data-artist="skitz_kraven" class="artist-btn bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4 text-left transition-all duration-200 hover:scale-[1.03] hover:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-400">
+                                <img src="assets/images/artists/skitz_kraven.png" alt="sKitz Kraven icon" class="w-10 h-10 rounded-full object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=SK'">
                                 <h3 class="text-lg font-semibold text-zinc-100">sKitz Kraven</h3>
-                            </div>
+                            </button>
+                            <button data-artist="djsm" class="artist-btn bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4 text-left transition-all duration-200 hover:scale-[1.03] hover:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-400">
+                                <img src="assets/images/artists/djsm.png" alt="DJSM icon" class="w-10 h-10 rounded-full object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=DJ'">
+                                <h3 class="text-lg font-semibold text-zinc-100">DJSM</h3>
+                            </button>
+                            <button data-artist="snotkop" class="artist-btn bg-zinc-700/50 p-4 rounded-lg border border-zinc-700 flex items-center space-x-4 text-left transition-all duration-200 hover:scale-[1.03] hover:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-400">
+                                <img src="assets/images/artists/snotkop.png" alt="Snotkop icon" class="w-10 h-10 rounded-full object-cover" onerror="this.src='https://placehold.co/40x40/27272a/fafafa?text=SN'">
+                                <h3 class="text-lg font-semibold text-zinc-100">Snotkop</h3>
+                            </button>
+                            
                         </div>
-                        <p class="text-zinc-400 my-4">My current favorite playlist:</p>
-                        <div class="sm:col-span-2">
-                             <iframe 
-                                title="My current favorite playlist" 
-                                style="border-radius:12px" 
-                                src="https://open.spotify.com/embed/playlist/7g9raifcuolyTWFlGAhLnR?utm_source=generator" 
-                                width="100%" 
-                                height="352" 
-                                frameBorder="0" 
-                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                                loading="lazy">
-                            </iframe>
-                        </div>
+                        <p class="text-zinc-300 my-4">I listen to a lot of rap, phonk, and Afrikaans music.</p>
                     </section>
                     
                     <section id="wip" class="tab-content hidden" role="tabpanel" aria-labelledby="wip-tab">
@@ -231,10 +222,30 @@
         </div>
     </div> 
     
+    <div id="artist-modal-overlay" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div id="artist-modal" class="bg-zinc-800 rounded-xl shadow-2xl border border-zinc-700 w-full max-w-sm p-6 relative transform transition-all duration-300 scale-95 opacity-0">
+            
+            <button id="close-modal-btn" class="absolute top-3 right-3 text-zinc-400 hover:text-white transition-colors p-2 rounded-full hover:bg-zinc-700" aria-label="Close dialog">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="flex items-center space-x-4 mb-6">
+                <img id="modal-artist-icon" src="" alt="Artist icon" class="w-12 h-12 rounded-full object-cover">
+                <h3 id="modal-artist-name" class="text-2xl font-bold text-white">Artist Name</h3>
+            </div>
+            
+            <p class="text-zinc-400 mb-4">Where would you like to listen?</p>
+
+            <div id="modal-links" class="space-y-3">
+                </div>
+
+        </div>
+    </div>
+
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         lucide.createIcons();
     </script>
-    <script src="app.js?v=5"></script>
+    <script src="app.js?v=6"></script>
 </body>
 </html>
