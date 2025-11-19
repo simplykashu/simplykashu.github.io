@@ -1,5 +1,5 @@
 /* --- Configuration --- */
-const SONG_START_TIME = 35; 
+const SONG_START_TIME = 0; 
 
 /* --- 3D Tilt Logic --- */
 const card = document.getElementById('tilt-card');
@@ -220,4 +220,5 @@ window.switchTab = function(tabName) {
         btn.classList.add('active');
         btn.classList.remove('text-gray-400');
     }
+
 }
