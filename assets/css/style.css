@@ -1,11 +1,19 @@
 /* --- Core Setup --- */
+/* Default PC Cursor */
 body {
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg>') 12 12, auto;
-    perspective: 1000px; /* Essential for 3D tilt */
+    perspective: 1000px;
 }
 
 a, button, .cursor-pointer {
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>') 12 12, pointer;
+}
+
+/* DISABLE custom cursor on mobile/touch devices */
+@media (hover: none) {
+    body, a, button, .cursor-pointer {
+        cursor: auto !important;
+    }
 }
 
 /* --- 3D Tilt Classes --- */
@@ -60,7 +68,6 @@ a, button, .cursor-pointer {
 }
 
 /* --- UI Components --- */
-/* CRT Effect */
 .crt::before {
     content: " ";
     display: block;
@@ -72,7 +79,6 @@ a, button, .cursor-pointer {
     pointer-events: none;
 }
 
-/* Glass Card Enhanced */
 .glass-card {
     background: rgba(5, 5, 5, 0.7);
     backdrop-filter: blur(25px);
@@ -81,7 +87,6 @@ a, button, .cursor-pointer {
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
 }
 
-/* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
     width: 4px;
 }
@@ -93,10 +98,9 @@ a, button, .cursor-pointer {
     border-radius: 2px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #6b21a8; /* Purple hover */
+    background: #6b21a8; 
 }
 
-/* Nav Button Animation */
 .nav-btn {
     position: relative;
 }
@@ -108,7 +112,7 @@ a, button, .cursor-pointer {
     transform: translateX(-50%);
     width: 0;
     height: 2px;
-    background: #a855f7; /* Purple */
+    background: #a855f7; 
     transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 0 10px #a855f7;
 }
@@ -116,7 +120,6 @@ a, button, .cursor-pointer {
     width: 60%;
 }
 
-/* Volume Slider Styling */
 input[type=range] {
     -webkit-appearance: none;
     background: transparent;
@@ -139,7 +142,6 @@ input[type=range]::-webkit-slider-runnable-track {
     border-radius: 2px;
 }
 
-/* Social Icons Hover */
 .social-icon {
     transition: all 0.3s ease;
 }
@@ -148,7 +150,6 @@ input[type=range]::-webkit-slider-runnable-track {
     filter: drop-shadow(0 0 8px currentColor);
 }
 
-/* Tab transitions */
 .tab-content {
     display: none;
     animation: fade-in-up 0.5s ease;
@@ -157,7 +158,6 @@ input[type=range]::-webkit-slider-runnable-track {
     display: block;
 }
 
-/* Helper Classes */
 .animate-spin-slow {
     animation: spin 8s linear infinite;
 }
