@@ -32,43 +32,43 @@
     <div id="main-content" class="h-full w-full flex items-center justify-center p-3 md:p-4 opacity-0 transition-opacity duration-1000 hidden perspective-1000">
         
         <!-- The Card -->
-        <div id="tilt-card" class="glass-card w-full max-w-4xl h-[90vh] md:h-[600px] rounded-2xl flex flex-col md:flex-row overflow-hidden relative animate-fade-in-up transform-style-3d transition-transform duration-100 ease-out">
+        <div id="tilt-card" class="glass-card w-full max-w-4xl h-[92vh] md:h-[600px] rounded-2xl flex flex-col md:flex-row overflow-hidden relative animate-fade-in-up transform-style-3d transition-transform duration-100 ease-out">
             
             <!-- Left Sidebar (Profile) -->
-            <div class="w-full md:w-[35%] bg-black/40 p-6 flex flex-col items-center justify-center border-b border-white/10 md:border-b-0 md:border-r relative shrink-0">
+            <div class="w-full md:w-[35%] bg-black/40 p-4 md:p-6 flex flex-col items-center justify-center border-b border-white/10 md:border-b-0 md:border-r relative shrink-0 z-10">
                 
                 <!-- Avatar -->
-                <div class="relative group mb-4">
+                <div class="relative group mb-2 md:mb-4">
                     <div class="absolute inset-0 bg-gradient-to-tr from-purple-600 to-blue-600 rounded-full blur opacity-40 group-hover:opacity-75 transition-opacity duration-500"></div>
-                    <div class="w-28 h-28 md:w-36 md:h-36 rounded-full bg-gray-800 border-2 border-white/20 overflow-hidden relative z-10 shadow-2xl">
+                    <div class="w-24 h-24 md:w-36 md:h-36 rounded-full bg-gray-800 border-2 border-white/20 overflow-hidden relative z-10 shadow-2xl">
                         <img src="assets/profile/images/avatar.png" alt="Luke" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                     </div>
                     <div class="absolute bottom-2 right-2 w-5 h-5 bg-green-500 rounded-full border-4 border-black z-20 animate-pulse" title="Online"></div>
                 </div>
 
                 <h1 class="text-2xl md:text-3xl font-bold tracking-wide animate-glow mt-2">simplykashu</h1>
-                <div class="flex items-center gap-2 text-xs text-gray-400 font-['JetBrains_Mono'] mt-2">
+                <div class="flex items-center gap-2 text-xs text-gray-400 font-['JetBrains_Mono'] mt-1">
                     <span>@simplykashu</span>
                     <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
                     <span>UID: 1066...</span>
                 </div>
                 
                 <!-- Status Badges -->
-                <div class="flex gap-2 mt-4 justify-center flex-wrap">
-                    <span class="badge px-3 py-1 text-[10px] md:text-xs bg-white/5 rounded border border-white/10 hover:border-purple-500/30 transition-colors">🇿🇦 SA</span>
-                    <span class="badge px-3 py-1 text-[10px] md:text-xs bg-white/5 rounded border border-white/10 hover:border-purple-500/30 transition-colors text-gray-300"><i class="fa-solid fa-heart-crack mr-1 text-red-400"></i> Single</span>
-                    <span class="badge px-3 py-1 text-[10px] md:text-xs bg-white/5 rounded border border-white/10 hover:border-purple-500/30 transition-colors">Lvl. 15</span>
+                <div class="flex gap-2 mt-3 justify-center flex-wrap">
+                    <span class="badge px-2 md:px-3 py-1 text-[10px] md:text-xs bg-white/5 rounded border border-white/10">🇿🇦 SA</span>
+                    <span class="badge px-2 md:px-3 py-1 text-[10px] md:text-xs bg-white/5 rounded border border-white/10 text-gray-300"><i class="fa-solid fa-heart-crack mr-1 text-red-400"></i> Single</span>
+                    <span class="badge px-2 md:px-3 py-1 text-[10px] md:text-xs bg-white/5 rounded border border-white/10">Lvl. 15</span>
                 </div>
 
                 <!-- Live Clock -->
-                <div class="mt-4 flex items-center gap-2 font-['JetBrains_Mono'] text-xs">
+                <div class="mt-3 flex items-center gap-2 font-['JetBrains_Mono'] text-xs">
                     <div class="text-purple-400 border border-purple-500/20 bg-purple-500/5 px-3 py-1.5 rounded-full flex items-center shadow-[0_0_10px_rgba(168,85,247,0.1)]">
                         <i class="fa-regular fa-clock mr-2 animate-spin-slow"></i> <span id="sast-clock">--:--</span>
                     </div>
                 </div>
 
                 <!-- Social Icons -->
-                <div class="flex gap-6 mt-6 md:mt-auto md:mb-4 text-gray-400">
+                <div class="flex gap-6 mt-4 md:mt-auto md:mb-4 text-gray-400">
                     <a href="https://discord.com/users/1066445133916164146" target="_blank" class="social-icon text-xl hover:text-[#7289da]"><i class="fa-brands fa-discord"></i></a>
                     <a href="https://open.spotify.com/user/31t67ze3lao3tbx7h6i3vxm2u4yy" target="_blank" class="social-icon text-xl hover:text-[#1DB954]"><i class="fa-brands fa-spotify"></i></a>
                     <a href="#" class="social-icon text-xl hover:text-white"><i class="fa-solid fa-gamepad"></i></a>
@@ -78,19 +78,19 @@
             <!-- Right Content Area -->
             <div class="w-full md:w-[65%] flex flex-col bg-black/20 relative z-20 min-h-0">
                 <!-- Navigation -->
-                <div class="flex w-full border-b border-white/10 bg-black/40 backdrop-blur-sm shrink-0">
+                <div class="flex w-full border-b border-white/10 bg-black/40 backdrop-blur-sm shrink-0 z-30">
                     <button onclick="switchTab('home')" id="tab-home" class="nav-btn active flex-1 py-4 text-xs md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">Home</button>
-                    <button onclick="switchTab('about')" id="tab-about" class="nav-btn flex-1 py-4 text-xs md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">About Me</button>
+                    <button onclick="switchTab('about')" id="tab-about" class="nav-btn flex-1 py-4 text-xs md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">About</button>
                     <button onclick="switchTab('favs')" id="tab-favs" class="nav-btn flex-1 py-4 text-xs md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">Loadout</button>
                 </div>
 
-                <!-- Tab Panels -->
-                <div class="flex-1 p-5 md:p-8 overflow-y-auto relative custom-scrollbar overscroll-contain">
+                <!-- Tab Panels (Scrollable Area) -->
+                <!-- Added pb-32 to ensure content isn't hidden behind the player -->
+                <div class="flex-1 p-5 md:p-8 overflow-y-auto relative custom-scrollbar overscroll-contain pb-32 md:pb-28">
                     
                     <!-- Home Tab -->
-                    <div id="content-home" class="tab-content active h-full flex flex-col">
-                        <div class="font-['JetBrains_Mono'] text-sm space-y-6 h-full flex flex-col justify-center">
-                            
+                    <div id="content-home" class="tab-content active">
+                        <div class="font-['JetBrains_Mono'] text-sm space-y-6 flex flex-col justify-center h-full">
                             <!-- Terminal -->
                             <div class="terminal-box bg-black/40 border border-white/10 p-4 rounded-lg shadow-inner relative overflow-hidden group hover:border-white/20 transition-colors">
                                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500"></div>
@@ -104,73 +104,15 @@
                                     <span class="text-purple-400">root@simplykashu:~$</span> ./init_bio.sh
                                 </p>
                                 <p class="text-gray-400 text-xs md:text-sm typing-effect leading-relaxed pl-3 border-l-2 border-gray-700 mt-3">
-                                    "Welcome to my corner of the internet.<br>
+                                    "Welcome to the void.<br>
                                     Chill vibes only."
                                 </p>
                             </div>
-                            
-                            <!-- Music Player -->
-                            <div class="p-4 bg-gradient-to-br from-white/5 to-black/20 rounded-xl border border-white/10 backdrop-blur-sm shadow-lg">
-                                <div class="flex justify-between items-center mb-4">
-                                    <h3 class="text-[10px] uppercase tracking-widest text-gray-500 flex items-center gap-2">
-                                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Now Playing
-                                    </h3>
-                                    <i class="fa-solid fa-signal text-gray-600 text-xs"></i>
-                                </div>
-                                
-                                <div class="flex items-center gap-4">
-                                    <!-- Cover Art -->
-                                    <div class="w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden border border-white/10 shadow-2xl shrink-0 relative group cursor-pointer" onclick="toggleMusic()">
-                                        <img src="assets/profile/music/do_me_good.png" alt="Cover" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                            <i class="fa-solid fa-play text-white"></i>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Info & Controls -->
-                                    <div class="flex-1 min-w-0">
-                                        <div class="mb-2">
-                                            <p class="text-sm md:text-base font-bold text-white truncate">Do Me Good</p>
-                                            <p class="text-xs text-purple-400 truncate font-semibold">ORGAVSM</p>
-                                        </div>
-                                        
-                                        <div class="flex flex-col gap-2">
-                                            <!-- Progress Bar -->
-                                            <div class="w-full flex items-center gap-2">
-                                                <span id="current-time" class="text-[10px] text-gray-400 w-8 text-right font-mono">0:00</span>
-                                                <div class="h-1.5 flex-1 bg-gray-700 rounded-full overflow-hidden relative cursor-pointer group" id="progress-container">
-                                                    <div id="progress-bar" class="h-full w-0 bg-purple-500 rounded-full relative shadow-[0_0_10px_#a855f7]"></div>
-                                                </div>
-                                                <span id="total-duration" class="text-[10px] text-gray-400 w-8 font-mono">0:00</span>
-                                            </div>
-                                            
-                                            <!-- Controls -->
-                                            <div class="flex justify-between items-center px-1">
-                                                <div class="flex items-center gap-4">
-                                                    <button class="text-gray-500 hover:text-white transition-colors text-xs"><i class="fa-solid fa-backward-step"></i></button>
-                                                    <button id="play-btn" onclick="toggleMusic()" class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
-                                                        <i class="fa-solid fa-play ml-0.5 text-xs" id="play-icon"></i>
-                                                    </button>
-                                                    <button class="text-gray-500 hover:text-white transition-colors text-xs"><i class="fa-solid fa-forward-step"></i></button>
-                                                </div>
-                                                
-                                                <!-- Volume -->
-                                                <div class="flex items-center gap-2 opacity-70 hover:opacity-100 transition-opacity">
-                                                    <i class="fa-solid fa-volume-high text-[10px] text-gray-400"></i>
-                                                    <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.3" class="w-16 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-white">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
 
                     <!-- About Tab -->
                     <div id="content-about" class="tab-content space-y-6">
-                        
                         <!-- Header Section -->
                         <div class="flex items-end justify-between border-b border-white/10 pb-4">
                             <div>
@@ -187,12 +129,12 @@
                         <div class="bg-white/5 p-4 rounded-lg border border-white/5 text-sm leading-relaxed text-gray-300 shadow-inner">
                             <p>
                                 Yo, I'm Luke. Just a 15-year-old from <span class="text-white font-semibold">South Africa</span> trying to navigate life. 
-                                Currently grinding through Acellus school and planning my escape to the farm life.
+                                Currently grinding through Acellus school.
                             </p>
                             <p class="mt-3">
-                                When I'm not focused on my future H-2A goals, I'm usually deep into <span class="text-purple-400">Roblox</span>, 
-                                hanging out on <span class="text-blue-400">Discord</span>, or blasting music. 
-                                I've got a soft spot for snakes and spiders 🐍 — chill vibes only here.
+                                My main goal is the H-2A Visa program for farm work. When I'm not focused on that, I'm usually on <span class="text-purple-400">Roblox</span>, 
+                                playing <span class="text-red-400">Dead by Daylight</span>, or listening to music. 
+                                I like all animals, especially snakes and spiders 🐍.
                             </p>
                         </div>
 
@@ -227,7 +169,7 @@
                     </div>
 
                     <!-- Loadout Tab -->
-                    <div id="content-favs" class="tab-content space-y-8">
+                    <div id="content-favs" class="tab-content space-y-6">
                         
                         <!-- Audio Logs -->
                         <div>
@@ -286,11 +228,49 @@
 
                 </div>
                 
-                <!-- Footer -->
-                <div class="p-3 border-t border-white/10 flex justify-between items-center text-[10px] text-gray-500 font-['JetBrains_Mono'] bg-black/40 backdrop-blur-md rounded-br-2xl">
-                    <span class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_5px_#22c55e]"></div> SYSTEMS ONLINE</span>
-                    <span>VER 3.0</span>
+                <!-- GLOBAL Sticky Player (Outside Tab Content) -->
+                <div class="absolute bottom-0 left-0 w-full bg-black/60 backdrop-blur-xl border-t border-white/10 p-3 md:p-4 z-40">
+                    <div class="flex items-center gap-3 md:gap-4">
+                        <!-- Cover Art -->
+                        <div class="w-12 h-12 md:w-14 md:h-14 rounded-lg overflow-hidden border border-white/10 shadow-lg shrink-0 relative group cursor-pointer" onclick="toggleMusic()">
+                            <img src="assets/profile/music/do_me_good.png" alt="Cover" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <i class="fa-solid fa-play text-white text-xs"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Info & Controls -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-center mb-1">
+                                <div class="overflow-hidden">
+                                    <p class="text-xs md:text-sm font-bold text-white truncate">Do Me Good</p>
+                                    <p class="text-[10px] text-purple-400 truncate font-semibold">ORGAVSM</p>
+                                </div>
+                                <!-- Volume Slider (Mini) -->
+                                <div class="flex items-center gap-2 opacity-70">
+                                    <i class="fa-solid fa-volume-high text-[10px] text-gray-500"></i>
+                                    <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.3" class="w-12 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-white">
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-3">
+                                <button id="play-btn" onclick="toggleMusic()" class="w-6 h-6 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shrink-0">
+                                    <i class="fa-solid fa-play ml-0.5 text-[10px]" id="play-icon"></i>
+                                </button>
+                                
+                                <!-- Progress Bar -->
+                                <div class="flex-1 flex items-center gap-2">
+                                    <span id="current-time" class="text-[9px] text-gray-400 w-6 text-right font-mono">0:00</span>
+                                    <div class="h-1 flex-1 bg-gray-700 rounded-full overflow-hidden relative cursor-pointer group" id="progress-container">
+                                        <div id="progress-bar" class="h-full w-0 bg-purple-500 rounded-full relative shadow-[0_0_10px_#a855f7]"></div>
+                                    </div>
+                                    <span id="total-duration" class="text-[9px] text-gray-400 w-6 font-mono">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
