@@ -1,5 +1,5 @@
 /* --- Configuration --- */
-const SONG_START_TIME = 0; 
+const SONG_START_TIME = 35; 
 
 /* --- 3D Tilt Logic (Desktop Only) --- */
 const card = document.getElementById('tilt-card');
@@ -44,25 +44,6 @@ function createSparkle(x, y) {
         sparkle.remove();
     }, 600);
 }
-
-/* --- Custom Context Menu --- */
-const contextMenu = document.getElementById('context-menu');
-
-document.addEventListener('contextmenu', (e) => {
-    // Allow context menu on inputs (like slider)
-    if (e.target.tagName === 'INPUT') return;
-    
-    e.preventDefault();
-    if (contextMenu && window.innerWidth > 768) {
-        contextMenu.style.top = `${e.clientY}px`;
-        contextMenu.style.left = `${e.clientX}px`;
-        contextMenu.classList.remove('hidden');
-    }
-});
-
-document.addEventListener('click', () => {
-    if (contextMenu) contextMenu.classList.add('hidden');
-});
 
 /* --- Clock Logic (SAST) --- */
 function updateClock() {
@@ -126,8 +107,6 @@ window.toggleMusic = function() {
             playIcon.classList.add('fa-play');
             playIcon.classList.add('ml-0.5');
         }
-        const musicIcon = document.querySelector('.fa-music');
-        if (musicIcon) musicIcon.classList.remove('text-purple-400', 'animate-bounce');
     } else {
         music.play().catch(e => console.log("Audio play failed:", e));
         if (playIcon) {
@@ -135,8 +114,6 @@ window.toggleMusic = function() {
             playIcon.classList.remove('ml-0.5');
             playIcon.classList.add('fa-pause');
         }
-        const musicIcon = document.querySelector('.fa-music');
-        if (musicIcon) musicIcon.classList.add('text-purple-400', 'animate-bounce');
     }
     isPlaying = !isPlaying;
 }
