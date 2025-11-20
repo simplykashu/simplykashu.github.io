@@ -1,16 +1,15 @@
 /* --- Configuration --- */
 const SONG_START_TIME = 0; 
 
-/* --- 3D Tilt Logic --- */
+/* --- 3D Tilt Logic (Desktop Only) --- */
 const card = document.getElementById('tilt-card');
 const container = document.getElementById('main-content');
 
-if (card && container) {
+if (card && container && window.innerWidth > 768) {
     container.addEventListener('mousemove', (e) => {
-        const xAxis = (window.innerWidth / 2 - e.pageX) / 25; // Adjust divider for sensitivity
+        const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
         const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
         
-        // Clamping rotation to avoid extreme angles
         const clampX = Math.max(-10, Math.min(10, yAxis));
         const clampY = Math.max(-10, Math.min(10, xAxis));
 
@@ -35,7 +34,6 @@ function createSparkle(x, y) {
     sparkle.style.left = `${x}px`;
     sparkle.style.top = `${y}px`;
     
-    // Randomize slight movement
     const randomX = (Math.random() - 0.5) * 50;
     const randomY = (Math.random() - 0.5) * 50;
     
@@ -51,8 +49,11 @@ function createSparkle(x, y) {
 const contextMenu = document.getElementById('context-menu');
 
 document.addEventListener('contextmenu', (e) => {
+    // Allow context menu on inputs (like slider)
+    if (e.target.tagName === 'INPUT') return;
+    
     e.preventDefault();
-    if (contextMenu) {
+    if (contextMenu && window.innerWidth > 768) {
         contextMenu.style.top = `${e.clientY}px`;
         contextMenu.style.left = `${e.clientX}px`;
         contextMenu.classList.remove('hidden');
@@ -91,9 +92,11 @@ const volumeSlider = document.getElementById('volume-slider');
 let isPlaying = false;
 
 // Volume Control
-volumeSlider.addEventListener('input', (e) => {
-    music.volume = e.target.value;
-});
+if (volumeSlider) {
+    volumeSlider.addEventListener('input', (e) => {
+        music.volume = e.target.value;
+    });
+}
 
 // Format Time
 function formatTime(seconds) {
@@ -106,30 +109,34 @@ function formatTime(seconds) {
 music.addEventListener('timeupdate', () => {
     if (music.duration) {
         const progressPercent = (music.currentTime / music.duration) * 100;
-        progressBar.style.width = `${progressPercent}%`;
-        currTimeDisplay.textContent = formatTime(music.currentTime);
+        if (progressBar) progressBar.style.width = `${progressPercent}%`;
+        if (currTimeDisplay) currTimeDisplay.textContent = formatTime(music.currentTime);
     }
 });
 
 music.addEventListener('loadedmetadata', () => {
-    totalDurationDisplay.textContent = formatTime(music.duration);
+    if (totalDurationDisplay) totalDurationDisplay.textContent = formatTime(music.duration);
 });
 
-function toggleMusic() {
+window.toggleMusic = function() {
     if (isPlaying) {
         music.pause();
-        playIcon.classList.remove('fa-pause');
-        playIcon.classList.add('fa-play');
-        playIcon.classList.add('ml-0.5');
-        // Visuals
-        document.querySelector('.fa-music').classList.remove('text-purple-400', 'animate-bounce');
+        if (playIcon) {
+            playIcon.classList.remove('fa-pause');
+            playIcon.classList.add('fa-play');
+            playIcon.classList.add('ml-0.5');
+        }
+        const musicIcon = document.querySelector('.fa-music');
+        if (musicIcon) musicIcon.classList.remove('text-purple-400', 'animate-bounce');
     } else {
         music.play().catch(e => console.log("Audio play failed:", e));
-        playIcon.classList.remove('fa-play');
-        playIcon.classList.remove('ml-0.5');
-        playIcon.classList.add('fa-pause');
-        // Visuals
-        document.querySelector('.fa-music').classList.add('text-purple-400', 'animate-bounce');
+        if (playIcon) {
+            playIcon.classList.remove('fa-play');
+            playIcon.classList.remove('ml-0.5');
+            playIcon.classList.add('fa-pause');
+        }
+        const musicIcon = document.querySelector('.fa-music');
+        if (musicIcon) musicIcon.classList.add('text-purple-400', 'animate-bounce');
     }
     isPlaying = !isPlaying;
 }
@@ -220,5 +227,4 @@ window.switchTab = function(tabName) {
         btn.classList.add('active');
         btn.classList.remove('text-gray-400');
     }
-
 }
