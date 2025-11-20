@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>simplykashu | Bio</title>
     
     <!-- Libraries -->
@@ -13,13 +13,13 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body class="bg-black text-white font-['Outfit'] h-screen w-screen overflow-hidden relative crt">
+<body class="bg-black text-white font-['Outfit'] h-screen w-screen overflow-hidden relative crt selection:bg-purple-500/30">
 
     <!-- Click to Enter Overlay -->
-    <div id="overlay" class="fixed inset-0 z-50 bg-black flex items-center justify-center cursor-pointer transition-opacity duration-1000">
+    <div id="overlay" class="fixed inset-0 z-50 bg-black flex items-center justify-center cursor-pointer transition-opacity duration-1000 touch-manipulation">
         <div class="text-center animate-pulse">
-            <p class="text-xl md:text-3xl font-light tracking-[0.5em] uppercase text-gray-400 hover:text-white transition-colors shadow-glow">
-                Click to Enter
+            <p class="text-xl md:text-3xl font-light tracking-[0.5em] uppercase text-gray-400 hover:text-white transition-colors shadow-glow px-4 text-center">
+                Tap to Enter
             </p>
         </div>
     </div>
@@ -28,108 +28,99 @@
     <div class="absolute inset-0 bg-animated -z-10"></div>
     <canvas id="particle-canvas" class="absolute inset-0 -z-5 opacity-30"></canvas>
 
-    <!-- Custom Context Menu -->
+    <!-- Custom Context Menu (Desktop Only) -->
     <div id="context-menu" class="fixed z-[100] hidden bg-black/90 border border-white/10 rounded-lg shadow-2xl py-2 w-40 backdrop-blur-md">
         <a href="https://github.com/simplykashu" target="_blank" class="block px-4 py-2 text-xs text-gray-300 hover:bg-purple-500/20 hover:text-white transition-colors"><i class="fa-brands fa-github mr-2"></i> Source</a>
         <div class="block px-4 py-2 text-xs text-gray-300 hover:bg-purple-500/20 hover:text-white transition-colors cursor-pointer" onclick="location.reload()"><i class="fa-solid fa-rotate-right mr-2"></i> Reload</div>
     </div>
 
-    <!-- Main Content (3D Tilt Container) -->
-    <div id="main-content" class="h-full w-full flex items-center justify-center p-4 opacity-0 transition-opacity duration-1000 hidden perspective-1000">
+    <!-- Main Content Container -->
+    <div id="main-content" class="h-full w-full flex items-center justify-center p-2 md:p-4 opacity-0 transition-opacity duration-1000 hidden perspective-1000">
         
         <!-- The Card -->
-        <div id="tilt-card" class="glass-card w-full max-w-3xl h-[650px] md:h-[550px] rounded-2xl flex flex-col md:flex-row overflow-hidden relative animate-fade-in-up transform-style-3d transition-transform duration-100 ease-out">
+        <div id="tilt-card" class="glass-card w-full max-w-3xl h-[95vh] md:h-[550px] rounded-xl md:rounded-2xl flex flex-col md:flex-row overflow-hidden relative animate-fade-in-up transform-style-3d transition-transform duration-100 ease-out">
             
-            <!-- Left Sidebar -->
-            <div class="w-full md:w-1/3 bg-black/40 p-6 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-white/10 relative">
+            <!-- Left Sidebar (Top on Mobile) -->
+            <div class="w-full md:w-1/3 bg-black/40 p-4 md:p-6 flex flex-col items-center justify-center border-b border-white/10 md:border-b-0 md:border-r relative shrink-0">
                 
-                <!-- Avatar with Glow Ring -->
-                <div class="relative group mb-4">
+                <!-- Avatar -->
+                <div class="relative group mb-3 md:mb-4">
                     <div class="absolute inset-0 bg-gradient-to-tr from-purple-600 to-blue-600 rounded-full blur opacity-40 group-hover:opacity-75 transition-opacity duration-500"></div>
-                    <div class="w-32 h-32 rounded-full bg-gray-800 border-2 border-white/20 overflow-hidden relative z-10">
+                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gray-800 border-2 border-white/20 overflow-hidden relative z-10">
                         <img src="assets/profile/images/avatar.png" alt="Luke" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                     </div>
-                    <div class="absolute bottom-2 right-2 w-5 h-5 bg-green-500 rounded-full border-4 border-black z-20 animate-pulse" title="Online"></div>
+                    <div class="absolute bottom-2 right-2 w-4 h-4 md:w-5 md:h-5 bg-green-500 rounded-full border-4 border-black z-20 animate-pulse"></div>
                 </div>
 
-                <h1 class="text-2xl font-bold tracking-wide animate-glow">simplykashu</h1>
-                <div class="flex items-center gap-2 text-xs text-gray-400 font-['JetBrains_Mono'] mt-1">
+                <h1 class="text-xl md:text-2xl font-bold tracking-wide animate-glow">simplykashu</h1>
+                <div class="flex items-center gap-2 text-[10px] md:text-xs text-gray-400 font-['JetBrains_Mono'] mt-1">
                     <span>@simplykashu</span>
                     <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
                     <span>UID: 1066...</span>
                 </div>
                 
                 <!-- Status Badges -->
-                <div class="flex gap-2 mt-5 justify-center flex-wrap">
-                    <span class="badge group relative px-3 py-1 text-[10px] bg-white/5 rounded border border-white/10 hover:border-purple-500/50 transition-colors cursor-default">
-                        🇿🇦 SA
-                    </span>
-                    <span class="badge group relative px-3 py-1 text-[10px] bg-white/5 rounded border border-white/10 hover:border-red-500/50 transition-colors cursor-default text-gray-300">
-                        <i class="fa-solid fa-heart-crack text-[8px] mr-1"></i> Single
-                    </span>
-                    <span class="badge group relative px-3 py-1 text-[10px] bg-white/5 rounded border border-white/10 hover:border-blue-500/50 transition-colors cursor-default">
-                        Lvl. 15
-                    </span>
+                <div class="flex gap-2 mt-3 md:mt-5 justify-center flex-wrap">
+                    <span class="badge px-2 py-1 text-[9px] md:text-[10px] bg-white/5 rounded border border-white/10">🇿🇦 SA</span>
+                    <span class="badge px-2 py-1 text-[9px] md:text-[10px] bg-white/5 rounded border border-white/10 text-gray-300"><i class="fa-solid fa-heart-crack mr-1"></i> Single</span>
+                    <span class="badge px-2 py-1 text-[9px] md:text-[10px] bg-white/5 rounded border border-white/10">Lvl. 15</span>
                 </div>
 
-                <!-- Live Clock & Weather -->
-                <div class="mt-4 flex items-center gap-2 font-['JetBrains_Mono'] text-xs">
-                    <div class="text-purple-400 border border-purple-500/20 bg-purple-500/5 px-3 py-1 rounded-full flex items-center">
-                        <i class="fa-regular fa-clock mr-2 animate-spin-slow"></i> <span id="sast-clock">--:--</span>
-                    </div>
-                    <div class="text-blue-400 border border-blue-500/20 bg-blue-500/5 px-3 py-1 rounded-full flex items-center" title="Partly Cloudy">
-                        <i class="fa-solid fa-cloud-moon mr-1"></i> 18°C
+                <!-- Live Clock -->
+                <div class="mt-3 flex items-center gap-2 font-['JetBrains_Mono'] text-[10px] md:text-xs">
+                    <div class="text-purple-400 border border-purple-500/20 bg-purple-500/5 px-2 py-1 rounded-full flex items-center">
+                        <i class="fa-regular fa-clock mr-1.5 animate-spin-slow"></i> <span id="sast-clock">--:--</span>
                     </div>
                 </div>
 
-                <!-- Social Icons -->
-                <div class="flex gap-6 mt-8 text-gray-400">
-                    <a href="https://discord.com/users/1066445133916164146" target="_blank" class="social-icon hover:text-[#7289da]"><i class="fa-brands fa-discord text-2xl"></i></a>
-                    <a href="https://open.spotify.com/user/31t67ze3lao3tbx7h6i3vxm2u4yy" target="_blank" class="social-icon hover:text-[#1DB954]"><i class="fa-brands fa-spotify text-2xl"></i></a>
-                    <a href="#" class="social-icon hover:text-white"><i class="fa-solid fa-gamepad text-2xl"></i></a>
+                <!-- Social Icons (Compact on Mobile) -->
+                <div class="flex gap-5 mt-4 md:mt-8 text-gray-400">
+                    <a href="https://discord.com/users/1066445133916164146" target="_blank" class="social-icon text-lg md:text-2xl"><i class="fa-brands fa-discord"></i></a>
+                    <a href="https://open.spotify.com/user/31t67ze3lao3tbx7h6i3vxm2u4yy" target="_blank" class="social-icon text-lg md:text-2xl"><i class="fa-brands fa-spotify"></i></a>
+                    <a href="#" class="social-icon text-lg md:text-2xl"><i class="fa-solid fa-gamepad"></i></a>
                 </div>
             </div>
 
-            <!-- Right Content Area -->
-            <div class="w-full md:w-2/3 flex flex-col bg-black/20 relative z-20">
+            <!-- Right Content Area (Bottom on Mobile) -->
+            <div class="w-full md:w-2/3 flex flex-col bg-black/20 relative z-20 min-h-0">
                 <!-- Navigation -->
-                <div class="flex w-full border-b border-white/10 bg-black/40 backdrop-blur-sm">
-                    <button onclick="switchTab('home')" id="tab-home" class="nav-btn active flex-1 py-4 text-xs md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">Home</button>
-                    <button onclick="switchTab('about')" id="tab-about" class="nav-btn flex-1 py-4 text-xs md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">Stats</button>
-                    <button onclick="switchTab('favs')" id="tab-favs" class="nav-btn flex-1 py-4 text-xs md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">Loadout</button>
+                <div class="flex w-full border-b border-white/10 bg-black/40 backdrop-blur-sm shrink-0">
+                    <button onclick="switchTab('home')" id="tab-home" class="nav-btn active flex-1 py-3 md:py-4 text-[10px] md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">Home</button>
+                    <button onclick="switchTab('about')" id="tab-about" class="nav-btn flex-1 py-3 md:py-4 text-[10px] md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">Stats</button>
+                    <button onclick="switchTab('favs')" id="tab-favs" class="nav-btn flex-1 py-3 md:py-4 text-[10px] md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">Loadout</button>
                 </div>
 
-                <!-- Tab Panels -->
-                <div class="flex-1 p-6 overflow-y-auto relative custom-scrollbar">
+                <!-- Tab Panels (Scrollable) -->
+                <div class="flex-1 p-4 md:p-6 overflow-y-auto relative custom-scrollbar overscroll-contain">
                     
                     <!-- Home Tab -->
                     <div id="content-home" class="tab-content active h-full flex flex-col justify-center">
-                        <div class="font-['JetBrains_Mono'] text-sm space-y-6">
-                            <div class="terminal-box bg-black/40 border border-white/10 p-4 rounded-lg shadow-inner relative overflow-hidden">
+                        <div class="font-['JetBrains_Mono'] text-sm space-y-4 md:space-y-6">
+                            <div class="terminal-box bg-black/40 border border-white/10 p-3 md:p-4 rounded-lg shadow-inner relative overflow-hidden">
                                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500"></div>
-                                <p class="text-gray-500 text-[10px] mb-2 flex gap-2">
+                                <p class="text-gray-500 text-[9px] md:text-[10px] mb-2 flex gap-2">
                                     <span class="w-2 h-2 rounded-full bg-red-500"></span>
                                     <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
                                     <span class="w-2 h-2 rounded-full bg-green-500"></span>
                                     bash
                                 </p>
-                                <p class="text-gray-300 text-xs mb-1">
+                                <p class="text-gray-300 text-[11px] md:text-xs mb-1 truncate">
                                     <span class="text-purple-400">root@simplykashu:~$</span> ./welcome.sh
                                 </p>
-                                <p class="text-gray-400 typing-effect leading-relaxed pl-2 border-l-2 border-gray-700 mt-2">
+                                <p class="text-gray-400 text-xs md:text-sm typing-effect leading-relaxed pl-2 border-l-2 border-gray-700 mt-2">
                                     Welcome to the void.<br>
                                     Chill vibes only.
                                 </p>
                             </div>
                             
                             <!-- Music Player -->
-                            <div class="mt-6 p-4 bg-gradient-to-r from-white/5 to-transparent rounded-xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-colors">
-                                <h3 class="text-[10px] uppercase tracking-widest text-gray-500 mb-3 flex items-center gap-2">
+                            <div class="mt-2 md:mt-6 p-3 md:p-4 bg-gradient-to-r from-white/5 to-transparent rounded-xl border border-white/10 backdrop-blur-sm">
+                                <h3 class="text-[9px] md:text-[10px] uppercase tracking-widest text-gray-500 mb-3 flex items-center gap-2">
                                     <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Now Playing
                                 </h3>
-                                <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-3 md:gap-4">
                                     <!-- Cover Art -->
-                                    <div class="w-16 h-16 rounded-lg overflow-hidden border border-white/10 shadow-lg shrink-0 relative group cursor-pointer" onclick="toggleMusic()">
+                                    <div class="w-12 h-12 md:w-16 md:h-16 rounded-lg overflow-hidden border border-white/10 shadow-lg shrink-0 relative group cursor-pointer" onclick="toggleMusic()">
                                         <img src="assets/profile/music/do_me_good.png" alt="Cover" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
                                             <i class="fa-solid fa-play text-white opacity-0 group-hover:opacity-100 transition-opacity"></i>
@@ -138,39 +129,38 @@
                                     
                                     <!-- Info & Controls -->
                                     <div class="flex-1 min-w-0">
-                                        <div class="mb-2 flex justify-between items-start">
+                                        <div class="mb-1 md:mb-2 flex justify-between items-start">
                                             <div>
-                                                <p class="text-sm font-bold text-white truncate hover:text-purple-400 transition-colors">Do Me Good</p>
-                                                <p class="text-xs text-gray-400 truncate">ORGAVSM</p>
+                                                <p class="text-xs md:text-sm font-bold text-white truncate">Do Me Good</p>
+                                                <p class="text-[10px] md:text-xs text-gray-400 truncate">ORGAVSM</p>
                                             </div>
-                                            <i class="fa-solid fa-music text-white/10 text-xl"></i>
+                                            <i class="fa-solid fa-music text-white/10 text-lg"></i>
                                         </div>
                                         
-                                        <!-- Controls -->
-                                        <div class="flex flex-col gap-2">
+                                        <div class="flex flex-col gap-1 md:gap-2">
                                             <!-- Progress Bar -->
                                             <div class="w-full flex items-center gap-2">
-                                                <span id="current-time" class="text-[10px] text-gray-400 w-8 text-right font-mono">0:00</span>
+                                                <span id="current-time" class="text-[9px] text-gray-400 w-6 text-right font-mono">0:00</span>
                                                 <div class="h-1 flex-1 bg-gray-700 rounded-full overflow-hidden relative cursor-pointer group" id="progress-container">
-                                                    <div id="progress-bar" class="h-full w-0 bg-gradient-to-r from-purple-600 to-purple-400 rounded-full relative shadow-[0_0_10px_rgba(168,85,247,0.5)]"></div>
+                                                    <div id="progress-bar" class="h-full w-0 bg-purple-500 rounded-full relative"></div>
                                                 </div>
-                                                <span id="total-duration" class="text-[10px] text-gray-400 w-8 font-mono">0:00</span>
+                                                <span id="total-duration" class="text-[9px] text-gray-400 w-6 font-mono">0:00</span>
                                             </div>
                                             
-                                            <!-- Buttons & Volume -->
+                                            <!-- Controls -->
                                             <div class="flex justify-between items-center mt-1">
-                                                <div class="flex items-center gap-3">
-                                                    <button class="text-gray-500 hover:text-white transition-colors text-xs"><i class="fa-solid fa-backward-step"></i></button>
-                                                    <button id="play-btn" onclick="toggleMusic()" class="w-6 h-6 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
-                                                        <i class="fa-solid fa-play ml-0.5 text-[10px]" id="play-icon"></i>
+                                                <div class="flex items-center gap-2 md:gap-3">
+                                                    <button class="text-gray-500 hover:text-white transition-colors text-[10px]"><i class="fa-solid fa-backward-step"></i></button>
+                                                    <button id="play-btn" onclick="toggleMusic()" class="w-5 h-5 md:w-6 md:h-6 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                                        <i class="fa-solid fa-play ml-0.5 text-[9px]" id="play-icon"></i>
                                                     </button>
-                                                    <button class="text-gray-500 hover:text-white transition-colors text-xs"><i class="fa-solid fa-forward-step"></i></button>
+                                                    <button class="text-gray-500 hover:text-white transition-colors text-[10px]"><i class="fa-solid fa-forward-step"></i></button>
                                                 </div>
                                                 
-                                                <!-- Volume Slider -->
-                                                <div class="flex items-center gap-2 group">
-                                                    <i class="fa-solid fa-volume-high text-[10px] text-gray-500 group-hover:text-white transition-colors"></i>
-                                                    <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.3" class="w-16 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-purple-500">
+                                                <!-- Volume -->
+                                                <div class="flex items-center gap-2">
+                                                    <i class="fa-solid fa-volume-high text-[9px] text-gray-500"></i>
+                                                    <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.3" class="w-12 md:w-16 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-purple-500">
                                                 </div>
                                             </div>
                                         </div>
@@ -180,113 +170,107 @@
                         </div>
                     </div>
 
-                    <!-- About Tab (RPG Style) -->
-                    <div id="content-about" class="tab-content space-y-5">
-                        <div class="space-y-1 border-b border-white/10 pb-3 flex justify-between items-end">
+                    <!-- About Tab -->
+                    <div id="content-about" class="tab-content space-y-4 md:space-y-5">
+                        <div class="space-y-1 border-b border-white/10 pb-2 md:pb-3 flex justify-between items-end">
                             <div>
-                                <h2 class="text-xl font-bold text-white">Luke Rheeder</h2>
-                                <p class="text-xs text-purple-400 font-['JetBrains_Mono']">Class: Aspiring Farmworker</p>
+                                <h2 class="text-lg md:text-xl font-bold text-white">Luke Rheeder</h2>
+                                <p class="text-[10px] md:text-xs text-purple-400 font-['JetBrains_Mono']">Class: Aspiring Farmworker</p>
                             </div>
                             <div class="text-right">
-                                <span class="text-[10px] text-gray-500 block">EXP</span>
-                                <div class="w-20 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                                <span class="text-[9px] text-gray-500 block">EXP</span>
+                                <div class="w-16 md:w-20 h-1.5 bg-gray-800 rounded-full overflow-hidden">
                                     <div class="h-full w-[75%] bg-blue-500"></div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-3 mt-2">
-                            <!-- Stat Card -->
-                            <div class="p-3 bg-white/5 rounded border border-white/5 hover:border-purple-500/40 transition-all group">
-                                <h3 class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Main Quest</h3>
+                        <div class="grid grid-cols-2 gap-2 md:gap-3 mt-2">
+                            <div class="p-2 md:p-3 bg-white/5 rounded border border-white/5">
+                                <h3 class="text-[9px] text-gray-500 uppercase tracking-wider mb-1">Main Quest</h3>
                                 <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-tractor text-yellow-500 group-hover:animate-bounce-slow"></i>
-                                    <span class="text-sm font-bold">H-2A Visa</span>
+                                    <i class="fa-solid fa-tractor text-yellow-500"></i>
+                                    <span class="text-xs md:text-sm font-bold">H-2A Visa</span>
                                 </div>
                             </div>
-                            
-                            <!-- Stat Card -->
-                            <div class="p-3 bg-white/5 rounded border border-white/5 hover:border-purple-500/40 transition-all group">
-                                <h3 class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Current School</h3>
+                            <div class="p-2 md:p-3 bg-white/5 rounded border border-white/5">
+                                <h3 class="text-[9px] text-gray-500 uppercase tracking-wider mb-1">Current School</h3>
                                 <div class="flex items-center gap-2">
                                     <i class="fa-solid fa-graduation-cap text-blue-400"></i>
-                                    <span class="text-sm font-bold">Acellus</span>
+                                    <span class="text-xs md:text-sm font-bold">Acellus</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mt-4">
-                            <h3 class="text-xs text-gray-400 uppercase tracking-wider mb-2">Passive Abilities</h3>
+                        <div class="mt-3">
+                            <h3 class="text-[10px] text-gray-400 uppercase tracking-wider mb-2">Passive Abilities</h3>
                             <div class="space-y-2">
                                 <div class="flex items-center justify-between p-2 bg-black/20 rounded border border-white/5">
                                     <div class="flex items-center gap-2">
-                                        <i class="fa-solid fa-gamepad text-gray-400"></i>
-                                        <span class="text-xs">Gamer</span>
+                                        <i class="fa-solid fa-gamepad text-gray-400 text-xs"></i>
+                                        <span class="text-[11px] md:text-xs">Gamer</span>
                                     </div>
-                                    <span class="text-[10px] text-green-400">+10 DEX</span>
+                                    <span class="text-[9px] text-green-400">+10 DEX</span>
                                 </div>
                                 <div class="flex items-center justify-between p-2 bg-black/20 rounded border border-white/5">
                                     <div class="flex items-center gap-2">
-                                        <i class="fa-solid fa-spider text-gray-400"></i>
-                                        <span class="text-xs">Beast Tamer</span>
+                                        <i class="fa-solid fa-spider text-gray-400 text-xs"></i>
+                                        <span class="text-[11px] md:text-xs">Beast Tamer</span>
                                     </div>
-                                    <span class="text-[10px] text-purple-400">+15 CHA</span>
+                                    <span class="text-[9px] text-purple-400">+15 CHA</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Favorites Tab (Loadout) -->
-                    <div id="content-favs" class="tab-content space-y-5">
-                        
-                        <!-- Artists -->
+                    <!-- Favorites Tab -->
+                    <div id="content-favs" class="tab-content space-y-4 md:space-y-5">
                         <div>
-                            <h3 class="text-xs text-purple-400 font-['JetBrains_Mono'] mb-3 flex items-center gap-2 border-b border-white/5 pb-1">
+                            <h3 class="text-[10px] text-purple-400 font-['JetBrains_Mono'] mb-2 flex items-center gap-2 border-b border-white/5 pb-1">
                                 <i class="fa-solid fa-headphones"></i> AUDIO LOGS
                             </h3>
                             <div class="grid grid-cols-2 gap-2">
-                                <div class="fav-item bg-white/5 p-2 rounded border border-white/10 flex items-center gap-2 hover:bg-white/10 hover:translate-x-1 transition-all cursor-default">
-                                    <div class="w-8 h-8 bg-gray-800 rounded-md flex items-center justify-center border border-white/5"><i class="fa-solid fa-skull text-xs"></i></div>
-                                    <span class="text-xs font-bold">Diggy Graves</span>
+                                <div class="bg-white/5 p-2 rounded border border-white/10 flex items-center gap-2">
+                                    <div class="w-6 h-6 md:w-8 md:h-8 bg-gray-800 rounded flex items-center justify-center border border-white/5"><i class="fa-solid fa-skull text-[10px]"></i></div>
+                                    <span class="text-[10px] md:text-xs font-bold truncate">Diggy Graves</span>
                                 </div>
-                                <div class="fav-item bg-white/5 p-2 rounded border border-white/10 flex items-center gap-2 hover:bg-white/10 hover:translate-x-1 transition-all cursor-default">
-                                    <div class="w-8 h-8 bg-gray-800 rounded-md flex items-center justify-center border border-white/5"><i class="fa-solid fa-ghost text-xs"></i></div>
-                                    <span class="text-xs font-bold">sKitz Kraven</span>
+                                <div class="bg-white/5 p-2 rounded border border-white/10 flex items-center gap-2">
+                                    <div class="w-6 h-6 md:w-8 md:h-8 bg-gray-800 rounded flex items-center justify-center border border-white/5"><i class="fa-solid fa-ghost text-[10px]"></i></div>
+                                    <span class="text-[10px] md:text-xs font-bold truncate">sKitz Kraven</span>
                                 </div>
-                                <div class="fav-item bg-white/5 p-2 rounded border border-white/10 flex items-center gap-2 hover:bg-white/10 hover:translate-x-1 transition-all cursor-default">
-                                    <div class="w-8 h-8 bg-gray-800 rounded-md flex items-center justify-center border border-white/5"><i class="fa-solid fa-compact-disc text-xs"></i></div>
-                                    <span class="text-xs font-bold">DJSM</span>
+                                <div class="bg-white/5 p-2 rounded border border-white/10 flex items-center gap-2">
+                                    <div class="w-6 h-6 md:w-8 md:h-8 bg-gray-800 rounded flex items-center justify-center border border-white/5"><i class="fa-solid fa-compact-disc text-[10px]"></i></div>
+                                    <span class="text-[10px] md:text-xs font-bold truncate">DJSM</span>
                                 </div>
-                                <div class="fav-item bg-white/5 p-2 rounded border border-white/10 flex items-center gap-2 hover:bg-white/10 hover:translate-x-1 transition-all cursor-default">
-                                    <div class="w-8 h-8 bg-gray-800 rounded-md flex items-center justify-center border border-white/5"><i class="fa-solid fa-microphone-lines text-xs"></i></div>
-                                    <span class="text-xs font-bold">Snotkop</span>
+                                <div class="bg-white/5 p-2 rounded border border-white/10 flex items-center gap-2">
+                                    <div class="w-6 h-6 md:w-8 md:h-8 bg-gray-800 rounded flex items-center justify-center border border-white/5"><i class="fa-solid fa-microphone-lines text-[10px]"></i></div>
+                                    <span class="text-[10px] md:text-xs font-bold truncate">Snotkop</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Food & Games -->
                         <div class="grid grid-cols-1 gap-2">
-                            <h3 class="text-xs text-purple-400 font-['JetBrains_Mono'] mb-1 flex items-center gap-2 border-b border-white/5 pb-1 mt-2">
+                            <h3 class="text-[10px] text-purple-400 font-['JetBrains_Mono'] mb-1 flex items-center gap-2 border-b border-white/5 pb-1 mt-1">
                                 <i class="fa-solid fa-box-open"></i> INVENTORY
                             </h3>
                             
-                            <div class="bg-gradient-to-r from-orange-900/20 to-transparent p-3 rounded border border-orange-500/20 flex items-center gap-3 group hover:border-orange-500/40 transition-all">
-                                <div class="bg-orange-500/10 p-2 rounded-lg group-hover:rotate-12 transition-transform">
-                                    <i class="fa-solid fa-pizza-slice text-orange-400"></i>
+                            <div class="bg-gradient-to-r from-orange-900/20 to-transparent p-2 md:p-3 rounded border border-orange-500/20 flex items-center gap-3">
+                                <div class="bg-orange-500/10 p-1.5 rounded-lg">
+                                    <i class="fa-solid fa-pizza-slice text-orange-400 text-xs"></i>
                                 </div>
                                 <div>
-                                    <p class="text-xs font-bold text-gray-200">Debonairs Pizza</p>
-                                    <p class="text-[10px] text-gray-500">Item: "Something Meaty"</p>
+                                    <p class="text-[11px] md:text-xs font-bold text-gray-200">Debonairs Pizza</p>
+                                    <p class="text-[9px] text-gray-500">Item: "Something Meaty"</p>
                                 </div>
                             </div>
 
-                            <div class="bg-gradient-to-r from-red-900/20 to-transparent p-3 rounded border border-red-500/20 flex items-center gap-3 group hover:border-red-500/40 transition-all">
-                                <div class="bg-red-500/10 p-2 rounded-lg group-hover:rotate-12 transition-transform">
-                                    <i class="fa-solid fa-gamepad text-red-400"></i>
+                            <div class="bg-gradient-to-r from-red-900/20 to-transparent p-2 md:p-3 rounded border border-red-500/20 flex items-center gap-3">
+                                <div class="bg-red-500/10 p-1.5 rounded-lg">
+                                    <i class="fa-solid fa-gamepad text-red-400 text-xs"></i>
                                 </div>
                                 <div>
-                                    <p class="text-xs font-bold text-gray-200">Dead by Daylight</p>
-                                    <p class="text-[10px] text-gray-500">Status: Survivor Main</p>
+                                    <p class="text-[11px] md:text-xs font-bold text-gray-200">Dead by Daylight</p>
+                                    <p class="text-[9px] text-gray-500">Status: Survivor Main</p>
                                 </div>
                             </div>
                         </div>
@@ -295,20 +279,16 @@
                 </div>
                 
                 <!-- Footer -->
-                <div class="p-3 border-t border-white/10 flex justify-between items-center text-[10px] text-gray-500 font-['JetBrains_Mono'] bg-black/40 backdrop-blur-md rounded-br-2xl">
-                    <span class="flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-green-500"></div> SERVERS ONLINE</span>
-                    <span>VER 2.0</span>
+                <div class="p-3 border-t border-white/10 flex justify-between items-center text-[9px] text-gray-500 font-['JetBrains_Mono'] bg-black/40 backdrop-blur-md">
+                    <span class="flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-green-500"></div> ONLINE</span>
+                    <span>VER 2.1-Mobile</span>
                 </div>
             </div>
-        </div>
-        
-        <div class="absolute bottom-4 text-center w-full">
-            <p class="text-[10px] text-gray-600 opacity-50">designed for github.io</p>
         </div>
     </div>
 
     <!-- Audio Element -->
-    <audio id="bg-music" loop preload="metadata">
+    <audio id="bg-music" loop preload="metadata" playsinline>
         <source src="assets/profile/music/do_me_good.mp3" type="audio/mp3">
     </audio>
 
