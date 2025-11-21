@@ -6,10 +6,14 @@ const DISCORD_ID = "1066445133916164146";
 const avatarImg = document.getElementById('discord-pfp');
 const statusDot = document.getElementById('discord-status-dot');
 const glowEffect = document.getElementById('discord-glow');
+
+// RPC Card Elements
 const activityBox = document.getElementById('discord-activity');
+const rpcAvatar = document.getElementById('rpc-avatar');
+const rpcStatusDot = document.getElementById('rpc-status-dot');
 const activityIcon = document.getElementById('activity-icon');
-const activityName = document.getElementById('activity-name');
-const activityState = document.getElementById('activity-state');
+const activityHeader = document.getElementById('activity-header'); // "Listening to"
+const activityName = document.getElementById('activity-name');     // Song/Game Name
 
 // Status Colors
 const STATUS_COLORS = {
@@ -23,7 +27,6 @@ function connectLanyard() {
     const socket = new WebSocket('wss://api.lanyard.rest/socket');
 
     socket.addEventListener('open', () => {
-        // Subscribe to the user ID
         socket.send(JSON.stringify({
             op: 2,
             d: { subscribe_to_id: DISCORD_ID }
@@ -40,7 +43,6 @@ function connectLanyard() {
     });
 
     socket.addEventListener('close', () => {
-        // Auto-reconnect after 5 seconds if connection drops
         setTimeout(connectLanyard, 5000);
     });
 }
@@ -49,50 +51,63 @@ function updateStatus(data) {
     const status = data.discord_status;
     const styles = STATUS_COLORS[status] || STATUS_COLORS.offline;
 
-    // Update Avatar Border/Dot
+    // 1. Update Main Avatar & Glow
     if (statusDot) {
         statusDot.style.backgroundColor = styles.color;
-        // Add pulsate animation only if online/dnd
         statusDot.className = `absolute bottom-2 right-2 w-5 h-5 rounded-full border-4 border-black z-20 ${status !== 'offline' ? 'animate-pulse' : ''}`;
-        statusDot.style.backgroundColor = styles.color; // Re-apply inline color because class wipe might remove it
+        statusDot.style.backgroundColor = styles.color;
     }
-
-    // Update Glow
     if (glowEffect) {
         glowEffect.className = `absolute inset-0 bg-gradient-to-tr ${styles.glow} rounded-full blur opacity-40 group-hover:opacity-75 transition-all duration-500`;
     }
 
-    // Handle Activities
-    // Filter for Playing (type 0) or Visual Studio Code/etc.
-    // We ignore "Custom Status" (type 4) usually unless desired.
-    const activity = data.activities.find(a => a.type === 0 || a.type === 2); // 0=Playing, 2=Listening
+    // 2. Update RPC Card Avatar/Dot
+    if (rpcStatusDot) {
+        rpcStatusDot.style.backgroundColor = styles.color;
+    }
 
-    if (activity && activityBox) {
-        activityBox.classList.remove('hidden');
-        
-        // Set Name
-        activityName.textContent = activity.name;
-        
-        // Set Details (State/Details)
-        const details = activity.details || activity.state || "Playing";
-        activityState.textContent = details;
-
-        // Try to set image
-        if (activity.assets && activity.assets.large_image) {
-            activityIcon.classList.remove('hidden');
-            // Lanyard proxies image urls usually, but we need to construct it
-            let iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.large_image}.png`;
-            
-            // Special case for Spotify
-            if (activity.id === "spotify:1") {
-                 iconUrl = `https://i.scdn.co/image/${activity.assets.large_image.replace("spotify:", "")}`;
+    // 3. Handle Activities (Priority: Spotify > Game)
+    if (data.listening_to_spotify) {
+        // SPOTIFY MODE
+        const spotify = data.spotify;
+        renderRPC(true, "Listening to", spotify.song + " by " + spotify.artist, spotify.album_art_url);
+    } else if (data.activities && data.activities.length > 0) {
+        // GAME MODE (Find first playing activity that isn't custom status)
+        const activity = data.activities.find(a => a.type === 0);
+        if (activity) {
+            let iconUrl = "";
+            if (activity.assets && activity.assets.large_image) {
+                if (activity.assets.large_image.startsWith("mp:external")) {
+                    iconUrl = activity.assets.large_image.replace(/mp:external\/([^\/]*)\/(https:\/\/.*)/, "$2");
+                } else {
+                    iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.large_image}.png`;
+                }
             }
-            
+            renderRPC(true, "Playing", activity.name, iconUrl);
+        } else {
+            // No game, check for other status or hide
+            renderRPC(false); 
+        }
+    } else {
+        renderRPC(false);
+    }
+}
+
+function renderRPC(show, header, name, iconUrl) {
+    if (!activityBox) return;
+
+    if (show) {
+        activityBox.classList.remove('hidden');
+        activityHeader.textContent = header;
+        activityName.textContent = name;
+        
+        if (iconUrl) {
             activityIcon.src = iconUrl;
+            activityIcon.classList.remove('hidden');
         } else {
             activityIcon.classList.add('hidden');
         }
-    } else if (activityBox) {
+    } else {
         activityBox.classList.add('hidden');
     }
 }
