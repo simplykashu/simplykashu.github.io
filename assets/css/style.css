@@ -139,7 +139,7 @@ input[type=range]::-webkit-slider-runnable-track {
 .tab-content {
     display: none;
     animation: fade-in-up 0.5s ease;
-    height: 100%;
+    /* Removed height: 100% so padding-bottom works */
 }
 .tab-content.active {
     display: block;
