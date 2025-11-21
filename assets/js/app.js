@@ -1,5 +1,5 @@
 /* --- Configuration --- */
-const SONG_START_TIME = 35; 
+const SONG_START_TIME = 0; 
 
 /* --- 3D Tilt Logic (Desktop Only) --- */
 const card = document.getElementById('tilt-card');
