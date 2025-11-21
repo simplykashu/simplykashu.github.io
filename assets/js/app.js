@@ -1,5 +1,105 @@
 /* --- Configuration --- */
 const SONG_START_TIME = 0; 
+const DISCORD_ID = "1066445133916164146";
+
+/* --- Lanyard / Discord Status Logic --- */
+const avatarImg = document.getElementById('discord-pfp');
+const statusDot = document.getElementById('discord-status-dot');
+const glowEffect = document.getElementById('discord-glow');
+const activityBox = document.getElementById('discord-activity');
+const activityIcon = document.getElementById('activity-icon');
+const activityName = document.getElementById('activity-name');
+const activityState = document.getElementById('activity-state');
+
+// Status Colors
+const STATUS_COLORS = {
+    online: { color: '#22c55e', glow: 'from-green-600 to-green-400' },
+    idle:   { color: '#f59e0b', glow: 'from-yellow-600 to-yellow-400' },
+    dnd:    { color: '#ef4444', glow: 'from-red-600 to-red-400' },
+    offline:{ color: '#6b7280', glow: 'from-gray-600 to-gray-400' }
+};
+
+function connectLanyard() {
+    const socket = new WebSocket('wss://api.lanyard.rest/socket');
+
+    socket.addEventListener('open', () => {
+        // Subscribe to the user ID
+        socket.send(JSON.stringify({
+            op: 2,
+            d: { subscribe_to_id: DISCORD_ID }
+        }));
+    });
+
+    socket.addEventListener('message', (event) => {
+        const data = JSON.parse(event.data);
+        const { t, d } = data;
+
+        if (t === 'INIT_STATE' || t === 'PRESENCE_UPDATE') {
+            updateStatus(d);
+        }
+    });
+
+    socket.addEventListener('close', () => {
+        // Auto-reconnect after 5 seconds if connection drops
+        setTimeout(connectLanyard, 5000);
+    });
+}
+
+function updateStatus(data) {
+    const status = data.discord_status;
+    const styles = STATUS_COLORS[status] || STATUS_COLORS.offline;
+
+    // Update Avatar Border/Dot
+    if (statusDot) {
+        statusDot.style.backgroundColor = styles.color;
+        // Add pulsate animation only if online/dnd
+        statusDot.className = `absolute bottom-2 right-2 w-5 h-5 rounded-full border-4 border-black z-20 ${status !== 'offline' ? 'animate-pulse' : ''}`;
+        statusDot.style.backgroundColor = styles.color; // Re-apply inline color because class wipe might remove it
+    }
+
+    // Update Glow
+    if (glowEffect) {
+        glowEffect.className = `absolute inset-0 bg-gradient-to-tr ${styles.glow} rounded-full blur opacity-40 group-hover:opacity-75 transition-all duration-500`;
+    }
+
+    // Handle Activities
+    // Filter for Playing (type 0) or Visual Studio Code/etc.
+    // We ignore "Custom Status" (type 4) usually unless desired.
+    const activity = data.activities.find(a => a.type === 0 || a.type === 2); // 0=Playing, 2=Listening
+
+    if (activity && activityBox) {
+        activityBox.classList.remove('hidden');
+        
+        // Set Name
+        activityName.textContent = activity.name;
+        
+        // Set Details (State/Details)
+        const details = activity.details || activity.state || "Playing";
+        activityState.textContent = details;
+
+        // Try to set image
+        if (activity.assets && activity.assets.large_image) {
+            activityIcon.classList.remove('hidden');
+            // Lanyard proxies image urls usually, but we need to construct it
+            let iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.large_image}.png`;
+            
+            // Special case for Spotify
+            if (activity.id === "spotify:1") {
+                 iconUrl = `https://i.scdn.co/image/${activity.assets.large_image.replace("spotify:", "")}`;
+            }
+            
+            activityIcon.src = iconUrl;
+        } else {
+            activityIcon.classList.add('hidden');
+        }
+    } else if (activityBox) {
+        activityBox.classList.add('hidden');
+    }
+}
+
+// Start Connection
+connectLanyard();
+
 
 /* --- 3D Tilt Logic (Desktop Only) --- */
 const card = document.getElementById('tilt-card');
