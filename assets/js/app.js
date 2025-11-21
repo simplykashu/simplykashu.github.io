@@ -12,8 +12,8 @@ const activityBox = document.getElementById('discord-activity');
 const rpcAvatar = document.getElementById('rpc-avatar');
 const rpcStatusDot = document.getElementById('rpc-status-dot');
 const activityIcon = document.getElementById('activity-icon');
-const activityHeader = document.getElementById('activity-header'); // "Listening to"
-const activityName = document.getElementById('activity-name');     // Song/Game Name
+const activityHeader = document.getElementById('activity-header'); 
+const activityName = document.getElementById('activity-name');     
 
 // Status Colors
 const STATUS_COLORS = {
@@ -61,18 +61,20 @@ function updateStatus(data) {
         glowEffect.className = `absolute inset-0 bg-gradient-to-tr ${styles.glow} rounded-full blur opacity-40 group-hover:opacity-75 transition-all duration-500`;
     }
 
-    // 2. Update RPC Card Avatar/Dot
+    // 2. Update RPC Card Status Dot
     if (rpcStatusDot) {
         rpcStatusDot.style.backgroundColor = styles.color;
     }
 
-    // 3. Handle Activities (Priority: Spotify > Game)
+    // 3. Handle Activities (Spotify > Game)
     if (data.listening_to_spotify) {
-        // SPOTIFY MODE
+        // SPOTIFY
         const spotify = data.spotify;
-        renderRPC(true, "Listening to", spotify.song + " by " + spotify.artist, spotify.album_art_url);
+        const song = spotify.song;
+        const artist = "by " + spotify.artist; // Add "by" prefix
+        renderRPC(true, `Listening to <span class="text-white font-bold">${song}</span>`, artist, spotify.album_art_url);
     } else if (data.activities && data.activities.length > 0) {
-        // GAME MODE (Find first playing activity that isn't custom status)
+        // GAME
         const activity = data.activities.find(a => a.type === 0);
         if (activity) {
             let iconUrl = "";
@@ -83,23 +85,30 @@ function updateStatus(data) {
                     iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.large_image}.png`;
                 }
             }
-            renderRPC(true, "Playing", activity.name, iconUrl);
+            const details = activity.details || activity.state || "Playing";
+            renderRPC(true, `Playing <span class="text-white font-bold">${activity.name}</span>`, details, iconUrl);
         } else {
-            // No game, check for other status or hide
-            renderRPC(false); 
+            // Fallback if online but no game
+            renderRPC(true, "Status", "Just chillin'", "");
         }
     } else {
-        renderRPC(false);
+        // Fallback if offline/no activity
+        renderRPC(true, "Status", "Offline", "");
     }
 }
 
-function renderRPC(show, header, name, iconUrl) {
+function renderRPC(show, line1Html, line2Text, iconUrl) {
     if (!activityBox) return;
 
     if (show) {
         activityBox.classList.remove('hidden');
-        activityHeader.textContent = header;
-        activityName.textContent = name;
+        activityBox.classList.add('flex');
+        
+        // Set Line 1 (e.g. Listening to SONG)
+        activityHeader.innerHTML = line1Html;
+        
+        // Set Line 2 (e.g. by ARTIST)
+        activityName.textContent = line2Text;
         
         if (iconUrl) {
             activityIcon.src = iconUrl;
@@ -109,6 +118,7 @@ function renderRPC(show, header, name, iconUrl) {
         }
     } else {
         activityBox.classList.add('hidden');
+        activityBox.classList.remove('flex');
     }
 }
 
@@ -167,7 +177,8 @@ function updateClock() {
         const options = { 
             timeZone: 'Africa/Johannesburg', 
             hour: '2-digit', 
-            minute: '2-digit',
+            minute: '2-digit', 
+            second: '2-digit',
             hour12: false 
         };
         const timeString = new Date().toLocaleTimeString('en-US', options);
