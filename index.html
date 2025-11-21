@@ -39,15 +39,10 @@
                 
                 <!-- Avatar (Connected to Discord) -->
                 <div class="relative group mb-2 md:mb-4">
-                    <!-- Glow effect that changes color based on status -->
                     <div id="discord-glow" class="absolute inset-0 bg-gradient-to-tr from-gray-600 to-gray-600 rounded-full blur opacity-40 group-hover:opacity-75 transition-all duration-500"></div>
-                    
                     <div class="w-24 h-24 md:w-36 md:h-36 rounded-full bg-gray-800 border-2 border-white/20 overflow-hidden relative z-10 shadow-2xl">
-                        <!-- Avatar Image -->
                         <img id="discord-pfp" src="assets/profile/images/avatar.png" alt="Luke" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                     </div>
-                    
-                    <!-- Status Dot -->
                     <div id="discord-status-dot" class="absolute bottom-2 right-2 w-5 h-5 bg-gray-500 rounded-full border-4 border-black z-20" title="Loading Status..."></div>
                 </div>
 
@@ -65,22 +60,34 @@
                     <span class="badge px-2 md:px-3 py-1 text-[10px] md:text-xs bg-white/5 rounded border border-white/10">Lvl. 15</span>
                 </div>
 
-                <!-- Live Activity / Clock Container -->
-                <div class="mt-3 flex flex-col items-center gap-2 font-['JetBrains_Mono'] text-xs w-full">
-                    <!-- Clock -->
-                    <div class="text-purple-400 border border-purple-500/20 bg-purple-500/5 px-3 py-1.5 rounded-full flex items-center shadow-[0_0_10px_rgba(168,85,247,0.1)]">
-                        <i class="fa-regular fa-clock mr-2 animate-spin-slow"></i> <span id="sast-clock">--:--</span>
+                <!-- GUNS.LOL STYLE RPC CARD -->
+                <div id="discord-activity" class="hidden w-full mt-4 bg-[#111] border border-white/10 rounded-xl p-3 flex items-center gap-3 relative overflow-hidden group animate-fade-in-up shadow-lg hover:border-white/20 transition-all">
+                    <!-- Background Glow -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-purple-900/20 to-transparent opacity-50"></div>
+                    
+                    <!-- Mini Avatar -->
+                    <div class="relative shrink-0">
+                        <img id="rpc-avatar" src="assets/profile/images/avatar.png" class="w-10 h-10 rounded-full border border-white/10">
+                        <div id="rpc-status-dot" class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-gray-500 rounded-full border-2 border-[#111]"></div>
                     </div>
 
-                    <!-- Discord Activity (Hidden by default, shows when playing) -->
-                    <div id="discord-activity" class="hidden w-full max-w-[200px] bg-white/5 border border-white/10 rounded p-2 flex items-center gap-2 animate-fade-in-up">
-                        <img id="activity-icon" src="" class="w-8 h-8 rounded bg-gray-700 object-cover hidden"> 
-                        <div class="overflow-hidden">
-                            <p class="text-[10px] text-gray-400 uppercase font-bold">Playing</p>
-                            <p id="activity-name" class="text-xs text-white font-bold truncate">...</p>
-                            <p id="activity-state" class="text-[10px] text-gray-400 truncate">...</p>
+                    <!-- Info -->
+                    <div class="flex-1 min-w-0 relative z-10">
+                        <div class="flex items-center gap-1.5 mb-0.5">
+                            <span class="text-xs font-bold text-white leading-none">simplykashu</span>
+                            <!-- Badges -->
+                            <div class="flex gap-0.5 bg-white/10 rounded px-1 py-0.5">
+                                <i class="fa-solid fa-gem text-[8px] text-pink-400"></i>
+                                <span class="text-[8px] font-bold text-white uppercase">PRO</span>
+                            </div>
+                            <i class="fa-brands fa-dev text-[10px] text-white/50"></i>
                         </div>
+                        <p id="activity-header" class="text-[9px] text-gray-400 uppercase font-bold leading-tight">Idling</p>
+                        <p id="activity-name" class="text-[10px] text-white font-medium truncate leading-tight">...</p>
                     </div>
+
+                    <!-- Large Art -->
+                    <img id="activity-icon" src="" class="w-12 h-12 rounded-md object-cover shrink-0 hidden border border-white/5">
                 </div>
 
                 <!-- Social Icons -->
@@ -128,7 +135,6 @@
 
                     <!-- About Tab -->
                     <div id="content-about" class="tab-content space-y-6">
-                        <!-- Header Section -->
                         <div class="flex items-end justify-between border-b border-white/10 pb-4">
                             <div>
                                 <h2 class="text-2xl font-bold text-white">Luke Rheeder</h2>
@@ -140,7 +146,6 @@
                             </div>
                         </div>
 
-                        <!-- The "About Me" Text -->
                         <div class="bg-white/5 p-4 rounded-lg border border-white/5 text-sm leading-relaxed text-gray-300 shadow-inner">
                             <p>
                                 Yo, I'm Luke. Just a 15-year-old from <span class="text-white font-semibold">South Africa</span> trying to navigate life. 
@@ -153,7 +158,6 @@
                             </p>
                         </div>
 
-                        <!-- Stats Grid -->
                         <div class="grid grid-cols-2 gap-3">
                             <div class="p-3 bg-black/30 rounded border border-white/5">
                                 <h3 class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Relationship</h3>
@@ -171,7 +175,6 @@
                             </div>
                         </div>
 
-                        <!-- XP Bar -->
                         <div>
                             <div class="flex justify-between text-[10px] text-gray-500 mb-1 uppercase tracking-wider">
                                 <span>Level 15 Progress</span>
@@ -185,8 +188,6 @@
 
                     <!-- Loadout Tab -->
                     <div id="content-favs" class="tab-content space-y-6">
-                        
-                        <!-- Audio Logs -->
                         <div>
                             <h3 class="text-xs text-purple-400 font-['JetBrains_Mono'] mb-4 flex items-center gap-2 border-b border-white/10 pb-2">
                                 <i class="fa-solid fa-headphones"></i> AUDIO LOGS
@@ -211,12 +212,10 @@
                             </div>
                         </div>
 
-                        <!-- Inventory -->
                         <div>
                             <h3 class="text-xs text-purple-400 font-['JetBrains_Mono'] mb-4 flex items-center gap-2 border-b border-white/10 pb-2">
                                 <i class="fa-solid fa-box-open"></i> INVENTORY
                             </h3>
-                            
                             <div class="grid grid-cols-1 gap-3">
                                 <div class="bg-gradient-to-r from-orange-900/10 to-transparent p-3 rounded border border-orange-500/20 flex items-center gap-4 hover:border-orange-500/40 transition-all group">
                                     <div class="bg-orange-500/10 p-2 rounded-lg group-hover:rotate-6 transition-transform">
@@ -227,7 +226,6 @@
                                         <p class="text-[10px] text-gray-500 font-mono">CONSUMABLE • "Something Meaty"</p>
                                     </div>
                                 </div>
-
                                 <div class="bg-gradient-to-r from-red-900/10 to-transparent p-3 rounded border border-red-500/20 flex items-center gap-4 hover:border-red-500/40 transition-all group">
                                     <div class="bg-red-500/10 p-2 rounded-lg group-hover:rotate-6 transition-transform">
                                         <i class="fa-solid fa-gamepad text-red-400 text-lg"></i>
@@ -240,40 +238,32 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 
                 <!-- GLOBAL Floating Player -->
                 <div class="absolute bottom-3 left-3 right-3 md:bottom-0 md:left-0 md:right-0 md:w-full bg-black/80 md:bg-black/60 backdrop-blur-xl border border-white/10 md:border-t md:border-x-0 md:border-b-0 rounded-2xl md:rounded-none md:rounded-br-2xl p-3 md:p-4 z-40 shadow-2xl">
                     <div class="flex items-center gap-3 md:gap-4">
-                        <!-- Cover Art -->
                         <div class="w-12 h-12 md:w-14 md:h-14 rounded-lg overflow-hidden border border-white/10 shadow-lg shrink-0 relative group cursor-pointer" onclick="toggleMusic()">
                             <img src="assets/profile/music/do_me_good.png" alt="Cover" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <i class="fa-solid fa-play text-white text-xs"></i>
                             </div>
                         </div>
-                        
-                        <!-- Info & Controls -->
                         <div class="flex-1 min-w-0">
                             <div class="flex justify-between items-center mb-1">
                                 <div class="overflow-hidden">
                                     <p class="text-xs md:text-sm font-bold text-white truncate">Do Me Good</p>
                                     <p class="text-[10px] text-purple-400 truncate font-semibold">ORGAVSM</p>
                                 </div>
-                                <!-- Volume Slider (Mini) -->
                                 <div class="flex items-center gap-2 opacity-70">
                                     <i class="fa-solid fa-volume-high text-[10px] text-gray-500"></i>
                                     <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.3" class="w-12 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-white">
                                 </div>
                             </div>
-                            
                             <div class="flex items-center gap-3">
                                 <button id="play-btn" onclick="toggleMusic()" class="w-6 h-6 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shrink-0">
                                     <i class="fa-solid fa-play ml-0.5 text-[10px]" id="play-icon"></i>
                                 </button>
-                                
-                                <!-- Progress Bar -->
                                 <div class="flex-1 flex items-center gap-2">
                                     <span id="current-time" class="text-[9px] text-gray-400 w-6 text-right font-mono">0:00</span>
                                     <div class="h-1 flex-1 bg-gray-700 rounded-full overflow-hidden relative cursor-pointer group" id="progress-container">
@@ -295,9 +285,8 @@
         <source src="assets/profile/music/do_me_good.mp3" type="audio/mp3">
     </audio>
 
-    <!-- App JS -->
+    <!-- Scripts -->
     <script src="assets/js/app.js"></script>
-    <!-- Security JS -->
     <script src="assets/js/x7z9q2.js"></script>
 </body>
 </html>
