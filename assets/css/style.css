@@ -156,3 +156,29 @@ input[type=range]::-webkit-slider-runnable-track {
 .shadow-glow {
     text-shadow: 0 0 15px rgba(255,255,255,0.5);
 }
+
+/* --- Sparkle Effect (New Addition) --- */
+
+@keyframes sparkle-animation {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(0.5);
+    }
+}
+
+.sparkle {
+    position: fixed;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px #a855f7; /* White/Purple Glow */
+    pointer-events: none;
+    z-index: 9999;
+    /* Animation Properties */
+    animation: sparkle-animation 0.6s ease-out forwards;
+}
