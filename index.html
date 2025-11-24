@@ -23,7 +23,7 @@
         }
     </script>
     <style>
-        /* Hides scrollbar but allows scrolling */
+        /* Hides scrollbar for clean look but allows scrolling */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -33,6 +33,7 @@
         }
     </style>
 </head>
+
 <body class="bg-black text-white font-['Outfit'] h-[100dvh] w-screen overflow-hidden fixed inset-0 crt selection:bg-purple-500/30 touch-none">
 
     <div id="overlay" class="fixed inset-0 z-50 bg-black flex items-center justify-center cursor-pointer transition-opacity duration-1000 touch-manipulation">
@@ -97,6 +98,7 @@
                         <p id="activity-header" class="text-[10px] text-gray-400 font-medium leading-tight mt-0.5 truncate">Loading...</p>
                         <p id="activity-name" class="text-[10px] text-gray-300 truncate leading-tight">...</p>
                     </div>
+                    <img id="activity-icon" src="" class="w-10 h-10 rounded-md object-cover shrink-0 hidden border border-white/10 shadow-sm" onerror="this.style.display='none'">
                 </div>
 
                 <div class="flex gap-6 mt-2 md:mt-auto text-gray-400 shrink-0">
