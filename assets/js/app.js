@@ -79,10 +79,12 @@ function updateStatus(data) {
         if (activity) {
             let iconUrl = "";
             if (activity.assets && activity.assets.large_image) {
-                if (activity.assets.large_image.startsWith("mp:external")) {
-                    iconUrl = activity.assets.large_image.replace(/mp:external\/([^\/]*)\/(https:\/\/.*)/, "$2");
+                let rawImage = activity.assets.large_image;
+                if (rawImage.startsWith("mp:external")) {
+                    // Fixed external image parsing
+                    iconUrl = rawImage.replace(/mp:external\/([^\/]*)\/(https:\/\/.*)/, "$2");
                 } else {
-                    iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.large_image}.png`;
+                    iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${rawImage}.png`;
                 }
             }
             const details = activity.details || activity.state || "Playing";
@@ -123,6 +125,9 @@ function renderRPC(show, line1Html, line2Text, iconUrl) {
             if (iconUrl) {
                 activityIcon.src = iconUrl;
                 activityIcon.classList.remove('hidden');
+                
+                // CRITICAL FIX: This resets the display if 'onerror' previously hid it
+                activityIcon.style.display = 'block'; 
             } else {
                 activityIcon.classList.add('hidden');
             }
@@ -375,4 +380,5 @@ function animateParticles() {
 }
 initParticles();
 animateParticles();
+
 
