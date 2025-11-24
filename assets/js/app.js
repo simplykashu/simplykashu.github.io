@@ -53,9 +53,9 @@ function updateStatus(data) {
 
     // 1. Update Main Avatar & Glow
     if (statusDot) {
-        statusDot.style.backgroundColor = styles.color;
         statusDot.className = `absolute bottom-2 right-2 w-5 h-5 rounded-full border-4 border-black z-20 ${status !== 'offline' ? 'animate-pulse' : ''}`;
         statusDot.style.backgroundColor = styles.color;
+        statusDot.title = status.toUpperCase();
     }
     if (glowEffect) {
         glowEffect.className = `absolute inset-0 bg-gradient-to-tr ${styles.glow} rounded-full blur opacity-40 group-hover:opacity-75 transition-all duration-500`;
@@ -88,29 +88,22 @@ function updateStatus(data) {
             const details = activity.details || activity.state || "Playing";
             renderRPC(true, `Playing <span class="text-white font-bold">${activity.name}</span>`, details, iconUrl);
         } else {
-            // Fallback if online but the activity isn't a "Game" (type 0)
+            // Activity exists but not a main game
             displayStatusText(status);
         }
     } else {
-        // NO ACTIVITY - Display Status Text
+        // NO ACTIVITY
         displayStatusText(status);
     }
 }
 
 function displayStatusText(status) {
-    let statusText = "";
+    let statusText = "Offline";
     switch (status) {
-        case 'online':
-            statusText = "Online";
-            break;
-        case 'idle':
-            statusText = "Idle";
-            break;
-        case 'dnd':
-            statusText = "DND";
-            break;
-        default:
-            statusText = "Offline";
+        case 'online': statusText = "Online"; break;
+        case 'idle': statusText = "Idle"; break;
+        case 'dnd': statusText = "Do Not Disturb"; break;
+        default: statusText = "Offline";
     }
     renderRPC(true, "Status", statusText, "");
 }
@@ -122,10 +115,7 @@ function renderRPC(show, line1Html, line2Text, iconUrl) {
         activityBox.classList.remove('hidden');
         activityBox.classList.add('flex');
         
-        // Set Line 1 (e.g. Listening to SONG)
         activityHeader.innerHTML = line1Html;
-        
-        // Set Line 2 (e.g. by ARTIST)
         activityName.textContent = line2Text;
         
         if (iconUrl) {
@@ -153,8 +143,8 @@ if (card && container && window.innerWidth > 768) {
         const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
         const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
         
-        const clampX = Math.max(-10, Math.min(10, yAxis));
-        const clampY = Math.max(-10, Math.min(10, xAxis));
+        const clampX = Math.max(-8, Math.min(8, yAxis));
+        const clampY = Math.max(-8, Math.min(8, xAxis));
 
         card.style.transform = `rotateY(${clampY * -1}deg) rotateX(${clampX}deg) scale(1.01)`;
     });
@@ -164,8 +154,10 @@ if (card && container && window.innerWidth > 768) {
     });
 }
 
-/* --- Click Sparkle Effect --- */
+/* --- Click Sparkle Effect (Optimized) --- */
 document.addEventListener('click', (e) => {
+    // Limit existing sparkles to prevent lag
+    if(document.querySelectorAll('.sparkle').length > 15) return;
     createSparkle(e.clientX, e.clientY);
 });
 
@@ -177,8 +169,8 @@ function createSparkle(x, y) {
     sparkle.style.left = `${x}px`;
     sparkle.style.top = `${y}px`;
     
-    const randomX = (Math.random() - 0.5) * 50;
-    const randomY = (Math.random() - 0.5) * 50;
+    const randomX = (Math.random() - 0.5) * 60;
+    const randomY = (Math.random() - 0.5) * 60;
     
     sparkle.style.setProperty('--tx', `${randomX}px`);
     sparkle.style.setProperty('--ty', `${randomY}px`);
@@ -243,6 +235,18 @@ music.addEventListener('loadedmetadata', () => {
     if (totalDurationDisplay) totalDurationDisplay.textContent = formatTime(music.duration);
 });
 
+// Click to Seek
+window.seekAudio = function(e) {
+    if (music.duration) {
+        const container = document.getElementById('progress-container');
+        const width = container.clientWidth;
+        const clickX = e.offsetX;
+        const duration = music.duration;
+        
+        music.currentTime = (clickX / width) * duration;
+    }
+}
+
 window.toggleMusic = function() {
     if (isPlaying) {
         music.pause();
@@ -260,6 +264,66 @@ window.toggleMusic = function() {
         }
     }
     isPlaying = !isPlaying;
+}
+
+/* --- Typewriter Logic --- */
+const typeText = "Welcome to the void.\nChill vibes only.";
+const typeElement = document.getElementById('typewriter-text');
+let typeIndex = 0;
+
+function typeWriter() {
+    if (typeIndex < typeText.length) {
+        if(typeText.charAt(typeIndex) === '\n') {
+            typeElement.innerHTML += '<br>';
+        } else {
+            typeElement.innerHTML += typeText.charAt(typeIndex);
+        }
+        typeIndex++;
+        setTimeout(typeWriter, 50);
+    }
+}
+
+/* --- Enter Site Logic --- */
+const overlay = document.getElementById('overlay');
+const mainContent = document.getElementById('main-content');
+
+overlay.addEventListener('click', () => {
+    overlay.style.opacity = '0';
+    
+    // Start music
+    music.currentTime = SONG_START_TIME;
+    music.volume = 0.3;
+    
+    setTimeout(() => {
+        overlay.classList.add('hidden');
+        mainContent.classList.remove('hidden');
+        setTimeout(() => {
+            mainContent.style.opacity = '1';
+            // Start typewriter after entry
+            typeWriter();
+        }, 50);
+        
+        toggleMusic(); 
+    }, 500);
+});
+
+/* --- Tab Logic --- */
+window.switchTab = function(tabName) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(el => {
+        el.classList.remove('active');
+        el.classList.remove('text-white');
+        el.classList.add('text-gray-400');
+    });
+
+    const content = document.getElementById(`content-${tabName}`);
+    if (content) content.classList.add('active');
+    
+    const btn = document.getElementById(`tab-${tabName}`);
+    if (btn) {
+        btn.classList.add('active');
+        btn.classList.remove('text-gray-400');
+    }
 }
 
 /* --- Particles Logic --- */
@@ -308,44 +372,3 @@ function animateParticles() {
 }
 initParticles();
 animateParticles();
-
-/* --- Enter Site Logic --- */
-const overlay = document.getElementById('overlay');
-const mainContent = document.getElementById('main-content');
-
-overlay.addEventListener('click', () => {
-    overlay.style.opacity = '0';
-    
-    // Start music
-    music.currentTime = SONG_START_TIME;
-    music.volume = 0.3;
-    
-    setTimeout(() => {
-        overlay.classList.add('hidden');
-        mainContent.classList.remove('hidden');
-        setTimeout(() => {
-            mainContent.style.opacity = '1';
-        }, 50);
-        
-        toggleMusic(); 
-    }, 500);
-});
-
-/* --- Tab Logic --- */
-window.switchTab = function(tabName) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(el => {
-        el.classList.remove('active');
-        el.classList.remove('text-white');
-        el.classList.add('text-gray-400');
-    });
-
-    const content = document.getElementById(`content-${tabName}`);
-    if (content) content.classList.add('active');
-    
-    const btn = document.getElementById(`tab-${tabName}`);
-    if (btn) {
-        btn.classList.add('active');
-        btn.classList.remove('text-gray-400');
-    }
-}
