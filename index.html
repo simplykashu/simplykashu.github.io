@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>simplykashu | Bio</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -22,8 +22,18 @@
             }
         }
     </script>
+    <style>
+        /* Hides scrollbar but allows scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </head>
-<body class="bg-black text-white font-['Outfit'] h-screen w-screen overflow-hidden relative crt selection:bg-purple-500/30">
+<body class="bg-black text-white font-['Outfit'] h-[100dvh] w-screen overflow-hidden fixed inset-0 crt selection:bg-purple-500/30 touch-none">
 
     <div id="overlay" class="fixed inset-0 z-50 bg-black flex items-center justify-center cursor-pointer transition-opacity duration-1000 touch-manipulation">
         <div class="text-center animate-pulse">
@@ -34,31 +44,31 @@
     </div>
 
     <div class="absolute inset-0 bg-animated -z-10"></div>
-    <canvas id="particle-canvas" class="absolute inset-0 -z-5 opacity-30"></canvas>
+    <canvas id="particle-canvas" class="absolute inset-0 -z-5 opacity-30 pointer-events-none"></canvas>
 
-    <div id="main-content" class="h-full w-full flex items-center justify-center p-3 md:p-4 opacity-0 transition-opacity duration-1000 hidden perspective-1000">
+    <div id="main-content" class="h-full w-full flex items-center justify-center p-2 md:p-4 opacity-0 transition-opacity duration-1000 hidden perspective-1000">
         
-        <div id="tilt-card" class="glass-card w-full max-w-4xl h-[92vh] md:h-[600px] rounded-2xl flex flex-col md:flex-row overflow-hidden relative animate-fade-in-up transform-style-3d transition-transform duration-100 ease-out">
+        <div id="tilt-card" class="glass-card w-full max-w-4xl h-full md:h-[600px] rounded-2xl flex flex-col md:flex-row overflow-hidden relative animate-fade-in-up transform-style-3d transition-transform duration-100 ease-out bg-black/40 border border-white/10">
             
-            <div class="w-full md:w-[35%] bg-black/40 p-4 md:p-6 flex flex-col items-center justify-center border-b border-white/10 md:border-b-0 md:border-r relative shrink-0 z-10">
+            <div class="w-full md:w-[35%] bg-black/20 p-4 flex flex-col items-center justify-center border-b border-white/10 md:border-b-0 md:border-r relative shrink-0 z-10 overflow-y-auto md:overflow-hidden no-scrollbar">
                 
-                <div class="relative group mb-2 md:mb-4">
+                <div class="relative group mb-2 md:mb-4 shrink-0">
                     <div id="discord-glow" class="absolute inset-0 bg-gradient-to-tr from-gray-600 to-gray-600 rounded-full blur opacity-40 group-hover:opacity-75 transition-all duration-500"></div>
-                    <div class="w-24 h-24 md:w-36 md:h-36 rounded-full bg-gray-800 border-2 border-white/20 overflow-hidden relative z-10 shadow-2xl">
+                    <div class="w-20 h-20 md:w-36 md:h-36 rounded-full bg-gray-800 border-2 border-white/20 overflow-hidden relative z-10 shadow-2xl">
                         <img id="discord-pfp" src="assets/profile/images/avatar.png" alt="Luke" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                     </div>
-                    <div id="discord-status-dot" class="absolute bottom-2 right-2 w-5 h-5 bg-gray-500 rounded-full border-4 border-black z-20" title="Offline"></div>
+                    <div id="discord-status-dot" class="absolute bottom-2 right-2 w-4 h-4 md:w-5 md:h-5 bg-gray-500 rounded-full border-4 border-black z-20" title="Offline"></div>
                 </div>
 
-                <h1 class="text-2xl md:text-3xl font-bold tracking-wide animate-glow mt-2">simplykashu</h1>
+                <h1 class="text-2xl md:text-3xl font-bold tracking-wide animate-glow mt-1">simplykashu</h1>
                 
-                <div class="flex items-center gap-2 text-xs text-gray-400 font-['JetBrains_Mono'] mt-1 mb-3">
+                <div class="flex items-center gap-2 text-xs text-gray-400 font-['JetBrains_Mono'] mt-1 mb-2">
                     <span>@simplykashu</span>
                     <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
                     <span>UID: 1066...</span>
                 </div>
 
-                <div class="mb-4 w-full flex justify-center">
+                <div class="mb-3 w-full flex justify-center">
                     <div class="bg-black/50 border border-purple-500/20 rounded px-4 py-1.5 shadow-[0_0_10px_rgba(168,85,247,0.1)] backdrop-blur-md">
                         <p class="text-xs font-['JetBrains_Mono'] text-purple-300 flex items-center gap-2">
                             <i class="fa-regular fa-clock text-[10px]"></i>
@@ -68,52 +78,45 @@
                     </div>
                 </div>
                 
-                <div class="flex gap-2 justify-center flex-wrap">
-                    <span class="badge px-3 py-1 text-[10px] md:text-xs bg-white/5 rounded border border-white/10 text-gray-300">
-                        🇿🇦 South Africa
+                <div class="flex gap-2 justify-center flex-wrap mb-2">
+                    <span class="badge px-2 py-1 text-[10px] bg-white/5 rounded border border-white/10 text-gray-300">🇿🇦 SA</span>
+                    <span class="badge px-2 py-1 text-[10px] bg-white/5 rounded border border-white/10 text-gray-300">
+                         Single
                     </span>
-                    <span class="badge px-3 py-1 text-[10px] md:text-xs bg-white/5 rounded border border-white/10 text-gray-300">
-                        <i class="fa-solid fa-heart-crack mr-1 text-red-400"></i> Single
-                    </span>
-                    <span class="badge px-3 py-1 text-[10px] md:text-xs bg-white/5 rounded border border-white/10 text-gray-300">
-                        Age 15
-                    </span>
+                    <span class="badge px-2 py-1 text-[10px] bg-white/5 rounded border border-white/10 text-gray-300">Age 15</span>
                 </div>
 
-                <div id="discord-activity" class="hidden w-full mt-4 bg-[#111] border border-white/10 rounded-xl p-3 flex items-center gap-3 relative overflow-hidden group animate-fade-in-up shadow-lg hover:border-white/20 transition-all">
+                <div id="discord-activity" class="hidden w-full mt-2 bg-[#111] border border-white/10 rounded-xl p-3 flex items-center gap-3 relative overflow-hidden group animate-fade-in-up shadow-lg shrink-0">
                     <div class="absolute inset-0 bg-gradient-to-r from-purple-900/10 to-transparent opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                    
                     <div class="relative shrink-0">
-                        <img id="rpc-avatar" src="assets/profile/images/avatar.png" class="w-12 h-12 rounded-full border border-white/10">
-                        <div id="rpc-status-dot" class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-gray-500 rounded-full border-2 border-[#111]"></div>
+                        <img id="rpc-avatar" src="assets/profile/images/avatar.png" class="w-10 h-10 rounded-full border border-white/10">
+                        <div id="rpc-status-dot" class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-gray-500 rounded-full border-2 border-[#111]"></div>
                     </div>
-
                     <div class="flex-1 min-w-0 relative z-10 flex flex-col justify-center">
                         <p class="text-xs font-bold text-white leading-tight">simplykashu</p>
                         <p id="activity-header" class="text-[10px] text-gray-400 font-medium leading-tight mt-0.5 truncate">Loading...</p>
                         <p id="activity-name" class="text-[10px] text-gray-300 truncate leading-tight">...</p>
                     </div>
-
-                    <img id="activity-icon" src="" class="w-12 h-12 rounded-md object-cover shrink-0 hidden border border-white/10 shadow-sm" onerror="this.style.display='none'">
                 </div>
 
-                <div class="flex gap-6 mt-4 md:mt-auto md:mb-4 text-gray-400">
-                    <a href="https://discord.com/users/1066445133916164146" target="_blank" class="social-icon text-xl hover:text-[#7289da] transition-colors"><i class="fa-brands fa-discord"></i></a>
-                    <a href="https://open.spotify.com/user/31t67ze3lao3tbx7h6i3vxm2u4yy" target="_blank" class="social-icon text-xl hover:text-[#1DB954] transition-colors"><i class="fa-brands fa-spotify"></i></a>
-                    <a href="#" class="social-icon text-xl hover:text-white transition-colors"><i class="fa-solid fa-gamepad"></i></a>
+                <div class="flex gap-6 mt-2 md:mt-auto text-gray-400 shrink-0">
+                    <a href="https://discord.com/users/1066445133916164146" target="_blank" class="social-icon text-lg hover:text-[#7289da] transition-colors"><i class="fa-brands fa-discord"></i></a>
+                    <a href="https://open.spotify.com/user/31t67ze3lao3tbx7h6i3vxm2u4yy" target="_blank" class="social-icon text-lg hover:text-[#1DB954] transition-colors"><i class="fa-brands fa-spotify"></i></a>
+                    <a href="#" class="social-icon text-lg hover:text-white transition-colors"><i class="fa-solid fa-gamepad"></i></a>
                 </div>
             </div>
 
             <div class="w-full md:w-[65%] flex flex-col bg-black/20 relative z-20 min-h-0">
+                
                 <div class="flex w-full border-b border-white/10 bg-black/40 backdrop-blur-sm shrink-0 z-30">
-                    <button onclick="switchTab('home')" id="tab-home" class="nav-btn active flex-1 py-4 text-xs md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">Home</button>
-                    <button onclick="switchTab('about')" id="tab-about" class="nav-btn flex-1 py-4 text-xs md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">About</button>
-                    <button onclick="switchTab('favs')" id="tab-favs" class="nav-btn flex-1 py-4 text-xs md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">Loadout</button>
+                    <button onclick="switchTab('home')" id="tab-home" class="nav-btn active flex-1 py-3 md:py-4 text-xs md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">Home</button>
+                    <button onclick="switchTab('about')" id="tab-about" class="nav-btn flex-1 py-3 md:py-4 text-xs md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">About</button>
+                    <button onclick="switchTab('favs')" id="tab-favs" class="nav-btn flex-1 py-3 md:py-4 text-xs md:text-sm font-bold tracking-wider text-gray-400 hover:text-white transition-all uppercase">Loadout</button>
                 </div>
 
-                <div class="flex-1 p-5 md:p-8 overflow-y-auto relative custom-scrollbar overscroll-contain pb-40 md:pb-28">
+                <div class="flex-1 p-5 md:p-8 overflow-y-auto relative custom-scrollbar overscroll-contain">
                     
-                    <div id="content-home" class="tab-content active">
+                    <div id="content-home" class="tab-content active h-full">
                         <div class="font-['JetBrains_Mono'] text-sm space-y-6 flex flex-col justify-center h-full">
                             <div class="terminal-box bg-black/40 border border-white/10 p-4 rounded-lg shadow-inner relative overflow-hidden group hover:border-white/20 transition-colors">
                                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500"></div>
@@ -133,7 +136,7 @@
                         </div>
                     </div>
 
-                    <div id="content-about" class="tab-content space-y-6">
+                    <div id="content-about" class="tab-content space-y-6 hidden">
                         <div class="flex items-end justify-between border-b border-white/10 pb-4">
                             <div>
                                 <h2 class="text-2xl font-bold text-white">Luke Rheeder</h2>
@@ -185,26 +188,26 @@
                         </div>
                     </div>
 
-                    <div id="content-favs" class="tab-content space-y-6">
+                    <div id="content-favs" class="tab-content space-y-6 hidden">
                         <div>
                             <h3 class="text-xs text-purple-400 font-['JetBrains_Mono'] mb-4 flex items-center gap-2 border-b border-white/10 pb-2">
                                 <i class="fa-solid fa-headphones"></i> AUDIO LOGS
                             </h3>
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="group bg-white/5 p-3 rounded border border-white/10 flex items-center gap-3 hover:bg-white/10 hover:border-purple-500/30 transition-all cursor-default">
-                                    <div class="w-10 h-10 bg-gray-800 rounded flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform"><i class="fa-solid fa-skull text-xs"></i></div>
+                                    <div class="w-8 h-8 md:w-10 md:h-10 bg-gray-800 rounded flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform"><i class="fa-solid fa-skull text-xs"></i></div>
                                     <span class="text-xs font-bold truncate">Diggy Graves</span>
                                 </div>
                                 <div class="group bg-white/5 p-3 rounded border border-white/10 flex items-center gap-3 hover:bg-white/10 hover:border-purple-500/30 transition-all cursor-default">
-                                    <div class="w-10 h-10 bg-gray-800 rounded flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform"><i class="fa-solid fa-ghost text-xs"></i></div>
+                                    <div class="w-8 h-8 md:w-10 md:h-10 bg-gray-800 rounded flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform"><i class="fa-solid fa-ghost text-xs"></i></div>
                                     <span class="text-xs font-bold truncate">sKitz Kraven</span>
                                 </div>
                                 <div class="group bg-white/5 p-3 rounded border border-white/10 flex items-center gap-3 hover:bg-white/10 hover:border-purple-500/30 transition-all cursor-default">
-                                    <div class="w-10 h-10 bg-gray-800 rounded flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform"><i class="fa-solid fa-compact-disc text-xs"></i></div>
+                                    <div class="w-8 h-8 md:w-10 md:h-10 bg-gray-800 rounded flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform"><i class="fa-solid fa-compact-disc text-xs"></i></div>
                                     <span class="text-xs font-bold truncate">DJSM</span>
                                 </div>
                                 <div class="group bg-white/5 p-3 rounded border border-white/10 flex items-center gap-3 hover:bg-white/10 hover:border-purple-500/30 transition-all cursor-default">
-                                    <div class="w-10 h-10 bg-gray-800 rounded flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform"><i class="fa-solid fa-microphone-lines text-xs"></i></div>
+                                    <div class="w-8 h-8 md:w-10 md:h-10 bg-gray-800 rounded flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform"><i class="fa-solid fa-microphone-lines text-xs"></i></div>
                                     <span class="text-xs font-bold truncate">Snotkop</span>
                                 </div>
                             </div>
@@ -238,9 +241,9 @@
                     </div>
                 </div>
                 
-                <div class="absolute bottom-3 left-3 right-3 md:bottom-0 md:left-0 md:right-0 md:w-full bg-black/80 md:bg-black/60 backdrop-blur-xl border border-white/10 md:border-t md:border-x-0 md:border-b-0 rounded-2xl md:rounded-none md:rounded-br-2xl p-3 md:p-4 z-40 shadow-2xl">
+                <div class="shrink-0 w-full bg-black/60 backdrop-blur-xl border-t border-white/10 p-3 md:p-4 z-40 shadow-2xl">
                     <div class="flex items-center gap-3 md:gap-4">
-                        <div class="w-12 h-12 md:w-14 md:h-14 rounded-lg overflow-hidden border border-white/10 shadow-lg shrink-0 relative group cursor-pointer" onclick="toggleMusic()">
+                        <div class="w-10 h-10 md:w-14 md:h-14 rounded-lg overflow-hidden border border-white/10 shadow-lg shrink-0 relative group cursor-pointer" onclick="toggleMusic()">
                             <img src="assets/profile/music/do_me_good.png" alt="Cover" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <i class="fa-solid fa-play text-white text-xs"></i>
@@ -258,12 +261,12 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap-3">
-                                <button id="play-btn" onclick="toggleMusic()" class="w-6 h-6 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shrink-0">
+                                <button id="play-btn" onclick="toggleMusic()" class="w-5 h-5 md:w-6 md:h-6 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shrink-0">
                                     <i class="fa-solid fa-play ml-0.5 text-[10px]" id="play-icon"></i>
                                 </button>
                                 <div class="flex-1 flex items-center gap-2">
                                     <span id="current-time" class="text-[9px] text-gray-400 w-6 text-right font-mono">0:00</span>
-                                    <div class="h-2 flex-1 bg-gray-700 rounded-full overflow-hidden relative cursor-pointer group" id="progress-container" onclick="seekAudio(event)">
+                                    <div class="h-1.5 md:h-2 flex-1 bg-gray-700 rounded-full overflow-hidden relative cursor-pointer group" id="progress-container" onclick="seekAudio(event)">
                                         <div id="progress-bar" class="h-full w-0 bg-purple-500 rounded-full relative shadow-[0_0_10px_#a855f7] pointer-events-none"></div>
                                     </div>
                                     <span id="total-duration" class="text-[9px] text-gray-400 w-6 font-mono">0:00</span>
