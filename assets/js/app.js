@@ -115,14 +115,17 @@ function renderRPC(show, line1Html, line2Text, iconUrl) {
         activityBox.classList.remove('hidden');
         activityBox.classList.add('flex');
         
-        activityHeader.innerHTML = line1Html;
-        activityName.textContent = line2Text;
+        if (activityHeader) activityHeader.innerHTML = line1Html;
+        if (activityName) activityName.textContent = line2Text;
         
-        if (iconUrl) {
-            activityIcon.src = iconUrl;
-            activityIcon.classList.remove('hidden');
-        } else {
-            activityIcon.classList.add('hidden');
+        // SAFE CHECK: Only set src if the element actually exists
+        if (activityIcon) {
+            if (iconUrl) {
+                activityIcon.src = iconUrl;
+                activityIcon.classList.remove('hidden');
+            } else {
+                activityIcon.classList.add('hidden');
+            }
         }
     } else {
         activityBox.classList.add('hidden');
@@ -372,3 +375,4 @@ function animateParticles() {
 }
 initParticles();
 animateParticles();
+
