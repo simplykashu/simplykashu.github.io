@@ -13,7 +13,7 @@ const rpcAvatar = document.getElementById('rpc-avatar');
 const rpcStatusDot = document.getElementById('rpc-status-dot');
 const activityIcon = document.getElementById('activity-icon');
 const activityHeader = document.getElementById('activity-header'); 
-const activityName = document.getElementById('activity-name');     
+const activityName = document.getElementById('activity-name');      
 
 // Status Colors
 const STATUS_COLORS = {
@@ -66,12 +66,12 @@ function updateStatus(data) {
         rpcStatusDot.style.backgroundColor = styles.color;
     }
 
-    // 3. Handle Activities (Spotify > Game)
+    // 3. Handle Activities (Spotify > Game > Status Check)
     if (data.listening_to_spotify) {
         // SPOTIFY
         const spotify = data.spotify;
         const song = spotify.song;
-        const artist = "by " + spotify.artist; // Add "by" prefix
+        const artist = "by " + spotify.artist;
         renderRPC(true, `Listening to <span class="text-white font-bold">${song}</span>`, artist, spotify.album_art_url);
     } else if (data.activities && data.activities.length > 0) {
         // GAME
@@ -88,13 +88,31 @@ function updateStatus(data) {
             const details = activity.details || activity.state || "Playing";
             renderRPC(true, `Playing <span class="text-white font-bold">${activity.name}</span>`, details, iconUrl);
         } else {
-            // Fallback if online but no game
-            renderRPC(true, "Status", "Just chillin'", "");
+            // Fallback if online but the activity isn't a "Game" (type 0)
+            displayStatusText(status);
         }
     } else {
-        // Fallback if offline/no activity
-        renderRPC(true, "Status", "Offline", "");
+        // NO ACTIVITY - Display Status Text
+        displayStatusText(status);
     }
+}
+
+function displayStatusText(status) {
+    let statusText = "";
+    switch (status) {
+        case 'online':
+            statusText = "Online";
+            break;
+        case 'idle':
+            statusText = "Idle";
+            break;
+        case 'dnd':
+            statusText = "DND";
+            break;
+        default:
+            statusText = "Offline";
+    }
+    renderRPC(true, "Status", statusText, "");
 }
 
 function renderRPC(show, line1Html, line2Text, iconUrl) {
