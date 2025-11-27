@@ -135,11 +135,11 @@ function renderRPC(show, line1Html, line2Html, iconUrl) {
         if (activityHeader) activityHeader.innerHTML = line1Html;
         if (activityName) activityName.innerHTML = line2Html;
         
-        // Hide second line if empty to keep alignment tight
+        // FIX: Use Tailwind's 'hidden' class to fully collapse the space when line2 is empty.
         if (!line2Html && activityName) {
-             activityName.style.display = 'none';
+             activityName.classList.add('hidden');
         } else if (activityName) {
-             activityName.style.display = 'block';
+             activityName.classList.remove('hidden');
         }
         
         if (activityIcon) {
@@ -412,4 +412,3 @@ function animateParticles() {
 }
 initParticles();
 animateParticles();
-
