@@ -3,13 +3,11 @@ const SONG_START_TIME = 0;
 const DISCORD_ID = "1066445133916164146";
 
 /* --- Lanyard / Discord Status Logic --- */
-const avatarImg = document.getElementById('discord-pfp');
 const statusDot = document.getElementById('discord-status-dot');
 const glowEffect = document.getElementById('discord-glow');
 
 // RPC Card Elements
 const activityBox = document.getElementById('discord-activity');
-const rpcAvatar = document.getElementById('rpc-avatar');
 const rpcStatusDot = document.getElementById('rpc-status-dot');
 const activityIcon = document.getElementById('activity-icon');
 const activityHeader = document.getElementById('activity-header'); 
@@ -75,43 +73,36 @@ function updateStatus(data) {
         renderRPC(true, `Listening to <span class="text-white font-bold">${song}</span>`, artist, spotify.album_art_url);
     } else if (data.activities && data.activities.length > 0) {
         // --- GAME / ACTIVITY ---
-        // We look for Type 0 (Game) first
         const activity = data.activities.find(a => a.type === 0);
         
         if (activity) {
             let iconUrl = "";
             
-            // Logic to get the image URL (Standard vs External)
+            // Image Logic (Fixed mp: slash issue)
             if (activity.assets && activity.assets.large_image) {
                 if (activity.assets.large_image.startsWith("mp:")) {
-                    // It's a proxied external image (common in some custom RPCs)
-                    iconUrl = activity.assets.large_image.replace(/^mp:/, "https://media.discordapp.net");
+                    iconUrl = activity.assets.large_image.replace(/^mp:/, "https://media.discordapp.net/");
                 } else {
-                    // It's a standard Discord asset ID
                     iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.large_image}.png`;
                 }
             } 
-            // Fallback: If no large image, check for small image
             else if (activity.assets && activity.assets.small_image) {
                  if (activity.assets.small_image.startsWith("mp:")) {
-                    iconUrl = activity.assets.small_image.replace(/^mp:/, "https://media.discordapp.net");
+                    iconUrl = activity.assets.small_image.replace(/^mp:/, "https://media.discordapp.net/");
                 } else {
                     iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.small_image}.png`;
                 }
             }
 
-            // Text Handling
-            const header = "Playing";
-            let nameLine = `<span class="text-white font-bold">${activity.name}</span>`;
+            // Text Layout: "Playing Roblox" on one line
+            const header = `Playing <span class="text-white font-bold">${activity.name}</span>`;
             
+            // Second line: State/Details (e.g. "In Game")
             const details = activity.details || activity.state || "";
-            if(details && details !== "Playing") {
-                nameLine += `<span class="text-gray-400 ml-1">- ${details}</span>`;
-            }
+            const subtext = details ? `<span class="text-gray-400">${details}</span>` : "";
 
-            renderRPC(true, header, nameLine, iconUrl);
+            renderRPC(true, header, subtext, iconUrl);
         } else {
-            // Activity exists but isn't a game (Custom Status, etc)
             displayStatusText(status);
         }
     } else {
@@ -131,8 +122,6 @@ function displayStatusText(status) {
     
     // Combined line: "Status Online"
     const headerHtml = `Status <span class="text-white font-bold ml-1">${statusText}</span>`;
-    
-    // Empty second line, empty image
     renderRPC(true, headerHtml, "", "");
 }
 
@@ -145,6 +134,13 @@ function renderRPC(show, line1Html, line2Html, iconUrl) {
         
         if (activityHeader) activityHeader.innerHTML = line1Html;
         if (activityName) activityName.innerHTML = line2Html;
+        
+        // Hide second line if empty to keep alignment tight
+        if (!line2Html && activityName) {
+             activityName.style.display = 'none';
+        } else if (activityName) {
+             activityName.style.display = 'block';
+        }
         
         if (activityIcon) {
             if (iconUrl) {
@@ -294,6 +290,7 @@ window.toggleMusic = function() {
 
 /* --- Typewriter Logic (Looping) --- */
 const typePhrases = ["Welcome to the void.", "Chill vibes only."];
+const typePhrases = ["Chill vibes only."];
 const typeElement = document.getElementById('typewriter-text');
 let phraseIndex = 0;
 let charIndex = 0;
