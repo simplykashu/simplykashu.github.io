@@ -5,16 +5,14 @@ const DISCORD_ID = "1066445133916164146";
 /* --- Global State for Interaction --- */
 let currentSpotify = null;
 let currentGame = null;
-let isShowingSpotify = false; // Controls whether the card is showing Spotify details
+let showSpotifyOverride = false; // Toggles when clicked
 
-/* --- Lanyard / Discord Status Logic --- */
-const avatarImg = document.getElementById('discord-pfp');
+/* --- Elements --- */
 const statusDot = document.getElementById('discord-status-dot');
 const glowEffect = document.getElementById('discord-glow');
 
 // RPC Card Elements
 const activityBox = document.getElementById('discord-activity');
-const rpcAvatar = document.getElementById('rpc-avatar');
 const rpcStatusDot = document.getElementById('rpc-status-dot');
 const activityIcon = document.getElementById('activity-icon');
 const activityHeader = document.getElementById('activity-header'); 
@@ -28,6 +26,7 @@ const STATUS_COLORS = {
     offline:{ color: '#6b7280', glow: 'from-gray-600 to-gray-400' }
 };
 
+/* --- Main Connection Logic --- */
 function connectLanyard() {
     const socket = new WebSocket('wss://api.lanyard.rest/socket');
 
@@ -43,7 +42,7 @@ function connectLanyard() {
         const { t, d } = data;
 
         if (t === 'INIT_STATE' || t === 'PRESENCE_UPDATE') {
-            updateStatus(d);
+            updateData(d);
         }
     });
 
@@ -52,11 +51,12 @@ function connectLanyard() {
     });
 }
 
-function updateStatus(data) {
+/* --- Data Processing & State Management --- */
+function updateData(data) {
     const status = data.discord_status;
     const styles = STATUS_COLORS[status] || STATUS_COLORS.offline;
 
-    // 1. Update Main Avatar & Glow
+    // 1. Update Profile Visuals (Dot & Glow)
     if (statusDot) {
         statusDot.className = `absolute bottom-2 right-2 w-5 h-5 rounded-full border-4 border-black z-20 ${status !== 'offline' ? 'animate-pulse' : ''}`;
         statusDot.style.backgroundColor = styles.color;
@@ -65,124 +65,111 @@ function updateStatus(data) {
     if (glowEffect) {
         glowEffect.className = `absolute inset-0 bg-gradient-to-tr ${styles.glow} rounded-full blur opacity-40 group-hover:opacity-75 transition-all duration-500`;
     }
-
-    // 2. Update RPC Card Status Dot
     if (rpcStatusDot) {
         rpcStatusDot.style.backgroundColor = styles.color;
     }
 
-    // 3. Store Activity Data
+    // 2. Extract Data
     currentSpotify = data.listening_to_spotify ? data.spotify : null;
     currentGame = (data.activities && data.activities.length > 0) 
         ? data.activities.find(a => a.type === 0) 
         : null;
 
-    // 4. Render the Card based on the current view state
-    renderActivityCard(status);
+    // 3. Render Content
+    renderContent(status);
 }
 
-function renderActivityCard(status) {
-    // Determine clickability and visual feedback
-    if (currentSpotify) {
+function renderContent(status) {
+    // Scenario 1: Game AND Spotify (Dual Mode)
+    if (currentGame && currentSpotify) {
+        // Allow clicking to toggle
         activityBox.style.cursor = 'pointer';
-        activityBox.title = isShowingSpotify ? "Click for Game/Activity" : "Click for Spotify Music Details";
-    } else {
+        activityBox.title = "Click to swap between Game & Spotify";
+        
+        if (showSpotifyOverride) {
+            displaySpotify();
+        } else {
+            displayGame(true); // true = indicates there is more info (Spotify) hidden
+        }
+    } 
+    // Scenario 2: Game Only
+    else if (currentGame) {
         activityBox.style.cursor = 'default';
         activityBox.title = "";
-        isShowingSpotify = false; // Ensure it resets if music stops
-    }
-    
-    // Get current status string for fallback rendering
-    const currentStatusString = statusDot ? statusDot.title.toLowerCase() : 'offline';
-
-    // View Priority: Spotify Detail (if toggled) > Game+Music > Spotify Only > Status Only
-    if (currentSpotify && isShowingSpotify && currentGame) {
-        // --- SPOTIFY DETAILED VIEW (Swapped by click when a game is running) ---
-        displaySpotifyDetailed(currentSpotify);
+        showSpotifyOverride = false; // Reset toggle
+        displayGame(false);
     } 
-    else if (currentGame) {
-        // --- GAME + OPTIONAL MUSIC DISPLAY (Default View) ---
-        displayGameCombined(currentStatusString);
-    } 
+    // Scenario 3: Spotify Only
     else if (currentSpotify) {
-        // --- SPOTIFY ONLY (When no game is running) ---
-        displaySpotifyDetailed(currentSpotify);
-    }
+        activityBox.style.cursor = 'default';
+        activityBox.title = "";
+        showSpotifyOverride = true; // Force spotify view
+        displaySpotify();
+    } 
+    // Scenario 4: Nothing (Status Text)
     else {
-        // --- STATUS ONLY DISPLAY ---
-        displayStatusText(currentStatusString);
+        activityBox.style.cursor = 'default';
+        activityBox.title = "";
+        displayStatusText(status);
     }
 }
 
-/* --- Click Interaction (The Swap) --- */
+/* --- Click Interaction (The Dropdown/Swap) --- */
 if (activityBox) {
     activityBox.addEventListener('click', () => {
-        // Only clickable if Spotify data is available AND a Game is running (to allow swapping)
-        if (currentSpotify && currentGame) {
-            isShowingSpotify = !isShowingSpotify; // Toggle the view state
-            renderActivityCard(statusDot ? statusDot.title.toLowerCase() : 'offline'); // Re-render the card
+        if (currentGame && currentSpotify) {
+            showSpotifyOverride = !showSpotifyOverride;
+            // Re-render immediately using cached data
+            renderContent(null); // Status doesn't matter for the toggle re-render
         }
     });
 }
 
 /* --- Display Functions --- */
 
-// 1. Default Display: Game + Optional Music Tag (Your image style)
-function displayGameCombined(status) {
-    const gameActivity = currentGame;
-    
+function displayGame(hasMore) {
     let iconUrl = "";
-    if (gameActivity.assets && gameActivity.assets.large_image) {
-        let rawImage = gameActivity.assets.large_image;
-        if (rawImage.startsWith("mp:external")) {
-            iconUrl = rawImage.replace(/mp:external\/([^\/]*)\/(https:\/\/.*)/, "$2");
+    
+    // Resolve Image
+    if (currentGame.assets && currentGame.assets.large_image) {
+        if (currentGame.assets.large_image.startsWith("mp:")) {
+            iconUrl = currentGame.assets.large_image.replace(/^mp:/, "https://media.discordapp.net/");
         } else {
-            iconUrl = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${rawImage}.png`;
+            iconUrl = `https://cdn.discordapp.com/app-assets/${currentGame.application_id}/${currentGame.assets.large_image}.png`;
         }
-    }
-    
-    // Line 1: Playing [Game Name]
-    const header = `Playing <span class="text-white font-bold">${gameActivity.name}</span>`;
-    
-    // Line 2: Details / State / Music Tag
-    let nameLine = "";
-    
-    // 1. Check for Game Details (e.g., "In a match")
-    const details = gameActivity.details || gameActivity.state || "";
-    if(details && details !== "Playing") {
-        nameLine += `<span class="text-gray-400">${details}</span>`;
-    }
-    
-    // 2. Add Music Icon if Spotify is running
-    if (currentSpotify) {
-        // Add a separator if details already exist
-        if (nameLine) {
-             nameLine += ' <span class="text-gray-600">|</span> ';
+    } else if (currentGame.assets && currentGame.assets.small_image) {
+         if (currentGame.assets.small_image.startsWith("mp:")) {
+            iconUrl = currentGame.assets.small_image.replace(/^mp:/, "https://media.discordapp.net/");
+        } else {
+            iconUrl = `https://cdn.discordapp.com/app-assets/${currentGame.application_id}/${currentGame.assets.small_image}.png`;
         }
-        // Add the Music tag as per the image
-        nameLine += '<span class="text-purple-400">🎵 + Music</span>';
     }
 
-    renderRPC(true, header, nameLine, iconUrl);
+    // Text: Just "Playing [Game Name]" (Removed Details/State as requested)
+    const header = `Playing <span class="text-white font-bold">${currentGame.name}</span>`;
+    
+    // If we have Spotify hidden underneath, show a small hint (optional, but nice)
+    // For now, we leave line 2 empty to keep it clean, or we could add "Click for Music"
+    const subtext = hasMore ? `<span class="text-[9px] text-purple-400 animate-pulse"><i class="fa-brands fa-spotify"></i> + Music</span>` : "";
+
+    renderRPC(true, header, subtext, iconUrl);
 }
 
-// 2. Clicked Display: Detailed Spotify View (Now matching the two-line style)
-function displaySpotifyDetailed(spotify) {
-    const song = spotify.song;
-    const artist = spotify.artist.replace(/;/g, ', '); // Fix Discord's artist separator
-    
-    // Line 1: Listening to [Song Name] - Consistent header/style
+function displaySpotify() {
+    const song = currentSpotify.song;
+    const artist = "by " + currentSpotify.artist;
+    const artUrl = currentSpotify.album_art_url;
+
     const header = `Listening to <span class="text-white font-bold">${song}</span>`;
-    
-    // Line 2: Artist Name - Consistent detail line
-    const nameLine = `<span class="text-gray-400">by ${artist}</span>`;
-    
-    // Icon: Album Art
-    renderRPC(true, header, nameLine, spotify.album_art_url);
+    // Line 2: Artist
+    const subtext = artist;
+
+    renderRPC(true, header, subtext, artUrl);
 }
 
-// 3. Fallback Display: Status Only
 function displayStatusText(status) {
+    if (!status) return; // Guard clause
+    
     let statusText = "Offline";
     switch (status) {
         case 'online': statusText = "Online"; break;
@@ -191,10 +178,9 @@ function displayStatusText(status) {
         default: statusText = "Offline";
     }
     
-    // Combined line: "Status Online"
-    const headerHtml = `Status <span class="text-white font-bold ml-1">${statusText}</span>`;
+    // FIX: Removed 'ml-1' and used a standard space to fix the visual glitch
+    const headerHtml = `Status <span class="text-white font-bold"> ${statusText}</span>`;
     
-    // Empty second line, empty image
     renderRPC(true, headerHtml, "", "");
 }
 
@@ -206,15 +192,13 @@ function renderRPC(show, line1Html, line2Html, iconUrl) {
         activityBox.classList.add('flex');
         
         if (activityHeader) activityHeader.innerHTML = line1Html;
+        if (activityName) activityName.innerHTML = line2Html;
         
-        if (activityName) {
-             activityName.innerHTML = line2Html;
-             // Toggle visibility if the second line is empty to clean up space
-             if (!line2Html.trim()) {
-                 activityName.classList.add('hidden');
-             } else {
-                 activityName.classList.remove('hidden');
-             }
+        // Toggle visibility of line 2 to remove extra spacing if empty
+        if (!line2Html && activityName) {
+             activityName.classList.add('hidden');
+        } else if (activityName) {
+             activityName.classList.remove('hidden');
         }
         
         if (activityIcon) {
@@ -224,6 +208,7 @@ function renderRPC(show, line1Html, line2Html, iconUrl) {
                 activityIcon.style.display = 'block'; 
             } else {
                 activityIcon.classList.add('hidden');
+                activityIcon.style.display = 'none';
             }
         }
     } else {
@@ -260,7 +245,7 @@ if (card && container && window.innerWidth > 768) {
 document.addEventListener('click', (e) => {
     // Prevent sparkles if clicking on the interactive RPC card
     if (e.target.closest('#discord-activity')) return;
-    
+
     if(document.querySelectorAll('.sparkle').length > 15) return;
     createSparkle(e.clientX, e.clientY);
 });
