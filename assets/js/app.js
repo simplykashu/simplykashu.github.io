@@ -68,30 +68,42 @@ function updateStatus(data) {
 
     // 3. Handle Activities (Spotify > Game > Status Check)
     if (data.listening_to_spotify) {
-        // SPOTIFY
+        // --- SPOTIFY ---
         const spotify = data.spotify;
         const song = spotify.song;
         const artist = "by " + spotify.artist;
         renderRPC(true, `Listening to <span class="text-white font-bold">${song}</span>`, artist, spotify.album_art_url);
     } else if (data.activities && data.activities.length > 0) {
-        // GAME
+        // --- GAME / ACTIVITY ---
+        // We look for Type 0 (Game) first
         const activity = data.activities.find(a => a.type === 0);
+        
         if (activity) {
             let iconUrl = "";
+            
+            // Logic to get the image URL (Standard vs External)
             if (activity.assets && activity.assets.large_image) {
-                let rawImage = activity.assets.large_image;
-                if (rawImage.startsWith("mp:external")) {
-                    iconUrl = rawImage.replace(/mp:external\/([^\/]*)\/(https:\/\/.*)/, "$2");
+                if (activity.assets.large_image.startsWith("mp:")) {
+                    // It's a proxied external image (common in some custom RPCs)
+                    iconUrl = activity.assets.large_image.replace(/^mp:/, "https://media.discordapp.net");
                 } else {
-                    iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${rawImage}.png`;
+                    // It's a standard Discord asset ID
+                    iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.large_image}.png`;
+                }
+            } 
+            // Fallback: If no large image, check for small image
+            else if (activity.assets && activity.assets.small_image) {
+                 if (activity.assets.small_image.startsWith("mp:")) {
+                    iconUrl = activity.assets.small_image.replace(/^mp:/, "https://media.discordapp.net");
+                } else {
+                    iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.small_image}.png`;
                 }
             }
-            
-            // New Logic for Games
+
+            // Text Handling
             const header = "Playing";
             let nameLine = `<span class="text-white font-bold">${activity.name}</span>`;
             
-            // Add details if they exist and aren't just "Playing"
             const details = activity.details || activity.state || "";
             if(details && details !== "Playing") {
                 nameLine += `<span class="text-gray-400 ml-1">- ${details}</span>`;
@@ -99,11 +111,11 @@ function updateStatus(data) {
 
             renderRPC(true, header, nameLine, iconUrl);
         } else {
-            // Activity exists but not a main game
+            // Activity exists but isn't a game (Custom Status, etc)
             displayStatusText(status);
         }
     } else {
-        // NO ACTIVITY
+        // --- NO ACTIVITY ---
         displayStatusText(status);
     }
 }
@@ -132,7 +144,7 @@ function renderRPC(show, line1Html, line2Html, iconUrl) {
         activityBox.classList.add('flex');
         
         if (activityHeader) activityHeader.innerHTML = line1Html;
-        if (activityName) activityName.innerHTML = line2Html; // Changed to innerHTML to support Bold text
+        if (activityName) activityName.innerHTML = line2Html;
         
         if (activityIcon) {
             if (iconUrl) {
@@ -141,6 +153,7 @@ function renderRPC(show, line1Html, line2Html, iconUrl) {
                 activityIcon.style.display = 'block'; 
             } else {
                 activityIcon.classList.add('hidden');
+                activityIcon.style.display = 'none';
             }
         }
     } else {
