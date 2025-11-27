@@ -290,7 +290,6 @@ window.toggleMusic = function() {
 
 /* --- Typewriter Logic (Looping) --- */
 const typePhrases = ["Welcome to the void.", "Chill vibes only."];
-const typePhrases = ["Chill vibes only."];
 const typeElement = document.getElementById('typewriter-text');
 let phraseIndex = 0;
 let charIndex = 0;
@@ -413,3 +412,4 @@ function animateParticles() {
 }
 initParticles();
 animateParticles();
+
