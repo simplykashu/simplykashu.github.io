@@ -81,14 +81,23 @@ function updateStatus(data) {
             if (activity.assets && activity.assets.large_image) {
                 let rawImage = activity.assets.large_image;
                 if (rawImage.startsWith("mp:external")) {
-                    // Fixed external image parsing
                     iconUrl = rawImage.replace(/mp:external\/([^\/]*)\/(https:\/\/.*)/, "$2");
                 } else {
                     iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${rawImage}.png`;
                 }
             }
-            const details = activity.details || activity.state || "Playing";
-            renderRPC(true, `Playing <span class="text-white font-bold">${activity.name}</span>`, details, iconUrl);
+            
+            // New Logic for Games
+            const header = "Playing";
+            let nameLine = `<span class="text-white font-bold">${activity.name}</span>`;
+            
+            // Add details if they exist and aren't just "Playing"
+            const details = activity.details || activity.state || "";
+            if(details && details !== "Playing") {
+                nameLine += `<span class="text-gray-400 ml-1">- ${details}</span>`;
+            }
+
+            renderRPC(true, header, nameLine, iconUrl);
         } else {
             // Activity exists but not a main game
             displayStatusText(status);
@@ -107,10 +116,15 @@ function displayStatusText(status) {
         case 'dnd': statusText = "Do Not Disturb"; break;
         default: statusText = "Offline";
     }
-    renderRPC(true, "Status", statusText, "");
+    
+    // Combined line: "Status Online"
+    const headerHtml = `Status <span class="text-white font-bold ml-1">${statusText}</span>`;
+    
+    // Empty second line, empty image
+    renderRPC(true, headerHtml, "", "");
 }
 
-function renderRPC(show, line1Html, line2Text, iconUrl) {
+function renderRPC(show, line1Html, line2Html, iconUrl) {
     if (!activityBox) return;
 
     if (show) {
@@ -118,15 +132,12 @@ function renderRPC(show, line1Html, line2Text, iconUrl) {
         activityBox.classList.add('flex');
         
         if (activityHeader) activityHeader.innerHTML = line1Html;
-        if (activityName) activityName.textContent = line2Text;
+        if (activityName) activityName.innerHTML = line2Html; // Changed to innerHTML to support Bold text
         
-        // SAFE CHECK: Only set src if the element actually exists
         if (activityIcon) {
             if (iconUrl) {
                 activityIcon.src = iconUrl;
                 activityIcon.classList.remove('hidden');
-                
-                // CRITICAL FIX: This resets the display if 'onerror' previously hid it
                 activityIcon.style.display = 'block'; 
             } else {
                 activityIcon.classList.add('hidden');
@@ -162,9 +173,8 @@ if (card && container && window.innerWidth > 768) {
     });
 }
 
-/* --- Click Sparkle Effect (Optimized) --- */
+/* --- Click Sparkle Effect --- */
 document.addEventListener('click', (e) => {
-    // Limit existing sparkles to prevent lag
     if(document.querySelectorAll('.sparkle').length > 15) return;
     createSparkle(e.clientX, e.clientY);
 });
@@ -216,21 +226,18 @@ const totalDurationDisplay = document.getElementById('total-duration');
 const volumeSlider = document.getElementById('volume-slider');
 let isPlaying = false;
 
-// Volume Control
 if (volumeSlider) {
     volumeSlider.addEventListener('input', (e) => {
         music.volume = e.target.value;
     });
 }
 
-// Format Time
 function formatTime(seconds) {
     const min = Math.floor(seconds / 60);
     const sec = Math.floor(seconds % 60);
     return `${min}:${sec < 10 ? '0' + sec : sec}`;
 }
 
-// Update Progress
 music.addEventListener('timeupdate', () => {
     if (music.duration) {
         const progressPercent = (music.currentTime / music.duration) * 100;
@@ -243,14 +250,12 @@ music.addEventListener('loadedmetadata', () => {
     if (totalDurationDisplay) totalDurationDisplay.textContent = formatTime(music.duration);
 });
 
-// Click to Seek
 window.seekAudio = function(e) {
     if (music.duration) {
         const container = document.getElementById('progress-container');
         const width = container.clientWidth;
         const clickX = e.offsetX;
         const duration = music.duration;
-        
         music.currentTime = (clickX / width) * duration;
     }
 }
@@ -274,21 +279,39 @@ window.toggleMusic = function() {
     isPlaying = !isPlaying;
 }
 
-/* --- Typewriter Logic --- */
-const typeText = "Welcome to the void.\nChill vibes only.";
+/* --- Typewriter Logic (Looping) --- */
+const typePhrases = ["Welcome to the void.", "Chill vibes only."];
 const typeElement = document.getElementById('typewriter-text');
-let typeIndex = 0;
+let phraseIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+let typeSpeed = 100;
 
 function typeWriter() {
-    if (typeIndex < typeText.length) {
-        if(typeText.charAt(typeIndex) === '\n') {
-            typeElement.innerHTML += '<br>';
-        } else {
-            typeElement.innerHTML += typeText.charAt(typeIndex);
-        }
-        typeIndex++;
-        setTimeout(typeWriter, 50);
+    const currentPhrase = typePhrases[phraseIndex];
+    
+    if (isDeleting) {
+        typeElement.textContent = currentPhrase.substring(0, charIndex - 1);
+        charIndex--;
+        typeSpeed = 50; // Faster deletion
+    } else {
+        typeElement.textContent = currentPhrase.substring(0, charIndex + 1);
+        charIndex++;
+        typeSpeed = 100; // Normal typing
     }
+
+    if (!isDeleting && charIndex === currentPhrase.length) {
+        // Finished typing phrase, pause before deleting
+        isDeleting = true;
+        typeSpeed = 2000; 
+    } else if (isDeleting && charIndex === 0) {
+        // Finished deleting, switch to next phrase
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % typePhrases.length;
+        typeSpeed = 500;
+    }
+
+    setTimeout(typeWriter, typeSpeed);
 }
 
 /* --- Enter Site Logic --- */
@@ -380,5 +403,3 @@ function animateParticles() {
 }
 initParticles();
 animateParticles();
-
-
