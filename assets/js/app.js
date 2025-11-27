@@ -2,7 +2,12 @@
 const SONG_START_TIME = 0; 
 const DISCORD_ID = "1066445133916164146";
 
-/* --- Lanyard / Discord Status Logic --- */
+/* --- Global State for Interaction --- */
+let currentSpotify = null;
+let currentGame = null;
+let showSpotifyOverride = false; // Toggles when clicked
+
+/* --- Elements --- */
 const statusDot = document.getElementById('discord-status-dot');
 const glowEffect = document.getElementById('discord-glow');
 
@@ -21,6 +26,7 @@ const STATUS_COLORS = {
     offline:{ color: '#6b7280', glow: 'from-gray-600 to-gray-400' }
 };
 
+/* --- Main Connection Logic --- */
 function connectLanyard() {
     const socket = new WebSocket('wss://api.lanyard.rest/socket');
 
@@ -36,7 +42,7 @@ function connectLanyard() {
         const { t, d } = data;
 
         if (t === 'INIT_STATE' || t === 'PRESENCE_UPDATE') {
-            updateStatus(d);
+            updateData(d);
         }
     });
 
@@ -45,11 +51,12 @@ function connectLanyard() {
     });
 }
 
-function updateStatus(data) {
+/* --- Data Processing & State Management --- */
+function updateData(data) {
     const status = data.discord_status;
     const styles = STATUS_COLORS[status] || STATUS_COLORS.offline;
 
-    // 1. Update Main Avatar & Glow
+    // 1. Update Profile Visuals (Dot & Glow)
     if (statusDot) {
         statusDot.className = `absolute bottom-2 right-2 w-5 h-5 rounded-full border-4 border-black z-20 ${status !== 'offline' ? 'animate-pulse' : ''}`;
         statusDot.style.backgroundColor = styles.color;
@@ -58,60 +65,111 @@ function updateStatus(data) {
     if (glowEffect) {
         glowEffect.className = `absolute inset-0 bg-gradient-to-tr ${styles.glow} rounded-full blur opacity-40 group-hover:opacity-75 transition-all duration-500`;
     }
-
-    // 2. Update RPC Card Status Dot
     if (rpcStatusDot) {
         rpcStatusDot.style.backgroundColor = styles.color;
     }
 
-    // 3. Handle Activities (Spotify > Game > Status Check)
-    if (data.listening_to_spotify) {
-        // --- SPOTIFY ---
-        const spotify = data.spotify;
-        const song = spotify.song;
-        const artist = "by " + spotify.artist;
-        renderRPC(true, `Listening to <span class="text-white font-bold">${song}</span>`, artist, spotify.album_art_url);
-    } else if (data.activities && data.activities.length > 0) {
-        // --- GAME / ACTIVITY ---
-        const activity = data.activities.find(a => a.type === 0);
+    // 2. Extract Data
+    currentSpotify = data.listening_to_spotify ? data.spotify : null;
+    currentGame = (data.activities && data.activities.length > 0) 
+        ? data.activities.find(a => a.type === 0) 
+        : null;
+
+    // 3. Render Content
+    renderContent(status);
+}
+
+function renderContent(status) {
+    // Scenario 1: Game AND Spotify (Dual Mode)
+    if (currentGame && currentSpotify) {
+        // Allow clicking to toggle
+        activityBox.style.cursor = 'pointer';
+        activityBox.title = "Click to swap between Game & Spotify";
         
-        if (activity) {
-            let iconUrl = "";
-            
-            // Image Logic (Fixed mp: slash issue)
-            if (activity.assets && activity.assets.large_image) {
-                if (activity.assets.large_image.startsWith("mp:")) {
-                    iconUrl = activity.assets.large_image.replace(/^mp:/, "https://media.discordapp.net/");
-                } else {
-                    iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.large_image}.png`;
-                }
-            } 
-            else if (activity.assets && activity.assets.small_image) {
-                 if (activity.assets.small_image.startsWith("mp:")) {
-                    iconUrl = activity.assets.small_image.replace(/^mp:/, "https://media.discordapp.net/");
-                } else {
-                    iconUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.small_image}.png`;
-                }
-            }
-
-            // Text Layout: "Playing Roblox" on one line
-            const header = `Playing <span class="text-white font-bold">${activity.name}</span>`;
-            
-            // Second line: State/Details (e.g. "In Game")
-            const details = activity.details || activity.state || "";
-            const subtext = details ? `<span class="text-gray-400">${details}</span>` : "";
-
-            renderRPC(true, header, subtext, iconUrl);
+        if (showSpotifyOverride) {
+            displaySpotify();
         } else {
-            displayStatusText(status);
+            displayGame(true); // true = indicates there is more info (Spotify) hidden
         }
-    } else {
-        // --- NO ACTIVITY ---
+    } 
+    // Scenario 2: Game Only
+    else if (currentGame) {
+        activityBox.style.cursor = 'default';
+        activityBox.title = "";
+        showSpotifyOverride = false; // Reset toggle
+        displayGame(false);
+    } 
+    // Scenario 3: Spotify Only
+    else if (currentSpotify) {
+        activityBox.style.cursor = 'default';
+        activityBox.title = "";
+        showSpotifyOverride = true; // Force spotify view
+        displaySpotify();
+    } 
+    // Scenario 4: Nothing (Status Text)
+    else {
+        activityBox.style.cursor = 'default';
+        activityBox.title = "";
         displayStatusText(status);
     }
 }
 
+/* --- Click Interaction (The Dropdown/Swap) --- */
+if (activityBox) {
+    activityBox.addEventListener('click', () => {
+        if (currentGame && currentSpotify) {
+            showSpotifyOverride = !showSpotifyOverride;
+            // Re-render immediately using cached data
+            renderContent(null); // Status doesn't matter for the toggle re-render
+        }
+    });
+}
+
+/* --- Display Functions --- */
+
+function displayGame(hasMore) {
+    let iconUrl = "";
+    
+    // Resolve Image
+    if (currentGame.assets && currentGame.assets.large_image) {
+        if (currentGame.assets.large_image.startsWith("mp:")) {
+            iconUrl = currentGame.assets.large_image.replace(/^mp:/, "https://media.discordapp.net/");
+        } else {
+            iconUrl = `https://cdn.discordapp.com/app-assets/${currentGame.application_id}/${currentGame.assets.large_image}.png`;
+        }
+    } else if (currentGame.assets && currentGame.assets.small_image) {
+         if (currentGame.assets.small_image.startsWith("mp:")) {
+            iconUrl = currentGame.assets.small_image.replace(/^mp:/, "https://media.discordapp.net/");
+        } else {
+            iconUrl = `https://cdn.discordapp.com/app-assets/${currentGame.application_id}/${currentGame.assets.small_image}.png`;
+        }
+    }
+
+    // Text: Just "Playing [Game Name]" (Removed Details/State as requested)
+    const header = `Playing <span class="text-white font-bold">${currentGame.name}</span>`;
+    
+    // If we have Spotify hidden underneath, show a small hint (optional, but nice)
+    // For now, we leave line 2 empty to keep it clean, or we could add "Click for Music"
+    const subtext = hasMore ? `<span class="text-[9px] text-purple-400 animate-pulse"><i class="fa-brands fa-spotify"></i> + Music</span>` : "";
+
+    renderRPC(true, header, subtext, iconUrl);
+}
+
+function displaySpotify() {
+    const song = currentSpotify.song;
+    const artist = "by " + currentSpotify.artist;
+    const artUrl = currentSpotify.album_art_url;
+
+    const header = `Listening to <span class="text-white font-bold">${song}</span>`;
+    // Line 2: Artist
+    const subtext = artist;
+
+    renderRPC(true, header, subtext, artUrl);
+}
+
 function displayStatusText(status) {
+    if (!status) return; // Guard clause
+    
     let statusText = "Offline";
     switch (status) {
         case 'online': statusText = "Online"; break;
@@ -120,8 +178,9 @@ function displayStatusText(status) {
         default: statusText = "Offline";
     }
     
-    // Combined line: "Status Online"
-    const headerHtml = `Status <span class="text-white font-bold ml-1">${statusText}</span>`;
+    // FIX: Removed 'ml-1' and used a standard space to fix the visual glitch
+    const headerHtml = `Status <span class="text-white font-bold"> ${statusText}</span>`;
+    
     renderRPC(true, headerHtml, "", "");
 }
 
@@ -135,7 +194,7 @@ function renderRPC(show, line1Html, line2Html, iconUrl) {
         if (activityHeader) activityHeader.innerHTML = line1Html;
         if (activityName) activityName.innerHTML = line2Html;
         
-        // FIX: Use Tailwind's 'hidden' class to fully collapse the space when line2 is empty.
+        // Toggle visibility of line 2 to remove extra spacing if empty
         if (!line2Html && activityName) {
              activityName.classList.add('hidden');
         } else if (activityName) {
@@ -184,6 +243,9 @@ if (card && container && window.innerWidth > 768) {
 
 /* --- Click Sparkle Effect --- */
 document.addEventListener('click', (e) => {
+    // Prevent sparkles if clicking on the interactive RPC card
+    if (e.target.closest('#discord-activity')) return;
+
     if(document.querySelectorAll('.sparkle').length > 15) return;
     createSparkle(e.clientX, e.clientY);
 });
