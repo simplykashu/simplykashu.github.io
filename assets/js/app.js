@@ -280,62 +280,35 @@ window.toggleMusic = function() {
 }
 
 /* --- Typewriter Logic (Looping) --- */
-const typeLines = [
-    { elementId: 'typewriter-line1', text: "Welcome to the void." },
-    { elementId: 'typewriter-line2', text: "Chill vibes only." }
-];
-
-const line1Element = document.getElementById(typeLines[0].elementId);
-const line2Element = document.getElementById(typeLines[1].elementId);
-
-let lineIndex = 0; // Current line being typed (0 or 1)
+const typePhrases = ["Welcome to the void.", "Chill vibes only."];
+const typeElement = document.getElementById('typewriter-text');
+let phraseIndex = 0;
 let charIndex = 0;
-let isTyping = true;
+let isDeleting = false;
 let typeSpeed = 100;
 
 function typeWriter() {
-    // Ensure we have both elements before starting
-    if (!line1Element || !line2Element) return;
-
-    const currentLineData = typeLines[lineIndex];
-    const currentElement = document.getElementById(currentLineData.elementId);
-    const fullText = currentLineData.text;
-
-    if (isTyping) {
-        // Typing
-        currentElement.textContent = fullText.substring(0, charIndex + 1);
-        charIndex++;
-        typeSpeed = 100; // Normal typing speed
-
-        if (charIndex === fullText.length) {
-            // Finished typing the current line
-            isTyping = false;
-            typeSpeed = 1000; // Pause after typing line
-
-            if (lineIndex === 0) {
-                // If it was line 1, switch to line 2 for the next step
-                lineIndex = 1;
-            } else if (lineIndex === 1) {
-                // If it was line 2, pause, then reset everything to restart the loop
-                lineIndex = -1; // Flag to indicate a reset is needed
-            }
-        }
+    const currentPhrase = typePhrases[phraseIndex];
+    
+    if (isDeleting) {
+        typeElement.textContent = currentPhrase.substring(0, charIndex - 1);
+        charIndex--;
+        typeSpeed = 50; // Faster deletion
     } else {
-        // Pausing / Resetting
-        if (lineIndex === 1) {
-            // We just finished line 1 and are now pausing before line 2 starts typing
-            // Set up for line 2
-            isTyping = true;
-            charIndex = 0;
-        } else if (lineIndex === -1) {
-            // Reset for the full loop
-            line1Element.textContent = "";
-            line2Element.textContent = "";
-            lineIndex = 0;
-            charIndex = 0;
-            isTyping = true;
-            typeSpeed = 1500; // Pause before restarting the loop
-        }
+        typeElement.textContent = currentPhrase.substring(0, charIndex + 1);
+        charIndex++;
+        typeSpeed = 100; // Normal typing
+    }
+
+    if (!isDeleting && charIndex === currentPhrase.length) {
+        // Finished typing phrase, pause before deleting
+        isDeleting = true;
+        typeSpeed = 2000; 
+    } else if (isDeleting && charIndex === 0) {
+        // Finished deleting, switch to next phrase
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % typePhrases.length;
+        typeSpeed = 500;
     }
 
     setTimeout(typeWriter, typeSpeed);
@@ -430,4 +403,3 @@ function animateParticles() {
 }
 initParticles();
 animateParticles();
-
