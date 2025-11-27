@@ -5,7 +5,8 @@ const DISCORD_ID = "1066445133916164146";
 /* --- Global State for Interaction --- */
 let currentSpotify = null;
 let currentGame = null;
-let showSpotifyOverride = false; // Toggles when clicked
+let isSpotifyDropdownOpen = false; // Tracks the visibility of the dropdown card
+let spotifyDropdownEl = null;      // Reference to the dynamically created dropdown element
 
 /* --- Elements --- */
 const statusDot = document.getElementById('discord-status-dot');
@@ -51,6 +52,71 @@ function connectLanyard() {
     });
 }
 
+/* --- Dynamic Dropdown Creation --- */
+function createSpotifyDropdown() {
+    if (spotifyDropdownEl) return; // Already created
+
+    const newCard = document.createElement('div');
+    newCard.id = 'spotify-dropdown';
+    // Styling the new card to look like a subtle dropdown
+    newCard.className = 'w-full bg-black/30 backdrop-blur-md rounded-2xl p-4 mt-2 transition-all duration-300 ease-in-out hidden';
+    
+    // Inner structure for Spotify details
+    newCard.innerHTML = `
+        <div class="flex items-center space-x-4">
+            <div class="relative flex-shrink-0">
+                <img id="spotify-icon-dropdown" src="" alt="Spotify Art" class="w-16 h-16 rounded-lg shadow-xl shadow-purple-500/30">
+            </div>
+            <div class="flex-1 min-w-0">
+                <p id="spotify-header-dropdown" class="text-sm text-gray-400 font-medium whitespace-nowrap overflow-hidden text-ellipsis">Loading Spotify...</p>
+                <p id="spotify-name-dropdown" class="text-md font-extrabold text-white whitespace-nowrap overflow-hidden text-ellipsis mt-0.5"></p>
+            </div>
+        </div>
+    `;
+
+    spotifyDropdownEl = newCard;
+    
+    // Insert right after the main card
+    const activityBox = document.getElementById('discord-activity');
+    if (activityBox) {
+        activityBox.parentNode.insertBefore(spotifyDropdownEl, activityBox.nextSibling);
+    }
+}
+
+function displaySpotifyOnDropdown(cardEl) {
+    if (!currentSpotify) return;
+
+    const song = currentSpotify.song;
+    const artist = "by " + currentSpotify.artist;
+    const artUrl = currentSpotify.album_art_url;
+
+    // Find the elements inside the dynamic card
+    const iconEl = cardEl.querySelector('#spotify-icon-dropdown');
+    const headerEl = cardEl.querySelector('#spotify-header-dropdown');
+    const nameEl = cardEl.querySelector('#spotify-name-dropdown');
+    
+    if (iconEl) iconEl.src = artUrl;
+    if (headerEl) headerEl.innerHTML = `Listening to <span class="text-white font-bold">${song}</span>`;
+    if (nameEl) nameEl.textContent = artist;
+}
+
+function toggleSpotifyDropdown() {
+    if (!spotifyDropdownEl) {
+        createSpotifyDropdown();
+    }
+    
+    if (spotifyDropdownEl) {
+        if (isSpotifyDropdownOpen && currentSpotify) {
+            // SHOW dropdown
+            spotifyDropdownEl.classList.remove('hidden');
+            displaySpotifyOnDropdown(spotifyDropdownEl);
+        } else {
+            // HIDE dropdown
+            spotifyDropdownEl.classList.add('hidden');
+        }
+    }
+}
+
 /* --- Data Processing & State Management --- */
 function updateData(data) {
     const status = data.discord_status;
@@ -75,59 +141,45 @@ function updateData(data) {
         ? data.activities.find(a => a.type === 0) 
         : null;
 
-    // 3. Render Content
+    // Reset dropdown state on new data
+    isSpotifyDropdownOpen = false;
+    toggleSpotifyDropdown(); // Hide the dropdown if open
+
+    // 3. Render Content (Main Card)
     renderContent(status);
 }
 
 function renderContent(status) {
-    // Scenario 1: Game AND Spotify (Dual Mode)
-    if (currentGame && currentSpotify) {
-        // Allow clicking to toggle
+    // Determine clickability and visual feedback
+    if (currentSpotify) {
         activityBox.style.cursor = 'pointer';
-        activityBox.title = "Click to swap between Game & Spotify";
-        
-        if (showSpotifyOverride) {
-            displaySpotify();
-        } else {
-            displayGame(true); // true = indicates there is more info (Spotify) hidden
-        }
-    } 
-    // Scenario 2: Game Only
-    else if (currentGame) {
+        activityBox.title = "Click for Spotify Music Details";
+    } else {
         activityBox.style.cursor = 'default';
         activityBox.title = "";
-        showSpotifyOverride = false; // Reset toggle
-        displayGame(false);
-    } 
-    // Scenario 3: Spotify Only
-    else if (currentSpotify) {
-        activityBox.style.cursor = 'default';
-        activityBox.title = "";
-        showSpotifyOverride = true; // Force spotify view
-        displaySpotify();
-    } 
-    // Scenario 4: Nothing (Status Text)
-    else {
-        activityBox.style.cursor = 'default';
-        activityBox.title = "";
+    }
+    
+    // Priority: Game > Status
+    if (currentGame) {
+        displayGame();
+    } else {
         displayStatusText(status);
     }
 }
 
-/* --- Click Interaction (The Dropdown/Swap) --- */
+/* --- Click Interaction (The Dropdown) --- */
 if (activityBox) {
     activityBox.addEventListener('click', () => {
-        if (currentGame && currentSpotify) {
-            showSpotifyOverride = !showSpotifyOverride;
-            // Re-render immediately using cached data
-            renderContent(null); // Status doesn't matter for the toggle re-render
+        // Only clickable if Spotify data is available
+        if (currentSpotify) {
+            isSpotifyDropdownOpen = !isSpotifyDropdownOpen;
+            toggleSpotifyDropdown();
         }
     });
 }
 
 /* --- Display Functions --- */
-
-function displayGame(hasMore) {
+function displayGame() {
     let iconUrl = "";
     
     // Resolve Image
@@ -145,30 +197,20 @@ function displayGame(hasMore) {
         }
     }
 
-    // Text: Just "Playing [Game Name]" (Removed Details/State as requested)
+    // Text: Just "Playing [Game Name]"
     const header = `Playing <span class="text-white font-bold">${currentGame.name}</span>`;
     
-    // If we have Spotify hidden underneath, show a small hint (optional, but nice)
-    // For now, we leave line 2 empty to keep it clean, or we could add "Click for Music"
-    const subtext = hasMore ? `<span class="text-[9px] text-purple-400 animate-pulse"><i class="fa-brands fa-spotify"></i> + Music</span>` : "";
+    // Visual Hint for Music Dropdown
+    let subtext = "";
+    if (currentSpotify) {
+        subtext = `<span class="text-gray-400 text-xs mt-1 block">Click to see <i class="fa-brands fa-spotify text-green-400"></i> Music</span>`;
+    }
 
     renderRPC(true, header, subtext, iconUrl);
 }
 
-function displaySpotify() {
-    const song = currentSpotify.song;
-    const artist = "by " + currentSpotify.artist;
-    const artUrl = currentSpotify.album_art_url;
-
-    const header = `Listening to <span class="text-white font-bold">${song}</span>`;
-    // Line 2: Artist
-    const subtext = artist;
-
-    renderRPC(true, header, subtext, artUrl);
-}
-
 function displayStatusText(status) {
-    if (!status) return; // Guard clause
+    if (!status) return; 
     
     let statusText = "Offline";
     switch (status) {
@@ -178,8 +220,8 @@ function displayStatusText(status) {
         default: statusText = "Offline";
     }
     
-    // FIX: Removed 'ml-1' and used a standard space to fix the visual glitch
-    const headerHtml = `Status <span class="text-white font-bold"> ${statusText}</span>`;
+    // Combined line: "Status Online" (Fixed the spacing issue here)
+    const headerHtml = `Status <span class="text-white font-bold">${statusText}</span>`;
     
     renderRPC(true, headerHtml, "", "");
 }
@@ -243,8 +285,8 @@ if (card && container && window.innerWidth > 768) {
 
 /* --- Click Sparkle Effect --- */
 document.addEventListener('click', (e) => {
-    // Prevent sparkles if clicking on the interactive RPC card
-    if (e.target.closest('#discord-activity')) return;
+    // Prevent sparkles if clicking on the interactive RPC card or dropdown
+    if (e.target.closest('#discord-activity') || e.target.closest('#spotify-dropdown')) return;
 
     if(document.querySelectorAll('.sparkle').length > 15) return;
     createSparkle(e.clientX, e.clientY);
