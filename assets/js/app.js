@@ -5,16 +5,21 @@ const DISCORD_ID = "1066445133916164146";
 /* --- Elements --- */
 const statusDot = document.getElementById('discord-status-dot');
 const glowEffect = document.getElementById('discord-glow');
+const mainPfp = document.getElementById('discord-pfp');
 
-// New Card Elements
+// Card 1: Status Elements
 const statusCard = document.getElementById('card-status');
-const statusCardText = document.getElementById('status-text');
+const statusImage = document.getElementById('status-image');
+const statusDisplayName = document.getElementById('status-displayname');
+const statusText = document.getElementById('status-text');
 const statusCardDot = document.getElementById('status-card-dot');
 
+// Card 2: Game Elements
 const gameCard = document.getElementById('card-game');
 const gameName = document.getElementById('game-name');
 const gameImage = document.getElementById('game-image');
 
+// Card 3: Spotify Elements
 const spotifyCard = document.getElementById('card-spotify');
 const spotifySong = document.getElementById('spotify-song');
 const spotifyArtist = document.getElementById('spotify-artist');
@@ -57,6 +62,7 @@ function connectLanyard() {
 function updateData(data) {
     const status = data.discord_status;
     const styles = STATUS_COLORS[status] || STATUS_COLORS.offline;
+    const discordUser = data.discord_user;
 
     // 1. Update Profile Visuals (Main Avatar Dot & Glow)
     if (statusDot) {
@@ -75,25 +81,40 @@ function updateData(data) {
         : null;
 
     // 3. Render Individual Cards
-    renderStatus(status, styles.color);
+    renderStatus(status, styles.color, discordUser);
     renderGame(currentGame);
     renderSpotify(currentSpotify);
 }
 
 /* --- Render Functions --- */
 
-// Card 1: Status (Always Visible)
-function renderStatus(status, colorHex) {
-    let statusText = "Offline";
+// Card 1: Status (Shows Avatar, Display Name, Status)
+function renderStatus(status, colorHex, user) {
+    let statusLabel = "Offline";
     switch (status) {
-        case 'online': statusText = "Online"; break;
-        case 'idle': statusText = "Idle"; break;
-        case 'dnd': statusText = "Do Not Disturb"; break;
-        default: statusText = "Offline";
+        case 'online': statusLabel = "Online"; break;
+        case 'idle': statusLabel = "Idle"; break;
+        case 'dnd': statusLabel = "Do Not Disturb"; break;
+        default: statusLabel = "Offline";
     }
 
-    if (statusCardText) statusCardText.innerHTML = statusText;
+    // Update Text
+    if (statusText) statusText.innerHTML = statusLabel;
     if (statusCardDot) statusCardDot.style.backgroundColor = colorHex;
+
+    // Update User Info (Avatar & Names)
+    if (user) {
+        if (statusDisplayName) statusDisplayName.innerHTML = user.global_name || user.username;
+        
+        const avatarUrl = user.avatar 
+            ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128` 
+            : `https://cdn.discordapp.com/embed/avatars/0.png`;
+
+        if (statusImage) statusImage.src = avatarUrl;
+        
+        // Also update the main profile picture on the left side
+        if (mainPfp) mainPfp.src = avatarUrl; 
+    }
 }
 
 // Card 2: Game (Hidden if null)
@@ -106,24 +127,28 @@ function renderGame(game) {
         
         if (gameName) gameName.innerHTML = game.name;
         
-        // Resolve Image
-        let iconUrl = "";
-        if (game.assets && game.assets.large_image) {
-            if (game.assets.large_image.startsWith("mp:")) {
-                iconUrl = game.assets.large_image.replace(/^mp:/, "https://media.discordapp.net/");
-            } else {
-                iconUrl = `https://cdn.discordapp.com/app-assets/${game.application_id}/${game.assets.large_image}.png`;
+        // Resolve Game Image
+        let iconUrl = "https://cdn.discordapp.com/embed/avatars/0.png"; // Default
+        
+        if (game.assets) {
+            if (game.assets.large_image) {
+                if (game.assets.large_image.startsWith("mp:")) {
+                    iconUrl = game.assets.large_image.replace(/^mp:/, "https://media.discordapp.net/");
+                } else {
+                    iconUrl = `https://cdn.discordapp.com/app-assets/${game.application_id}/${game.assets.large_image}.png`;
+                }
+            } else if (game.assets.small_image) {
+                 if (game.assets.small_image.startsWith("mp:")) {
+                    iconUrl = game.assets.small_image.replace(/^mp:/, "https://media.discordapp.net/");
+                } else {
+                    iconUrl = `https://cdn.discordapp.com/app-assets/${game.application_id}/${game.assets.small_image}.png`;
+                }
             }
         }
         
         if (gameImage) {
-            if (iconUrl) {
-                gameImage.src = iconUrl;
-                gameImage.style.display = 'block';
-            } else {
-                // Use a default game icon if no asset found
-                gameImage.src = "https://cdn.discordapp.com/embed/avatars/0.png"; 
-            }
+            gameImage.src = iconUrl;
+            gameImage.style.display = 'block';
         }
 
     } else {
@@ -142,7 +167,10 @@ function renderSpotify(spotify) {
 
         if (spotifySong) spotifySong.innerHTML = spotify.song;
         if (spotifyArtist) spotifyArtist.innerHTML = "by " + spotify.artist;
-        if (spotifyArt) spotifyArt.src = spotify.album_art_url;
+        if (spotifyArt) {
+             spotifyArt.src = spotify.album_art_url;
+             spotifyArt.style.display = 'block';
+        }
 
     } else {
         spotifyCard.classList.add('hidden');
