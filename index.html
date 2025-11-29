@@ -23,14 +23,8 @@
         }
     </script>
     <style>
-        /* Hides scrollbar for clean look but allows scrolling */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 
@@ -51,7 +45,7 @@
         
         <div id="tilt-card" class="glass-card w-full max-w-4xl h-full md:h-[600px] rounded-2xl flex flex-col md:flex-row overflow-hidden relative animate-fade-in-up transform-style-3d transition-transform duration-100 ease-out bg-black/40 border border-white/10">
             
-            <div class="w-full md:w-[35%] bg-black/20 p-4 flex flex-col items-center justify-center border-b border-white/10 md:border-b-0 md:border-r relative shrink-0 z-10 overflow-y-auto md:overflow-hidden no-scrollbar">
+            <div class="w-full md:w-[35%] bg-black/20 p-4 flex flex-col items-center justify-start border-b border-white/10 md:border-b-0 md:border-r relative shrink-0 z-10 overflow-y-auto no-scrollbar">
                 
                 <div class="relative group mb-2 md:mb-4 shrink-0">
                     <div id="discord-glow" class="absolute inset-0 bg-gradient-to-tr from-gray-600 to-gray-600 rounded-full blur opacity-40 group-hover:opacity-75 transition-all duration-500"></div>
@@ -77,20 +71,46 @@
                     </div>
                 </div>
 
-                <div id="discord-activity" class="hidden w-full mt-2 bg-[#111] border border-white/10 rounded-xl p-3 flex items-center gap-3 relative overflow-hidden group animate-fade-in-up shadow-lg shrink-0">
-                    <div class="absolute inset-0 bg-gradient-to-r from-purple-900/10 to-transparent opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                    <div class="relative shrink-0">
-                        <img id="rpc-avatar" src="assets/profile/images/avatar.png" class="w-10 h-10 rounded-full border border-white/10">
-                        <div id="rpc-status-dot" class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-gray-500 rounded-full border-2 border-[#111]"></div>
+                <div class="w-full space-y-2 mt-2">
+                    
+                    <div id="card-status" class="w-full bg-[#111] border border-white/10 rounded-xl p-3 flex items-center gap-3 relative overflow-hidden group shadow-lg shrink-0">
+                        <div class="absolute inset-0 bg-gradient-to-r from-gray-800/20 to-transparent opacity-30"></div>
+                        <div class="relative shrink-0">
+                             <div class="w-10 h-10 rounded-full bg-[#5865F2] flex items-center justify-center border border-white/10">
+                                <i class="fa-brands fa-discord text-white text-lg"></i>
+                            </div>
+                            <div id="status-card-dot" class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-gray-500 rounded-full border-2 border-[#111]"></div>
+                        </div>
+                        <div class="flex-1 min-w-0 relative z-10 flex flex-col justify-center">
+                            <p class="text-[10px] text-gray-400 font-medium leading-tight">Current Status</p>
+                            <p id="status-text" class="text-xs font-bold text-white leading-tight truncate">Loading...</p>
+                        </div>
                     </div>
-                    <div class="flex-1 min-w-0 relative z-10 flex flex-col justify-center">
-                        <p class="text-xs font-bold text-white leading-tight">simplykashu</p>
-                        <p id="activity-header" class="text-[10px] text-gray-400 font-medium leading-tight mt-0.5 truncate">Loading...</p>
-                        <p id="activity-name" class="text-[10px] text-gray-300 truncate leading-tight">...</p>
-                    </div>
-                    <img id="activity-icon" src="" class="w-10 h-10 rounded-md object-cover shrink-0 hidden border border-white/10 shadow-sm" onerror="this.style.display='none'">
-                </div>
 
+                    <div id="card-game" class="hidden w-full bg-[#111] border border-white/10 rounded-xl p-3 flex items-center gap-3 relative overflow-hidden group shadow-lg shrink-0">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-transparent opacity-30"></div>
+                        <div class="relative shrink-0">
+                            <img id="game-image" src="" class="w-10 h-10 rounded-md object-cover border border-white/10" onerror="this.style.display='none'">
+                        </div>
+                        <div class="flex-1 min-w-0 relative z-10 flex flex-col justify-center">
+                            <p class="text-[10px] text-gray-400 font-medium leading-tight">Playing</p>
+                            <p id="game-name" class="text-xs font-bold text-white leading-tight truncate">...</p>
+                        </div>
+                    </div>
+
+                    <div id="card-spotify" class="hidden w-full bg-[#111] border border-white/10 rounded-xl p-3 flex items-center gap-3 relative overflow-hidden group shadow-lg shrink-0">
+                        <div class="absolute inset-0 bg-gradient-to-r from-green-900/20 to-transparent opacity-30"></div>
+                        <div class="relative shrink-0">
+                            <img id="spotify-art" src="" class="w-10 h-10 rounded-md object-cover border border-white/10" onerror="this.style.display='none'">
+                        </div>
+                        <div class="flex-1 min-w-0 relative z-10 flex flex-col justify-center">
+                            <p class="text-[10px] text-green-400 font-medium leading-tight flex items-center gap-1"><i class="fa-brands fa-spotify"></i> Spotify</p>
+                            <p id="spotify-song" class="text-xs font-bold text-white leading-tight truncate">...</p>
+                            <p id="spotify-artist" class="text-[9px] text-gray-400 leading-tight truncate">...</p>
+                        </div>
+                    </div>
+
+                </div>
                 <div class="flex gap-6 mt-4 md:mt-auto text-gray-400 shrink-0">
                     <a href="https://discord.com/users/1066445133916164146" target="_blank" class="social-icon text-lg hover:text-[#7289da] transition-colors"><i class="fa-brands fa-discord"></i></a>
                     <a href="https://open.spotify.com/user/31t67ze3lao3tbx7h6i3vxm2u4yy" target="_blank" class="social-icon text-lg hover:text-[#1DB954] transition-colors"><i class="fa-brands fa-spotify"></i></a>
@@ -143,16 +163,16 @@
                         <div class="bg-white/5 p-4 rounded-lg border border-white/5 text-sm leading-relaxed text-gray-300 shadow-inner space-y-4">
                             <p>
                                 <strong>// PROFILE ACTIVATED //</strong><br>
-                                Yo! I'm Luke (15), broadcasting live from South Africa. Right now, I'm navigating the virtual halls of <strong>Acellus</strong> for my education, which means my world operates mostly online. I've always got my sights set on the future, specifically the <strong>H-2A Visa program</strong>—the ultimate farming challenge. Getting hands-on experience and working the land is the mission.
+                                Yo! I'm Luke (15), broadcasting live from South Africa. Right now, I'm navigating the virtual halls of <strong>Acellus</strong> for my education. I've always got my sights set on the future, specifically the <strong>H-2A Visa program</strong>.
                             </p>
                             <div class="border-l-2 border-purple-500/50 pl-3">
                                 <h4 class="text-xs text-purple-300 font-bold uppercase tracking-wider mb-1">CURRENT LOADOUT & HOBBIES</h4>
                                 <p class="text-gray-400 text-sm">
-                                    When I'm off the clock, my energy goes into gaming. <strong>Roblox</strong> is a major time sink, and I enjoy other titles too. My personal soundtrack is exclusively dominated by <strong>ORGAVSM</strong>.
+                                    When I'm off the clock, my energy goes into gaming. <strong>Roblox</strong> is a major time sink. My soundtrack is exclusively dominated by <strong>ORGAVSM</strong>, Diggy Graves, and sKitz Kraven.
                                 </p>
                             </div>
                             <p>
-                                The one thing that keeps me grounded? My pets! I love all animals—seriously, even the creepy crawlies like snakes and spiders get a pass from me 🐍. Having a dog and a cat around the house definitely makes the online school day feel less isolating. Speaking of the house, since I'm online-schooled, <strong>making friends IRL is pretty tough</strong>, so my connections are mostly digital.
+                                The one thing that keeps me grounded? My pets! I love all animals—seriously, even the creepy crawlies like snakes and spiders get a pass from me 🐍.
                             </p>
                             <p class="text-xs text-gray-500 font-['JetBrains_Mono'] pt-2 border-t border-white/5">
                                 // DATA LOG: Don't translate: As jy dit vertaal, dan is jy 'n goeie seun/meisie. //
@@ -173,16 +193,6 @@
                                     <i class="fa-solid fa-school text-blue-400"></i>
                                     <span class="text-sm font-bold">Acellus</span>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <div class="flex justify-between text-[10px] text-gray-500 mb-1 uppercase tracking-wider">
-                                <span>Level 15 Progress</span>
-                                <span>75%</span>
-                            </div>
-                            <div class="w-full h-2 bg-gray-800 rounded-full overflow-hidden border border-white/5">
-                                <div class="h-full w-[75%] bg-gradient-to-r from-purple-600 to-blue-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]"></div>
                             </div>
                         </div>
                     </div>
@@ -275,4 +285,3 @@
     <script src="assets/js/x7z9q2.js"></script>
 </body>
 </html>
-
