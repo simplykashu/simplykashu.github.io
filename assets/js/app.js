@@ -2,21 +2,23 @@
 const SONG_START_TIME = 0; 
 const DISCORD_ID = "1066445133916164146";
 
-/* --- Global State for Interaction --- */
-let currentSpotify = null;
-let currentGame = null;
-let showSpotifyOverride = false; // Toggles when clicked
-
 /* --- Elements --- */
 const statusDot = document.getElementById('discord-status-dot');
 const glowEffect = document.getElementById('discord-glow');
 
-// RPC Card Elements
-const activityBox = document.getElementById('discord-activity');
-const rpcStatusDot = document.getElementById('rpc-status-dot');
-const activityIcon = document.getElementById('activity-icon');
-const activityHeader = document.getElementById('activity-header'); 
-const activityName = document.getElementById('activity-name');      
+// New Card Elements
+const statusCard = document.getElementById('card-status');
+const statusCardText = document.getElementById('status-text');
+const statusCardDot = document.getElementById('status-card-dot');
+
+const gameCard = document.getElementById('card-game');
+const gameName = document.getElementById('game-name');
+const gameImage = document.getElementById('game-image');
+
+const spotifyCard = document.getElementById('card-spotify');
+const spotifySong = document.getElementById('spotify-song');
+const spotifyArtist = document.getElementById('spotify-artist');
+const spotifyArt = document.getElementById('spotify-art');
 
 // Status Colors
 const STATUS_COLORS = {
@@ -51,12 +53,12 @@ function connectLanyard() {
     });
 }
 
-/* --- Data Processing & State Management --- */
+/* --- Data Processing --- */
 function updateData(data) {
     const status = data.discord_status;
     const styles = STATUS_COLORS[status] || STATUS_COLORS.offline;
 
-    // 1. Update Profile Visuals (Dot & Glow)
+    // 1. Update Profile Visuals (Main Avatar Dot & Glow)
     if (statusDot) {
         statusDot.className = `absolute bottom-2 right-2 w-5 h-5 rounded-full border-4 border-black z-20 ${status !== 'offline' ? 'animate-pulse' : ''}`;
         statusDot.style.backgroundColor = styles.color;
@@ -65,111 +67,23 @@ function updateData(data) {
     if (glowEffect) {
         glowEffect.className = `absolute inset-0 bg-gradient-to-tr ${styles.glow} rounded-full blur opacity-40 group-hover:opacity-75 transition-all duration-500`;
     }
-    if (rpcStatusDot) {
-        rpcStatusDot.style.backgroundColor = styles.color;
-    }
 
     // 2. Extract Data
-    currentSpotify = data.listening_to_spotify ? data.spotify : null;
-    currentGame = (data.activities && data.activities.length > 0) 
+    const currentSpotify = data.listening_to_spotify ? data.spotify : null;
+    const currentGame = (data.activities && data.activities.length > 0) 
         ? data.activities.find(a => a.type === 0) 
         : null;
 
-    // 3. Render Content
-    renderContent(status);
+    // 3. Render Individual Cards
+    renderStatus(status, styles.color);
+    renderGame(currentGame);
+    renderSpotify(currentSpotify);
 }
 
-function renderContent(status) {
-    // Scenario 1: Game AND Spotify (Dual Mode)
-    if (currentGame && currentSpotify) {
-        // Allow clicking to toggle
-        activityBox.style.cursor = 'pointer';
-        activityBox.title = "Click to swap between Game & Spotify";
-        
-        if (showSpotifyOverride) {
-            displaySpotify();
-        } else {
-            displayGame(true); // true = indicates there is more info (Spotify) hidden
-        }
-    } 
-    // Scenario 2: Game Only
-    else if (currentGame) {
-        activityBox.style.cursor = 'default';
-        activityBox.title = "";
-        showSpotifyOverride = false; // Reset toggle
-        displayGame(false);
-    } 
-    // Scenario 3: Spotify Only
-    else if (currentSpotify) {
-        activityBox.style.cursor = 'default';
-        activityBox.title = "";
-        showSpotifyOverride = true; // Force spotify view
-        displaySpotify();
-    } 
-    // Scenario 4: Nothing (Status Text)
-    else {
-        activityBox.style.cursor = 'default';
-        activityBox.title = "";
-        displayStatusText(status);
-    }
-}
+/* --- Render Functions --- */
 
-/* --- Click Interaction (The Dropdown/Swap) --- */
-if (activityBox) {
-    activityBox.addEventListener('click', () => {
-        if (currentGame && currentSpotify) {
-            showSpotifyOverride = !showSpotifyOverride;
-            // Re-render immediately using cached data
-            renderContent(null); // Status doesn't matter for the toggle re-render
-        }
-    });
-}
-
-/* --- Display Functions --- */
-
-function displayGame(hasMore) {
-    let iconUrl = "";
-    
-    // Resolve Image
-    if (currentGame.assets && currentGame.assets.large_image) {
-        if (currentGame.assets.large_image.startsWith("mp:")) {
-            iconUrl = currentGame.assets.large_image.replace(/^mp:/, "https://media.discordapp.net/");
-        } else {
-            iconUrl = `https://cdn.discordapp.com/app-assets/${currentGame.application_id}/${currentGame.assets.large_image}.png`;
-        }
-    } else if (currentGame.assets && currentGame.assets.small_image) {
-         if (currentGame.assets.small_image.startsWith("mp:")) {
-            iconUrl = currentGame.assets.small_image.replace(/^mp:/, "https://media.discordapp.net/");
-        } else {
-            iconUrl = `https://cdn.discordapp.com/app-assets/${currentGame.application_id}/${currentGame.assets.small_image}.png`;
-        }
-    }
-
-    // Text: Just "Playing [Game Name]" (Removed Details/State as requested)
-    const header = `Playing <span class="text-white font-bold">${currentGame.name}</span>`;
-    
-    // If we have Spotify hidden underneath, show a small hint (optional, but nice)
-    // For now, we leave line 2 empty to keep it clean, or we could add "Click for Music"
-    const subtext = hasMore ? `<span class="text-[9px] text-purple-400 animate-pulse"><i class="fa-brands fa-spotify"></i> + Music</span>` : "";
-
-    renderRPC(true, header, subtext, iconUrl);
-}
-
-function displaySpotify() {
-    const song = currentSpotify.song;
-    const artist = "by " + currentSpotify.artist;
-    const artUrl = currentSpotify.album_art_url;
-
-    const header = `Listening to <span class="text-white font-bold">${song}</span>`;
-    // Line 2: Artist
-    const subtext = artist;
-
-    renderRPC(true, header, subtext, artUrl);
-}
-
-function displayStatusText(status) {
-    if (!status) return; // Guard clause
-    
+// Card 1: Status (Always Visible)
+function renderStatus(status, colorHex) {
     let statusText = "Offline";
     switch (status) {
         case 'online': statusText = "Online"; break;
@@ -177,43 +91,62 @@ function displayStatusText(status) {
         case 'dnd': statusText = "Do Not Disturb"; break;
         default: statusText = "Offline";
     }
-    
-    // FIX: Removed 'ml-1' and used a standard space to fix the visual glitch
-    const headerHtml = `Status <span class="text-white font-bold"> ${statusText}</span>`;
-    
-    renderRPC(true, headerHtml, "", "");
+
+    if (statusCardText) statusCardText.innerHTML = statusText;
+    if (statusCardDot) statusCardDot.style.backgroundColor = colorHex;
 }
 
-function renderRPC(show, line1Html, line2Html, iconUrl) {
-    if (!activityBox) return;
+// Card 2: Game (Hidden if null)
+function renderGame(game) {
+    if (!gameCard) return;
 
-    if (show) {
-        activityBox.classList.remove('hidden');
-        activityBox.classList.add('flex');
+    if (game) {
+        gameCard.classList.remove('hidden');
+        gameCard.classList.add('flex');
         
-        if (activityHeader) activityHeader.innerHTML = line1Html;
-        if (activityName) activityName.innerHTML = line2Html;
+        if (gameName) gameName.innerHTML = game.name;
         
-        // Toggle visibility of line 2 to remove extra spacing if empty
-        if (!line2Html && activityName) {
-             activityName.classList.add('hidden');
-        } else if (activityName) {
-             activityName.classList.remove('hidden');
-        }
-        
-        if (activityIcon) {
-            if (iconUrl) {
-                activityIcon.src = iconUrl;
-                activityIcon.classList.remove('hidden');
-                activityIcon.style.display = 'block'; 
+        // Resolve Image
+        let iconUrl = "";
+        if (game.assets && game.assets.large_image) {
+            if (game.assets.large_image.startsWith("mp:")) {
+                iconUrl = game.assets.large_image.replace(/^mp:/, "https://media.discordapp.net/");
             } else {
-                activityIcon.classList.add('hidden');
-                activityIcon.style.display = 'none';
+                iconUrl = `https://cdn.discordapp.com/app-assets/${game.application_id}/${game.assets.large_image}.png`;
             }
         }
+        
+        if (gameImage) {
+            if (iconUrl) {
+                gameImage.src = iconUrl;
+                gameImage.style.display = 'block';
+            } else {
+                // Use a default game icon if no asset found
+                gameImage.src = "https://cdn.discordapp.com/embed/avatars/0.png"; 
+            }
+        }
+
     } else {
-        activityBox.classList.add('hidden');
-        activityBox.classList.remove('flex');
+        gameCard.classList.add('hidden');
+        gameCard.classList.remove('flex');
+    }
+}
+
+// Card 3: Spotify (Hidden if null)
+function renderSpotify(spotify) {
+    if (!spotifyCard) return;
+
+    if (spotify) {
+        spotifyCard.classList.remove('hidden');
+        spotifyCard.classList.add('flex');
+
+        if (spotifySong) spotifySong.innerHTML = spotify.song;
+        if (spotifyArtist) spotifyArtist.innerHTML = "by " + spotify.artist;
+        if (spotifyArt) spotifyArt.src = spotify.album_art_url;
+
+    } else {
+        spotifyCard.classList.add('hidden');
+        spotifyCard.classList.remove('flex');
     }
 }
 
@@ -243,8 +176,10 @@ if (card && container && window.innerWidth > 768) {
 
 /* --- Click Sparkle Effect --- */
 document.addEventListener('click', (e) => {
-    // Prevent sparkles if clicking on the interactive RPC card
-    if (e.target.closest('#discord-activity')) return;
+    // Prevent sparkles if clicking on any of the interactive RPC cards
+    if (e.target.closest('#card-status') || 
+        e.target.closest('#card-game') || 
+        e.target.closest('#card-spotify')) return;
 
     if(document.querySelectorAll('.sparkle').length > 15) return;
     createSparkle(e.clientX, e.clientY);
