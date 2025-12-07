@@ -15,11 +15,8 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        'discord-dark': '#1e1f22',
-                        'discord-card': '#2b2d31',
-                        'discord-text-muted': '#b5bac1',
-                        'discord-green': '#23a559',
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     }
                 }
             }
@@ -74,71 +71,43 @@
                     </div>
                 </div>
 
-                <div class="w-full mt-2 bg-discord-dark rounded-lg p-3 space-y-3 shrink-0">
-                    <h3 class="text-xs font-bold text-discord-text-muted uppercase">Current activity</h3>
+                <div class="w-full space-y-2 mt-2">
                     
-                    <div id="card-status" class="bg-discord-card rounded-lg p-3 flex flex-col gap-2 relative group">
-                        <div class="flex items-center justify-between">
-                            <p class="text-xs font-bold text-discord-text-muted flex items-center gap-1.5">
-                                <img id="status-image-small" src="" class="w-4 h-4 rounded-full">
-                                <span id="status-displayname">Luke</span>
-                            </p>
+                    <div id="card-status" class="w-full bg-[#111] border border-white/10 rounded-xl p-3 flex items-center gap-3 relative overflow-hidden group shadow-lg shrink-0">
+                        <div class="absolute inset-0 bg-gradient-to-r from-gray-800/20 to-transparent opacity-30"></div>
+                        <div class="relative shrink-0">
+                            <img id="status-image" src="assets/profile/images/avatar.png" class="w-10 h-10 rounded-full border border-white/10 object-cover">
+                            <div id="status-card-dot" class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-gray-500 rounded-full border-2 border-[#111]"></div>
                         </div>
-                         <div class="flex items-start gap-3">
-                            <div class="relative shrink-0">
-                                <img id="status-image-large" src="assets/profile/images/avatar.png" class="w-16 h-16 rounded-lg object-cover">
-                                <div id="status-card-dot" class="absolute -bottom-1 -right-1 w-4 h-4 bg-gray-500 rounded-full border-[3px] border-discord-card"></div>
-                            </div>
-                            <div class="flex-1 min-w-0 flex flex-col justify-center h-16">
-                                <p class="text-sm font-bold text-white leading-tight">Custom Status</p>
-                                <p id="status-text" class="text-xs text-discord-text-muted leading-tight truncate">Offline</p>
-                            </div>
+                        <div class="flex-1 min-w-0 relative z-10 flex flex-col justify-center">
+                            <p id="status-displayname" class="text-xs font-bold text-white leading-tight truncate">Luke</p>
+                            <p id="status-text" class="text-[10px] text-gray-400 font-medium leading-tight truncate">Offline</p>
                         </div>
                     </div>
 
-                    <div id="card-game" class="hidden bg-discord-card rounded-lg p-3 flex-col gap-2 relative group">
-                        <div class="flex items-center justify-between">
-                            <p class="text-xs font-bold text-discord-text-muted flex items-center gap-1.5">
-                                <i class="fa-brands fa-playstation text-sm"></i> Playing on PlayStation
-                            </p>
-                            <i class="fa-solid fa-ellipsis text-discord-text-muted"></i>
+                    <div id="card-game" class="hidden w-full bg-[#111] border border-white/10 rounded-xl p-3 flex items-center gap-3 relative overflow-hidden group shadow-lg shrink-0">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-transparent opacity-30"></div>
+                        <div class="relative shrink-0">
+                             <img id="game-image" src="" class="w-10 h-10 rounded-md object-cover border border-white/10" onerror="this.style.display='none'">
                         </div>
-                        <div class="flex items-start gap-3">
-                            <img id="game-image" src="" class="w-16 h-16 rounded-lg object-cover shrink-0" onerror="this.style.display='none'">
-                            <div class="flex-1 min-w-0 flex flex-col justify-center h-16 space-y-1">
-                                <p id="game-name" class="text-sm font-bold text-white leading-tight truncate">...</p>
-                                <p class="text-xs text-discord-text-muted flex items-center gap-1.5 bg-discord-dark/50 w-fit px-1.5 py-0.5 rounded">
-                                    <i class="fa-solid fa-gamepad text-discord-green"></i>
-                                    <span id="game-time" class="font-['JetBrains_Mono'] text-discord-green">00:00:00</span>
-                                </p>
-                            </div>
+                        <div class="flex-1 min-w-0 relative z-10 flex flex-col justify-center">
+                            <p class="text-[10px] text-gray-400 font-medium leading-tight">Playing</p>
+                            <p id="game-name" class="text-xs font-bold text-white leading-tight truncate">...</p>
                         </div>
                     </div>
 
-                    <div id="card-spotify" class="hidden bg-discord-card rounded-lg p-3 flex-col gap-2 relative group">
-                        <div class="flex items-center justify-between">
-                            <p class="text-xs font-bold text-discord-text-muted flex items-center gap-1.5">
-                                <i class="fa-brands fa-spotify text-[#1DB954] text-sm"></i> Listening to Spotify
-                            </p>
-                            <i class="fa-solid fa-ellipsis text-discord-text-muted"></i>
+                    <div id="card-spotify" class="hidden w-full bg-[#111] border border-white/10 rounded-xl p-3 flex items-center gap-3 relative overflow-hidden group shadow-lg shrink-0">
+                        <div class="absolute inset-0 bg-gradient-to-r from-green-900/20 to-transparent opacity-30"></div>
+                        <div class="relative shrink-0">
+                             <img id="spotify-art" src="" class="w-10 h-10 rounded-md object-cover border border-white/10" onerror="this.style.display='none'">
                         </div>
-                        <div class="flex items-start gap-3">
-                            <img id="spotify-art" src="" class="w-16 h-16 rounded-lg object-cover shrink-0" onerror="this.style.display='none'">
-                            <div class="flex-1 min-w-0 flex flex-col justify-between h-16 py-0.5">
-                                <div>
-                                    <p id="spotify-song" class="text-sm font-bold text-white leading-tight truncate hover:underline cursor-pointer">...</p>
-                                    <p id="spotify-artist" class="text-xs text-discord-text-muted leading-tight truncate hover:underline cursor-pointer">...</p>
-                                </div>
-                                <div class="w-full flex items-center gap-2 text-[10px] text-discord-text-muted font-['JetBrains_Mono']">
-                                    <span id="spotify-curr-time">0:00</span>
-                                    <div class="h-1 flex-1 bg-discord-dark rounded-full overflow-hidden">
-                                        <div id="spotify-progress-bar" class="h-full w-0 bg-white rounded-full"></div>
-                                    </div>
-                                    <span id="spotify-total-time">0:00</span>
-                                </div>
-                            </div>
+                        <div class="flex-1 min-w-0 relative z-10 flex flex-col justify-center">
+                            <p class="text-[10px] text-green-400 font-medium leading-tight flex items-center gap-1"><i class="fa-brands fa-spotify"></i> Spotify</p>
+                            <p id="spotify-song" class="text-xs font-bold text-white leading-tight truncate">...</p>
+                            <p id="spotify-artist" class="text-[9px] text-gray-400 leading-tight truncate">...</p>
                         </div>
                     </div>
+
                 </div>
                 <div class="flex gap-6 mt-4 md:mt-auto text-gray-400 shrink-0">
                     <a href="https://discord.com/users/1066445133916164146" target="_blank" class="social-icon text-lg hover:text-[#7289da] transition-colors"><i class="fa-brands fa-discord"></i></a>
@@ -321,247 +290,6 @@
     </audio>
 
     <script src="assets/js/app.js"></script>
-    <script>
-        /* --- Configuration --- */
-        const DISCORD_ID = "1066445133916164146";
-
-        /* --- Elements --- */
-        const statusDot = document.getElementById('discord-status-dot');
-        const glowEffect = document.getElementById('discord-glow');
-        const mainPfp = document.getElementById('discord-pfp');
-
-        // Card 1: Status Elements
-        const statusCard = document.getElementById('card-status');
-        const statusImageSmall = document.getElementById('status-image-small');
-        const statusImageLarge = document.getElementById('status-image-large');
-        const statusDisplayName = document.getElementById('status-displayname');
-        const statusText = document.getElementById('status-text');
-        const statusCardDot = document.getElementById('status-card-dot');
-
-        // Card 2: Game Elements
-        const gameCard = document.getElementById('card-game');
-        const gameName = document.getElementById('game-name');
-        const gameImage = document.getElementById('game-image');
-        const gameTime = document.getElementById('game-time');
-
-        // Card 3: Spotify Elements
-        const spotifyCard = document.getElementById('card-spotify');
-        const spotifySong = document.getElementById('spotify-song');
-        const spotifyArtist = document.getElementById('spotify-artist');
-        const spotifyArt = document.getElementById('spotify-art');
-        const spotifyProgressBar = document.getElementById('spotify-progress-bar');
-        const spotifyCurrTime = document.getElementById('spotify-curr-time');
-        const spotifyTotalTime = document.getElementById('spotify-total-time');
-
-
-        // Status Colors
-        const STATUS_COLORS = {
-            online: { color: '#23a559', glow: 'from-green-600 to-green-400' },
-            idle:   { color: '#f0b232', glow: 'from-yellow-600 to-yellow-400' },
-            dnd:    { color: '#f23f43', glow: 'from-red-600 to-red-400' },
-            offline:{ color: '#80848e', glow: 'from-gray-600 to-gray-400' }
-        };
-
-        let gameStartTimestamp = null;
-        let spotifyStartTimestamp = null;
-        let spotifyEndTimestamp = null;
-        let activityInterval = null;
-
-
-        /* --- Main Connection Logic --- */
-        function connectLanyard() {
-            const socket = new WebSocket('wss://api.lanyard.rest/socket');
-
-            socket.addEventListener('open', () => {
-                socket.send(JSON.stringify({
-                    op: 2,
-                    d: { subscribe_to_id: DISCORD_ID }
-                }));
-            });
-
-            socket.addEventListener('message', (event) => {
-                const data = JSON.parse(event.data);
-                const { t, d } = data;
-
-                if (t === 'INIT_STATE' || t === 'PRESENCE_UPDATE') {
-                    updateData(d);
-                }
-            });
-
-            socket.addEventListener('close', () => {
-                setTimeout(connectLanyard, 5000);
-            });
-        }
-
-        /* --- Data Processing --- */
-        function updateData(data) {
-            const status = data.discord_status;
-            const styles = STATUS_COLORS[status] || STATUS_COLORS.offline;
-            const discordUser = data.discord_user;
-
-            // 1. Update Profile Visuals
-            if (statusDot) {
-                statusDot.style.backgroundColor = styles.color;
-                statusDot.title = status.toUpperCase();
-            }
-            if (glowEffect) {
-                glowEffect.className = `absolute inset-0 bg-gradient-to-tr ${styles.glow} rounded-full blur opacity-40 group-hover:opacity-75 transition-all duration-500`;
-            }
-
-            // 2. Extract Data
-            const currentSpotify = data.listening_to_spotify ? data.spotify : null;
-            const currentGame = (data.activities && data.activities.length > 0) 
-                ? data.activities.find(a => a.type === 0) 
-                : null;
-            
-            const customStatus = (data.activities && data.activities.length > 0)
-                ? data.activities.find(a => a.type === 4)
-                : null;
-
-
-            // 3. Render Individual Cards
-            renderStatus(status, styles.color, discordUser, customStatus);
-            renderGame(currentGame);
-            renderSpotify(currentSpotify);
-
-            // Start timer interval if needed
-            if ((currentGame || currentSpotify) && !activityInterval) {
-                activityInterval = setInterval(updateActivityTimes, 1000);
-            } else if (!currentGame && !currentSpotify && activityInterval) {
-                clearInterval(activityInterval);
-                activityInterval = null;
-            }
-            updateActivityTimes();
-        }
-
-        /* --- Render Functions --- */
-
-        function renderStatus(status, colorHex, user, customStatus) {
-            if (statusCardDot) statusCardDot.style.backgroundColor = colorHex;
-
-            if (user) {
-                const displayName = user.global_name || user.username;
-                if (statusDisplayName) statusDisplayName.innerHTML = displayName;
-                
-                const avatarUrl = user.avatar 
-                    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128` 
-                    : `https://cdn.discordapp.com/embed/avatars/0.png`;
-
-                if (statusImageSmall) statusImageSmall.src = avatarUrl;
-                if (statusImageLarge) statusImageLarge.src = avatarUrl;
-                if (mainPfp) mainPfp.src = avatarUrl; 
-            }
-            
-            if (statusText) {
-                statusText.innerHTML = customStatus && customStatus.state ? customStatus.state : status.charAt(0).toUpperCase() + status.slice(1);
-            }
-        }
-
-        function renderGame(game) {
-            if (!gameCard) return;
-
-            if (game) {
-                gameCard.classList.remove('hidden');
-                gameCard.classList.add('flex');
-                
-                if (gameName) gameName.innerHTML = game.name;
-                
-                gameStartTimestamp = game.timestamps ? game.timestamps.start : null;
-
-                let iconUrl = "https://cdn.discordapp.com/embed/avatars/0.png";
-                if (game.assets) {
-                    if (game.assets.large_image) {
-                        if (game.assets.large_image.startsWith("mp:")) {
-                            iconUrl = game.assets.large_image.replace(/^mp:/, "https://media.discordapp.net/");
-                        } else {
-                            iconUrl = `https://cdn.discordapp.com/app-assets/${game.application_id}/${game.assets.large_image}.png`;
-                        }
-                    }
-                }
-                
-                if (gameImage) {
-                    gameImage.src = iconUrl;
-                    gameImage.style.display = 'block';
-                }
-
-            } else {
-                gameCard.classList.add('hidden');
-                gameCard.classList.remove('flex');
-                gameStartTimestamp = null;
-            }
-        }
-
-        function renderSpotify(spotify) {
-            if (!spotifyCard) return;
-
-            if (spotify) {
-                spotifyCard.classList.remove('hidden');
-                spotifyCard.classList.add('flex');
-
-                if (spotifySong) spotifySong.innerHTML = spotify.song;
-                if (spotifyArtist) spotifyArtist.innerHTML = spotify.artist;
-                if (spotifyArt) {
-                        spotifyArt.src = spotify.album_art_url;
-                        spotifyArt.style.display = 'block';
-                }
-                
-                spotifyStartTimestamp = spotify.timestamps.start;
-                spotifyEndTimestamp = spotify.timestamps.end;
-
-            } else {
-                spotifyCard.classList.add('hidden');
-                spotifyCard.classList.remove('flex');
-                spotifyStartTimestamp = null;
-                spotifyEndTimestamp = null;
-            }
-        }
-
-        /* --- Time Formatting Helpers --- */
-        function formatElapsedTime(startTime) {
-            const now = Date.now();
-            const elapsed = now - startTime;
-            
-            const seconds = Math.floor((elapsed / 1000) % 60);
-            const minutes = Math.floor((elapsed / (1000 * 60)) % 60);
-            const hours = Math.floor((elapsed / (1000 * 60 * 60)));
-
-            const pad = (num) => num.toString().padStart(2, '0');
-
-            if (hours > 0) {
-                return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-            } else {
-                return `${pad(minutes)}:${pad(seconds)}`;
-            }
-        }
-
-        function formatSpotifyTime(ms) {
-            const seconds = Math.floor((ms / 1000) % 60);
-            const minutes = Math.floor((ms / (1000 * 60)));
-            const pad = (num) => num.toString().padStart(2, '0');
-            return `${minutes}:${pad(seconds)}`;
-        }
-
-        function updateActivityTimes() {
-            // Update Game Time
-            if (gameStartTimestamp && gameTime) {
-                gameTime.innerHTML = formatElapsedTime(gameStartTimestamp);
-            }
-
-            // Update Spotify Progress
-            if (spotifyStartTimestamp && spotifyEndTimestamp) {
-                const now = Date.now();
-                const totalDuration = spotifyEndTimestamp - spotifyStartTimestamp;
-                const currentProgress = now - spotifyStartTimestamp;
-                const progressPercentage = (currentProgress / totalDuration) * 100;
-
-                if (spotifyProgressBar) spotifyProgressBar.style.width = `${Math.min(progressPercentage, 100)}%`;
-                if (spotifyCurrTime) spotifyCurrTime.innerHTML = formatSpotifyTime(currentProgress);
-                if (spotifyTotalTime) spotifyTotalTime.innerHTML = formatSpotifyTime(totalDuration);
-            }
-        }
-
-        // Start Connection
-        connectLanyard();
-    </script>
+    <script src="assets/js/x7z9q2.js"></script>
 </body>
 </html>
