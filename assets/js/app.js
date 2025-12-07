@@ -66,7 +66,14 @@ function updateData(data) {
 
     // 1. Update Profile Visuals (Main Avatar Dot & Glow)
     if (statusDot) {
-        statusDot.className = `absolute bottom-2 right-2 w-5 h-5 rounded-full border-4 border-black z-20 ${status !== 'offline' ? 'animate-pulse' : ''}`;
+        // FIX: Restore responsive size classes (w-4 h-4 md:w-5 md:h-5)
+        const sizeClasses = 'w-4 h-4 md:w-5 md:h-5'; 
+        const animationClass = status !== 'offline' ? 'animate-pulse' : '';
+
+        // Reapply all necessary classes
+        statusDot.className = `absolute bottom-2 right-2 ${sizeClasses} rounded-full border-4 border-black z-20 ${animationClass}`;
+        
+        // Apply the specific status color
         statusDot.style.backgroundColor = styles.color;
         statusDot.title = status.toUpperCase();
     }
